@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Common Hobbies — Class Presentation</title>
+<style>
+  :root{
+    --desk:#26241F;
+    --desk-2:#302D26;
+    --paper:#F4ECD8;
+    --paper-2:#EAE0C4;
+    --ink:#2A1F14;
+    --ink-soft:#5C4C36;
+    --moss:#4B6B4A;
+    --mustard:#C9932E;
+    --clay:#A8462F;
+    --line:rgba(42,31,20,0.18);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;}
+  body{
+    font-family:"Times New Roman", Times, serif;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(201,147,46,0.07), transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(75,107,74,0.10), transparent 45%),
+      var(--desk);
+    color:var(--ink);
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+
+  /* ---------- stage ---------- */
+  .stage{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:26px 24px 8px;
+    min-height:0;
+  }
+  .sheet{
+    position:relative;
+    width:min(1100px, 100%);
+    height:100%;
+    max-height:640px;
+    background:var(--paper);
+    border-radius:4px;
+    box-shadow:0 30px 60px rgba(0,0,0,0.45), 0 2px 0 rgba(255,255,255,0.05) inset;
+    padding:46px 58px 40px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .sheet::before{
+    content:"";
+    position:absolute; inset:14px;
+    border:1.5px dashed rgba(42,31,20,0.28);
+    pointer-events:none;
+    border-radius:2px;
+  }
+  .washi{
+    position:absolute; top:-14px; left:64px;
+    width:120px; height:34px;
+    background:repeating-linear-gradient(135deg, var(--mustard) 0 10px, #d9ac52 10px 20px);
+    opacity:0.85;
+    transform:rotate(-4deg);
+    box-shadow:0 3px 6px rgba(0,0,0,0.25);
+  }
+  .pagenum{
+    position:absolute; bottom:18px; right:26px;
+    font-style:italic; color:var(--ink-soft); font-size:14pt;
+  }
+  .eyebrow{
+    font-size:14pt;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--moss);
+    margin-bottom:10px;
+    font-style:italic;
+  }
+  .title{ font-size:40pt; font-weight:700; line-height:1.08; color:var(--ink); margin:0 0 6px; }
+  .subtitle{ font-size:30pt; font-weight:700; color:var(--clay); margin:0 0 18px; line-height:1.15; }
+  .body-text{ font-size:24pt; line-height:1.42; color:var(--ink); }
+  .caption{ font-size:14pt; color:var(--ink-soft); font-style:italic; line-height:1.4; }
+
+  .content-scroll{ flex:1; min-height:0; overflow:auto; padding-right:6px; }
+  ul.bullets{ margin:0; padding-left:30px; }
+  ul.bullets li{ font-size:24pt; line-height:1.4; margin-bottom:10px; }
+  ul.bullets li::marker{ color:var(--mustard); }
+
+  .icon-wrap{
+    width:120px; height:120px; flex:0 0 auto;
+    color:var(--moss);
+  }
+  .icon-wrap svg{ width:100%; height:100%; }
+
+  .two-col{ display:flex; gap:38px; flex:1; min-height:0; }
+  .two-col .text-col{ flex:1; min-height:0; display:flex; flex-direction:column; }
+  .two-col .icon-col{ display:flex; align-items:flex-start; justify-content:center; padding-top:6px; }
+
+  .vocab-box{
+    margin-top:18px; padding:16px 20px;
+    background:var(--paper-2);
+    border-left:4px solid var(--mustard);
+    border-radius:2px;
+  }
+  .vocab-box .vlabel{ font-size:14pt; text-transform:uppercase; letter-spacing:0.1em; color:var(--clay); margin-bottom:6px; font-style:italic;}
+  .vocab-box .vitem{ font-size:18pt; line-height:1.4; margin-bottom:4px; }
+  .vocab-box .vitem b{ color:var(--ink); }
+
+  /* quote slide */
+  .quote-slide{ display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center;}
+  .quote-mark{ font-size:70pt; color:var(--mustard); line-height:0.5; margin-bottom:10px; font-family:Georgia, serif;}
+  .quote-text{ font-size:30pt; line-height:1.4; font-style:italic; color:var(--ink); max-width:820px; }
+  .quote-attr{ margin-top:20px; font-size:20pt; color:var(--clay); }
+
+  /* fun fact / quiz */
+  .fact-strip{
+    display:flex; gap:14px; align-items:flex-start;
+    background:var(--paper-2); border-radius:3px; padding:14px 18px; margin-bottom:20px;
+    border:1px solid var(--line);
+  }
+  .fact-strip .fbadge{ font-size:22pt; }
+  .fact-strip .ftext{ font-size:18pt; line-height:1.4; color:var(--ink-soft); }
+  .stamp{
+    position:absolute; top:40px; right:52px;
+    border:4px solid var(--clay); color:var(--clay);
+    font-size:20pt; font-weight:700; letter-spacing:0.1em;
+    padding:6px 16px; border-radius:8px;
+    transform:rotate(9deg); opacity:0.85;
+  }
+  .qa-q{ font-size:26pt; font-weight:700; color:var(--ink); margin-bottom:14px; }
+  .qa-a{ font-size:24pt; color:var(--moss); font-weight:700; }
+  .qa-a .lab{ color:var(--ink-soft); font-weight:400; font-style:italic; font-size:16pt; display:block; margin-bottom:4px;}
+  .hidden-ans{
+    margin-top:18px; padding:14px 18px; border:2px dashed var(--clay); border-radius:3px;
+    color:var(--clay); font-size:16pt; font-style:italic; display:flex; align-items:center; justify-content:space-between; gap:14px;
+  }
+  .hidden-ans button{
+    font-family:"Times New Roman", Times, serif; font-size:14pt;
+    background:var(--clay); color:var(--paper); border:none; padding:8px 16px; border-radius:3px; cursor:pointer;
+  }
+  .hidden-ans.revealed{ border-style:solid; }
+  .hidden-ans .rtext{ display:none; color:var(--ink); font-style:normal; font-size:20pt; font-weight:700;}
+  .hidden-ans.revealed .rtext{ display:block; }
+  .hidden-ans.revealed .prompt, .hidden-ans.revealed button{ display:none; }
+
+  /* table */
+  table.matrix{ width:100%; border-collapse:collapse; font-size:15pt; }
+  table.matrix th{
+    background:var(--moss); color:var(--paper); text-align:left; padding:10px 12px; font-size:14pt; letter-spacing:0.04em;
+  }
+  table.matrix td{ padding:9px 12px; border-bottom:1px solid var(--line); }
+  table.matrix tr:nth-child(even) td{ background:rgba(75,107,74,0.06); }
+
+  /* nav */
+  .navbar{
+    flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center; gap:20px;
+    padding:14px 20px 22px;
+    color:var(--paper);
+  }
+  .navbar button{
+    font-family:"Times New Roman", Times, serif;
+    background:transparent; border:1.5px solid rgba(244,236,216,0.4); color:var(--paper);
+    font-size:16pt; padding:8px 20px; border-radius:3px; cursor:pointer;
+    transition:background .2s, border-color .2s;
+  }
+  .navbar button:hover{ background:rgba(244,236,216,0.12); border-color:var(--mustard); }
+  .navbar button:disabled{ opacity:0.3; cursor:default; }
+  .navbar button:disabled:hover{ background:transparent; border-color:rgba(244,236,216,0.4); }
+  .slide-counter{ font-size:14pt; font-style:italic; color:var(--paper-2); min-width:120px; text-align:center;}
+  .dots{ display:flex; gap:6px; flex-wrap:wrap; max-width:340px; justify-content:center;}
+  .dots span{
+    width:8px; height:8px; border-radius:50%; background:rgba(244,236,216,0.28); cursor:pointer;
+  }
+  .dots span.active{ background:var(--mustard); }
+
+  @media (max-width:760px){
+    .sheet{ padding:30px 24px 26px; max-height:none; }
+    .title{ font-size:28pt; }
+    .subtitle{ font-size:22pt; }
+    .body-text, ul.bullets li{ font-size:18pt; }
+    .two-col{ flex-direction:column; }
+    .icon-col{ display:none; }
+    .stamp{ top:20px; right:20px; font-size:14pt; padding:4px 10px;}
+    .quote-text{ font-size:22pt; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage"></div>
+
+<div class="navbar">
+  <button id="prevBtn">&#8592; Prev</button>
+  <div class="dots" id="dots"></div>
+  <div class="slide-counter" id="counter"></div>
+  <button id="nextBtn">Next &#8594;</button>
+</div>
+
+<script>
+/* ---------------- ICONS (simple monoline SVGs) ---------------- */
+const ICONS = {
+  spark: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M50 8v22M50 70v22M8 50h22M70 50h22M22 22l16 16M78 78l-16-16M78 22l-16 16M22 78l16-16"/></svg>`,
+  globe: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="50" r="38"/><ellipse cx="50" cy="50" rx="16" ry="38"/><path d="M12 50h76M17 32h66M17 68h66"/></svg>`,
+  book: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"><path d="M50 26c-8-8-24-10-36-8v54c12-2 28 0 36 8V26z"/><path d="M50 26c8-8 24-10 36-8v54c-12-2-28 0-36 8V26z"/></svg>`,
+  dance: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"><circle cx="50" cy="18" r="9"/><path d="M50 27v22M50 49l-22 18M50 49l24 12M50 27l-18-6M50 27l20-2"/></svg>`,
+  antique: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"><path d="M38 14h24v10c10 6 16 18 14 32-2 16-14 24-26 24s-24-8-26-24c-2-14 4-26 14-32V14z"/><path d="M30 86h40"/></svg>`,
+  palette: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"><path d="M50 12c-22 0-38 16-38 34 0 12 8 16 16 16 6 0 6-8 12-8s8 10 16 10c14 0 32-14 32-32C88 20 70 12 50 12z"/><circle cx="38" cy="38" r="3.5" fill="currentColor" stroke="none"/><circle cx="56" cy="30" r="3.5" fill="currentColor" stroke="none"/><circle cx="70" cy="42" r="3.5" fill="currentColor" stroke="none"/></svg>`,
+  camera: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"><rect x="10" y="30" width="80" height="54" rx="6"/><path d="M34 30l7-12h18l7 12"/><circle cx="50" cy="57" r="16"/><circle cx="50" cy="57" r="6"/></svg>`,
+  pen: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"><path d="M60 14l26 26L38 88 12 90l2-26z"/><path d="M52 22l26 26"/><circle cx="80" cy="66" r="10"/><path d="M76 62c2 2 6 2 8 0"/></svg>`,
+  trophy: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"><path d="M30 16h40v24c0 14-9 24-20 24s-20-10-20-24V16z"/><path d="M30 22H16c0 12 6 18 14 20M70 22h14c0 12-6 18-14 20"/><path d="M50 64v10M38 88h24l-4-14H42z"/></svg>`,
+  heart: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"><path d="M50 86C22 66 8 50 8 32c0-14 11-22 22-22 9 0 16 5 20 12 4-7 11-12 20-12 11 0 22 8 22 22 0 18-14 34-42 54z"/></svg>`,
+  quiz: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="40"/><path d="M38 40c0-8 6-13 13-13s12 5 12 12c0 9-12 9-12 20"/><circle cx="51" cy="72" r="1.5" fill="currentColor"/></svg>`,
+  chat: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"><path d="M12 20h76v46H40l-16 16V66H12V20z"/></svg>`
+};
+function icon(name){ return `<div class="icon-wrap">${ICONS[name]}</div>`; }
+
+/* ---------------- SLIDE DATA ---------------- */
+const slides = [];
+
+// 1. Title
+slides.push({ pageIcon:'spark', html:`
+  <div class="quote-slide">
+    <div class="icon-wrap" style="margin:0 auto 18px;">${ICONS.spark}</div>
+    <div class="eyebrow">Grade 10 English &middot; Pages 119&ndash;121</div>
+    <div class="title" style="font-size:44pt;">Common Hobbies</div>
+    <div class="subtitle" style="font-size:22pt; color:var(--ink-soft); font-weight:400; font-style:italic;">Finding what makes your free time count</div>
+  </div>
+`});
+
+// 2. Opening quote
+slides.push({ html:`
+  <div class="quote-slide">
+    <div class="quote-mark">&ldquo;</div>
+    <div class="quote-text">Surround yourself with the things you love; discard the rest. A hobby a day keeps the boredom away, ignites creativity, and gives us a purpose beyond routine work.</div>
+    <div class="quote-attr">&mdash; Winston Churchill <span style="font-size:14pt; font-style:italic; color:var(--ink-soft);">(adaptation)</span></div>
+    <div class="caption" style="margin-top:26px;">Presenter tip: speak this slowly, pause 2 seconds, then smile at the audience.</div>
+  </div>
+`});
+
+// 3. Icebreaker
+slides.push({ html:`
+  <div class="eyebrow">Icebreaker Game</div>
+  <div class="title">Point &amp; Guess</div>
+  <div class="two-col" style="align-items:center;">
+    <div class="text-col">
+      <div class="body-text">Point at three random classmates in the front row and ask:</div>
+      <div class="body-text" style="color:var(--clay); font-weight:700; margin:16px 0;">
+        &ldquo;If you had 2 extra free hours right now, would you spend them outdoors in nature, or indoors with a book or screen?&rdquo;
+      </div>
+      <div class="caption">Highlight how everyone has unique preferences based on personality!</div>
+    </div>
+    <div class="icon-col">${ICONS.chat.replace('viewBox','style="color:var(--mustard)" viewBox')}</div>
+  </div>
+`});
+
+// 4. What are hobbies
+slides.push({ html:`
+  <div class="eyebrow">1. Introduction</div>
+  <div class="title">What Are Hobbies?</div>
+  <div class="content-scroll">
+    <div class="body-text" style="margin-bottom:16px;">
+      Hobbies are not merely passive entertainment or casual pastimes &mdash; they are powerful outlets for igniting creativity, reducing stress, and discovering hidden talents.
+    </div>
+    <ul class="bullets">
+      <li>Hobbies bring excitement and personal growth.</li>
+      <li>Choosing one can be hard: we want something personally rewarding, yet also shareable with friends.</li>
+      <li>They range from active outdoor adventures (fishing, camping, hiking) to quiet indoor skill-building (reading, coding).</li>
+    </ul>
+  </div>
+`});
+
+// 5. Global popularity
+slides.push({ html:`
+  <div class="eyebrow">2A &middot; Topic Breakdown</div>
+  <div class="title">Global Popularity &amp; Culture</div>
+  <div class="two-col">
+    <div class="text-col">
+      <ul class="bullets">
+        <li>Popularity of hobbies varies globally with culture and geography.</li>
+        <li>In England, fishing is huge; in China, hiking is the most in-demand hobby.</li>
+        <li>The best common hobbies cost little and are easy to master.</li>
+      </ul>
+      <div class="vocab-box">
+        <div class="vlabel">Vocabulary</div>
+        <div class="vitem"><b>Prevalent</b> (adj) &mdash; widespread or common in an area.</div>
+        <div class="vitem"><b>Hone</b> (verb) &mdash; to refine or perfect a skill over time.</div>
+      </div>
+    </div>
+    <div class="icon-col">${icon('globe')}</div>
+  </div>
+`});
+
+// 6. Quiz 1
+slides.push({ quiz:true, html:`
+  <div class="stamp">QUIZ #1</div>
+  <div class="eyebrow">Mid-Presentation Check</div>
+  <div class="fact-strip"><div class="fbadge">&#128161;</div><div class="ftext">Fun fact: fishing (angling) in the UK has over 4 million participants &mdash; one of the largest participatory sports in the country!</div></div>
+  <div class="qa-q">Q: Which country considers hiking its most in-demand hobby, according to our text?</div>
+  <div class="qa-a"><span class="lab">Answer</span>China!</div>
+`});
+
+// 7. Reading
+slides.push({ html:`
+  <div class="eyebrow">2B &middot; Topic Breakdown</div>
+  <div class="title">Reading &mdash; The Ultimate Mind Expander</div>
+  <div class="two-col">
+    <div class="text-col">
+      <ul class="bullets">
+        <li>Universally popular: both an entertaining escape and a tool for self-improvement.</li>
+        <li>Wide selection of genres, no expensive gear needed.</li>
+        <li>Accessible anywhere &mdash; physical books, libraries, or digital PDFs.</li>
+        <li>Offers social connection through book clubs.</li>
+      </ul>
+      <div class="vocab-box">
+        <div class="vlabel">Vocabulary</div>
+        <div class="vitem"><b>Genres</b> (noun) &mdash; categories of literature, art, or music.</div>
+      </div>
+    </div>
+    <div class="icon-col">${icon('book')}</div>
+  </div>
+`});
+
+// 8. Quiz 2
+slides.push({ quiz:true, html:`
+  <div class="stamp">QUIZ #2</div>
+  <div class="eyebrow">Mid-Presentation Check</div>
+  <div class="fact-strip"><div class="fbadge">&#128161;</div><div class="ftext">Fun fact: reading for just 6 minutes a day can reduce stress by up to 68% &mdash; faster than listening to music or taking a walk!</div></div>
+  <div class="qa-q">Q: True or False &mdash; you need expensive equipment to start reading as a hobby.</div>
+  <div class="qa-a"><span class="lab">Answer</span>False! A library card or free digital PDFs are enough.</div>
+`});
+
+// 9. Dancing
+slides.push({ html:`
+  <div class="eyebrow">2C &middot; Topic Breakdown</div>
+  <div class="title">Dancing &mdash; Expressing &amp; Releasing Energy</div>
+  <div class="two-col">
+    <div class="text-col">
+      <ul class="bullets">
+        <li>A natural, rhythmic activity loved worldwide &mdash; professional or not.</li>
+        <li>Improves flexibility, joint mobility, and coordination.</li>
+        <li>A therapeutic exercise to blow off steam and stress.</li>
+        <li>Start in your living room, a studio, or with online courses.</li>
+      </ul>
+      <div class="vocab-box">
+        <div class="vlabel">Vocabulary</div>
+        <div class="vitem"><b>Mobility</b> (noun) &mdash; the ability to move freely and easily.</div>
+        <div class="vitem"><b>Take it up a notch</b> (idiom) &mdash; to increase intensity or quality.</div>
+      </div>
+    </div>
+    <div class="icon-col">${icon('dance')}</div>
+  </div>
+`});
+
+// 10. Dance poll
+slides.push({ html:`
+  <div class="eyebrow">Interactive Poll</div>
+  <div class="title">Confess It!</div>
+  <div class="two-col" style="align-items:center;">
+    <div class="text-col">
+      <div class="fact-strip"><div class="fbadge">&#128161;</div><div class="ftext">Dancing activates every part of the human brain at once &mdash; combining music, spatial awareness, and coordination!</div></div>
+      <div class="body-text" style="color:var(--clay); font-weight:700;">
+        &ldquo;Raise your hand if you secretly dance in front of the mirror when no one is home!&rdquo;
+      </div>
+      <div class="caption">Guaranteed laughs &mdash; no wrong answers here.</div>
+    </div>
+    <div class="icon-col">${icon('dance')}</div>
+  </div>
+`});
+
+// 11. Antiques
+slides.push({ html:`
+  <div class="eyebrow">2D &middot; Topic Breakdown</div>
+  <div class="title">Collecting Antiques</div>
+  <div class="two-col">
+    <div class="text-col">
+      <ul class="bullets">
+        <li>Appeals to people passionate about history, craftsmanship, and aesthetics.</li>
+        <li>Older items carry timeless quality and fascinating stories.</li>
+        <li>Often involves refurbishing old furniture into custom home decor.</li>
+      </ul>
+      <div class="vocab-box">
+        <div class="vlabel">Vocabulary</div>
+        <div class="vitem"><b>Refurbishing</b> (verb) &mdash; restoring something old to an attractive condition.</div>
+        <div class="vitem"><b>Passionate</b> (adj) &mdash; expressing strong enthusiasm or devotion.</div>
+      </div>
+    </div>
+    <div class="icon-col">${icon('antique')}</div>
+  </div>
+`});
+
+// 12. Quiz 3 - QUESTION ONLY (ask live, don't reveal on slide)
+slides.push({ quiz:true, html:`
+  <div class="stamp">QUIZ #3</div>
+  <div class="eyebrow">Mid-Presentation Check &mdash; Ask the Class!</div>
+  <div class="fact-strip"><div class="fbadge">&#128161;</div><div class="ftext">Fun fact: the oldest known antique collection belonged to Babylonian princess Ennigaldi-Nanna in 530 BCE, who built her own home museum!</div></div>
+  <div class="qa-q">Q: What process involves taking an old piece of furniture and fixing or renewing it?</div>
+  <div class="hidden-ans" id="quiz3">
+    <div class="prompt">Ask the class out loud &mdash; don't reveal yet.</div>
+    <div class="rtext">Answer: Refurbishing!</div>
+    <button onclick="document.getElementById('quiz3').classList.add('revealed')" type="button">Reveal (if needed)</button>
+  </div>
+`});
+
+// 13. Painting
+slides.push({ html:`
+  <div class="eyebrow">2E &middot; Topic Breakdown</div>
+  <div class="title">Painting &mdash; Creative &amp; Therapeutic Art</div>
+  <div class="two-col">
+    <div class="text-col">
+      <ul class="bullets">
+        <li>An expressive art form open to everyone &mdash; no professional skill required.</li>
+        <li>Extremely therapeutic and relaxing.</li>
+        <li>Total creative freedom on canvases, easels, or wall murals.</li>
+      </ul>
+      <div class="vocab-box">
+        <div class="vlabel">Vocabulary</div>
+        <div class="vitem"><b>Therapeutic</b> (adj) &mdash; healing or calming to mind and body.</div>
+        <div class="vitem"><b>Easel</b> (noun) &mdash; a frame that holds a canvas while painting.</div>
+        <div class="vitem"><b>Murals</b> (noun) &mdash; large artwork painted onto a wall.</div>
+      </div>
+    </div>
+    <div class="icon-col">${icon('palette')}</div>
+  </div>
+`});
+
+// 14. Audience question - painting
+slides.push({ html:`
+  <div class="eyebrow">Quick Audience Question</div>
+  <div class="title">Show Us Your Walls!</div>
+  <div class="two-col" style="align-items:center;">
+    <div class="text-col">
+      <div class="fact-strip"><div class="fbadge">&#128161;</div><div class="ftext">Leonardo da Vinci spent over 12 years painting just the lips of the Mona Lisa!</div></div>
+      <div class="body-text" style="color:var(--clay); font-weight:700;">Has anyone here ever painted a mural or customized their bedroom wall or desk?</div>
+      <div class="caption">Let 1&ndash;2 students share their story.</div>
+    </div>
+    <div class="icon-col">${icon('palette')}</div>
+  </div>
+`});
+
+// 15. Photography
+slides.push({ html:`
+  <div class="eyebrow">2F &middot; Topic Breakdown</div>
+  <div class="title">Photography &mdash; Preserving Moments</div>
+  <div class="two-col">
+    <div class="text-col">
+      <ul class="bullets">
+        <li>Modern photography doesn't need expensive gear &mdash; a smartphone is enough.</li>
+        <li>Core skills: framing, lighting, composition, depth, and exposure.</li>
+        <li>Preserves cherished memories and decorates personal spaces.</li>
+      </ul>
+      <div class="vocab-box">
+        <div class="vlabel">Vocabulary</div>
+        <div class="vitem"><b>Exposure</b> (noun) &mdash; the amount of light reaching a camera sensor.</div>
+      </div>
+    </div>
+    <div class="icon-col">${icon('camera')}</div>
+  </div>
+`});
+
+// 16. Quiz 4
+slides.push({ quiz:true, html:`
+  <div class="stamp">QUIZ #4</div>
+  <div class="eyebrow">Mid-Presentation Check</div>
+  <div class="fact-strip"><div class="fbadge">&#128161;</div><div class="ftext">Over 1.8 trillion digital photos are taken worldwide every year &mdash; about 5 billion per day, mostly on smartphones!</div></div>
+  <div class="qa-q">Q: Do you need a high-end, expensive DSLR camera to practice photography?</div>
+  <div class="qa-a"><span class="lab">Answer</span>No! A good smartphone camera plus an eye for lighting and exposure is all you need.</div>
+`});
+
+// 17. Writing & Knitting
+slides.push({ html:`
+  <div class="eyebrow">2G &middot; Topic Breakdown</div>
+  <div class="title">Writing &amp; Knitting</div>
+  <div class="two-col">
+    <div class="text-col">
+      <ul class="bullets">
+        <li><b>Writing:</b> total mental freedom &mdash; journaling, blogging, or crafting poetry reduces stress and boosts productivity.</li>
+        <li><b>Knitting:</b> a rewarding craft for custom winter wardrobe items and thoughtful gifts.</li>
+        <li>Both are highly portable &mdash; practice on the bus, watching TV, or hanging out.</li>
+      </ul>
+      <div class="vocab-box">
+        <div class="vlabel">Vocabulary</div>
+        <div class="vitem"><b>Niche</b> (noun) &mdash; a specialized topic of interest.</div>
+        <div class="vitem"><b>Wardrobe</b> (noun) &mdash; a person's entire clothing collection.</div>
+        <div class="vitem"><b>Hanging out</b> (idiom) &mdash; spending relaxed leisure time with friends.</div>
+      </div>
+    </div>
+    <div class="icon-col">${icon('pen')}</div>
+  </div>
+`});
+
+// 18. Quiz 5
+slides.push({ quiz:true, html:`
+  <div class="stamp">QUIZ #5</div>
+  <div class="eyebrow">Mid-Presentation Check</div>
+  <div class="fact-strip"><div class="fbadge">&#128161;</div><div class="ftext">Knitting was originally an all-male trade during the Middle Ages in Europe!</div></div>
+  <div class="qa-q">Q: According to studies in our text, what daily habit do the world's most successful people practice?</div>
+  <div class="qa-a"><span class="lab">Answer</span>Writing in journals!</div>
+`});
+
+// 19. Summary matrix
+slides.push({ html:`
+  <div class="eyebrow">3. Quick Reference</div>
+  <div class="title" style="font-size:34pt;">Summary Matrix</div>
+  <div class="content-scroll">
+    <table class="matrix">
+      <tr><th>Hobby</th><th>Primary Benefit</th><th>Key Requirement</th></tr>
+      <tr><td>Reading</td><td>Improves knowledge &amp; relaxes mind</td><td>Books, library card, or PDFs</td></tr>
+      <tr><td>Dancing</td><td>Boosts flexibility, mobility &amp; mood</td><td>Music &amp; open floor space</td></tr>
+      <tr><td>Collecting Antiques</td><td>Preserves history &amp; aesthetic value</td><td>Eye for detail &amp; taste</td></tr>
+      <tr><td>Painting</td><td>Therapeutic &amp; creative expression</td><td>Paints, brushes, easel/mural</td></tr>
+      <tr><td>Photography</td><td>Captures memories &amp; decorates spaces</td><td>Smartphone/camera &amp; lighting eye</td></tr>
+      <tr><td>Writing</td><td>Reduces stress &amp; boosts productivity</td><td>Journal, blog, or pen &amp; paper</td></tr>
+      <tr><td>Knitting</td><td>Hand coordination &amp; custom clothing</td><td>Yarn, needles &amp; leisure time</td></tr>
+    </table>
+  </div>
+`});
+
+// 20. Conclusion
+slides.push({ html:`
+  <div class="eyebrow">4. Conclusion</div>
+  <div class="title">Make Your Free Time Count</div>
+  <div class="two-col" style="align-items:center;">
+    <div class="text-col">
+      <div class="body-text">
+        Hobbies are not mere pastimes to kill time &mdash; they are essential tools for personal transformation, creative expression, physical vitality, and mental peace. Whether you pick up a paintbrush, write a daily journal, dance in your living room, or capture photos on your phone, every hobby enriches your life.
+      </div>
+    </div>
+    <div class="icon-col">${icon('heart')}</div>
+  </div>
+`});
+
+// 21. Closing
+slides.push({ html:`
+  <div class="quote-slide">
+    <div class="icon-wrap" style="margin:0 auto 14px; color:var(--mustard);">${ICONS.trophy}</div>
+    <div class="quote-mark">&ldquo;</div>
+    <div class="quote-text">A hobby a day keeps the boredom away, ignites creativity, and gives us a purpose beyond routine work. Find what you love and let it inspire you every day!</div>
+    <div class="quote-attr" style="margin-bottom:26px;">&mdash; Presentation Finale</div>
+    <div class="body-text" style="color:var(--clay); font-weight:700;">
+      Thank you for your active participation during our quizzes!
+    </div>
+    <div class="caption" style="margin-top:8px;">Now, go out there, find a hobby that ignites your passion, and make your free time count!</div>
+  </div>
+`});
+
+/* ---------------- RENDER ENGINE ---------------- */
+let current = 0;
+const stageEl = document.getElementById("stage");
+const dotsEl = document.getElementById("dots");
+const counterEl = document.getElementById("counter");
+
+function renderDots(){
+  dotsEl.innerHTML = slides.map((_, i) => `<span class="${i===current?'active':''}" data-i="${i}"></span>`).join("");
+}
+
+function render(){
+  const s = slides[current];
+  stageEl.innerHTML = `
+    <div class="sheet">
+      <div class="washi"></div>
+      ${s.html}
+      <div class="pagenum">p. ${current+1}</div>
+    </div>
+  `;
+  counterEl.textContent = `Slide ${current+1} of ${slides.length}`;
+  document.getElementById("prevBtn").disabled = current === 0;
+  document.getElementById("nextBtn").disabled = current === slides.length - 1;
+  renderDots();
+}
+
+document.getElementById("prevBtn").addEventListener("click", () => { if(current>0){ current--; render(); }});
+document.getElementById("nextBtn").addEventListener("click", () => { if(current<slides.length-1){ current++; render(); }});
+dotsEl.addEventListener("click", (e) => {
+  const d = e.target.closest("span[data-i]");
+  if(!d) return;
+  current = +d.dataset.i;
+  render();
+});
+document.addEventListener("keydown", (e) => {
+  if(e.key === "ArrowRight" && current < slides.length-1){ current++; render(); }
+  if(e.key === "ArrowLeft" && current > 0){ current--; render(); }
+});
+
+render();
+</script>
+</body>
+</html>
