@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Common Hobbies Across the World — Unit 8</title>
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --paper:#F1E7CE;
+  --paper-2:#E9DBB8;
+  --paper-edge:#D9C79C;
+  --ink:#2B2013;
+  --ink-soft:#5B4C36;
+  --ink-faint:#8A7A5C;
+  --thread:#C9B98C;
+  --accent:#B33A1E;
+  --accent-soft:#E7CBB8;
+  --accent-dark:#7A2513;
+  --shadow: 0 18px 40px -18px rgba(43,32,19,.45);
+  --radius: 3px;
+  --serif: "Times New Roman", Times, "Liberation Serif", Georgia, serif;
+}
+
+*{box-sizing:border-box;}
+html,body{
+  height:100%;
+  margin:0;
+  padding:0;
+  background:var(--paper);
+  font-family:var(--serif);
+  color:var(--ink);
+  overflow:hidden;
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+}
+
+/* paper grain texture, reused everywhere */
+.grain{
+  position:fixed; inset:0; pointer-events:none; z-index:1;
+  opacity:.5; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.16  0 0 0 0 0.12  0 0 0 0 0.07  0 0 0 0.045 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+#app{
+  position:relative;
+  height:100vh;
+  width:100vw;
+  overflow:hidden;
+  background:
+    radial-gradient(1100px 700px at 12% -10%, var(--accent-soft) 0%, transparent 60%),
+    radial-gradient(900px 600px at 105% 110%, var(--paper-2) 0%, transparent 55%),
+    var(--paper);
+  transition:background 1s ease;
+}
+
+/* stitched progress thread across the top */
+#progress-wrap{
+  position:fixed; top:0; left:0; right:0; height:34px; z-index:40;
+  display:flex; align-items:center; padding:0 22px;
+  pointer-events:none;
+}
+#progress-track{
+  position:relative; flex:1; height:2px;
+  background-image:linear-gradient(to right, var(--ink-faint) 0 6px, transparent 6px 12px);
+  background-size:12px 2px; background-repeat:repeat-x;
+  opacity:.55;
+}
+#progress-fill{
+  position:absolute; top:-4px; left:0; height:10px;
+  display:flex; align-items:center;
+  transition:width .6s cubic-bezier(.65,.05,.25,1);
+}
+#progress-fill::after{
+  content:"✂"; font-size:14px; color:var(--accent-dark); transform:translateX(-6px) rotate(90deg);
+  display:inline-block; margin-left:auto;
+}
+
+/* header: eyebrow + counter */
+#chrome-top{
+  position:fixed; top:10px; left:0; right:0; z-index:39;
+  display:flex; justify-content:space-between; align-items:flex-start;
+  padding:6px 26px 0; pointer-events:none;
+}
+#brand{
+  font-size:12.5px; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--ink-soft); font-style:italic;
+}
+#counter{
+  font-size:13px; letter-spacing:1px; color:var(--ink-soft);
+  background:rgba(255,252,240,.55); border:1px solid var(--paper-edge);
+  padding:2px 10px; border-radius:20px; pointer-events:auto;
+}
+#counter b{color:var(--accent-dark); font-weight:700;}
+
+/* ============================================================
+   SLIDES
+   ============================================================ */
+#stage{
+  position:relative; height:100%; width:100%;
+}
+.slide{
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transform:translateY(26px) scale(.985);
+  filter:blur(2px);
+  transition:opacity .55s cubic-bezier(.22,.68,.32,1), transform .6s cubic-bezier(.22,.68,.32,1), filter .5s ease;
+  padding:52px 4vw 26px;
+}
+.slide.active{
+  opacity:1; pointer-events:auto; transform:translateY(0) scale(1); filter:blur(0);
+  z-index:5;
+}
+.slide.leaving-prev{ transform:translateY(-26px) scale(.985); }
+.slide.leaving-next{ transform:translateY(26px) scale(.985); }
+
+.sheet{
+  position:relative;
+  width:min(1180px, 94vw);
+  height:min(760px, 88vh);
+  background:linear-gradient(180deg, #FBF6E7 0%, #F6EFDA 100%);
+  border-radius:6px;
+  box-shadow:var(--shadow), inset 0 0 0 1px rgba(43,32,19,.06);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+/* torn top + bottom edge illusion */
+.sheet::before, .sheet::after{
+  content:""; position:absolute; left:0; right:0; height:10px; z-index:2;
+  background-repeat:repeat-x; background-size:22px 10px; opacity:.9;
+}
+.sheet::before{
+  top:0;
+  background-image:linear-gradient(135deg, transparent 50%, var(--paper) 50%),
+                    linear-gradient(45deg, var(--paper) 50%, transparent 50%);
+  background-position:0 0, 11px 0;
+  transform:translateY(-9px);
+}
+.sheet::after{
+  bottom:0;
+  background-image:linear-gradient(45deg, transparent 50%, var(--paper) 50%),
+                    linear-gradient(135deg, var(--paper) 50%, transparent 50%);
+  background-position:0 0, 11px 0;
+  transform:translateY(9px);
+}
+
+.sheet-scroll{
+  position:relative;
+  height:100%; width:100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:118px clamp(24px,4.4vw,64px) 40px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--accent) transparent;
+}
+.sheet-scroll::-webkit-scrollbar{width:7px;}
+.sheet-scroll::-webkit-scrollbar-thumb{background:var(--accent); border-radius:8px; opacity:.5;}
+.sheet-scroll::-webkit-scrollbar-track{background:transparent;}
+
+/* stamp badge - the signature element */
+.stamp{
+  position:absolute; top:22px; right:26px; z-index:6;
+  width:86px; height:86px; border-radius:50%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  color:#fffdf3;
+  transform:rotate(-9deg) scale(.4);
+  opacity:0;
+}
+.slide.active .stamp{
+  animation:stampIn .55s cubic-bezier(.2,1.4,.5,1) .25s forwards;
+}
+@keyframes stampIn{
+  0%{transform:rotate(-9deg) scale(.4); opacity:0;}
+  60%{transform:rotate(-9deg) scale(1.12); opacity:1;}
+  100%{transform:rotate(-9deg) scale(1); opacity:1;}
+}
+.stamp .icon-badge{width:100%; height:100%;}
+.stamp svg{width:34px;height:34px;}
+.stamp .stamp-tag{
+  position:absolute; bottom:-9px; left:50%; transform:translateX(-50%);
+  font-size:9px; letter-spacing:1.5px; font-weight:700; color:#fffdf3;
+  background:var(--accent-dark); padding:2px 8px; border-radius:8px; white-space:nowrap;
+}
+
+/* washi tape */
+.tape{
+  position:absolute; height:26px; width:96px;
+  background:repeating-linear-gradient(45deg, var(--accent) 0 8px, var(--accent-soft) 8px 16px);
+  opacity:.75; box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+
+/* eyebrow / kicker */
+.kicker{
+  font-size:12.5px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--accent-dark); font-weight:700; margin:0 0 10px;
+  display:flex; align-items:center; gap:10px;
+}
+.kicker::before{content:""; width:26px; height:1.5px; background:var(--accent-dark); display:inline-block;}
+
+h1.title{
+  font-size:clamp(34px,4.6vw,58px); line-height:1.04; margin:0 0 14px;
+  font-weight:700; color:var(--ink);
+}
+h2.title{
+  font-size:clamp(26px,3.4vw,40px); line-height:1.08; margin:0 0 10px; font-weight:700;
+}
+.subtitle{
+  font-size:17px; color:var(--ink-soft); font-style:italic; margin:0 0 26px; max-width:60ch;
+}
+
+/* body content grid */
+.content-row{display:flex; gap:34px; align-items:flex-start; flex-wrap:wrap;}
+.content-main{flex:1 1 420px; min-width:0;}
+.content-side{flex:0 0 240px; display:flex; align-items:center; justify-content:center;}
+
+.hero-icon{width:200px;height:200px; opacity:.92; animation:float 6s ease-in-out infinite; color:var(--accent-dark);}
+
+/* ============================================================
+   ICON BADGE — colorful glossy illustration mark
+   ============================================================ */
+.icon-badge{
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,.55) 0%, transparent 42%),
+    linear-gradient(150deg, var(--accent) 0%, var(--accent-dark) 100%);
+  box-shadow:
+    0 14px 26px -10px var(--accent-dark),
+    inset 0 -8px 14px rgba(0,0,0,.18),
+    inset 0 6px 10px rgba(255,255,255,.35);
+  color:#fffdf3;
+}
+.icon-badge svg{ width:58%; height:58%; stroke-width:7; filter:drop-shadow(0 2px 2px rgba(0,0,0,.25)); }
+.icon-badge .spark-dot{
+  position:absolute; border-radius:50%; background:#FFD86B;
+  box-shadow:0 0 8px rgba(255,216,107,.9);
+  animation:twinkle 2.4s ease-in-out infinite;
+}
+@keyframes twinkle{ 0%,100%{opacity:.25; transform:scale(.7);} 50%{opacity:1; transform:scale(1.15);} }
+
+.badge-lg{width:190px; height:190px; animation:float 6s ease-in-out infinite;}
+.badge-md{width:104px; height:104px;}
+.badge-sm{width:44px; height:44px;}
+.badge-xs{width:30px; height:30px; box-shadow:0 6px 12px -6px var(--accent-dark), inset 0 -4px 8px rgba(0,0,0,.18);}
+
+/* decorative pattern ribbon per slide, sits just under the torn top edge */
+.theme-ribbon{
+  position:absolute; top:9px; left:0; right:0; height:9px; z-index:3; opacity:.55;
+}
+
+/* title collage */
+.collage{ position:relative; width:100%; height:210px; margin:6px 0 8px; }
+.collage .icon-badge{ position:absolute; }
+.collage .c1{ top:6px; left:2%; }
+.collage .c2{ top:56px; left:20%; }
+.collage .c3{ top:0px; left:40%; }
+.collage .c4{ top:50px; left:60%; }
+.collage .c5{ top:8px; left:80%; }
+.collage .icon-badge{ animation:float 6.5s ease-in-out infinite; }
+.collage .c2{ animation-delay:.6s; } .collage .c3{ animation-delay:1.1s; } .collage .c4{ animation-delay:.3s; } .collage .c5{ animation-delay:.9s; }
+@keyframes float{ 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-12px) rotate(2deg);} }
+
+.section-block{margin-bottom:22px;}
+.section-block h3{
+  font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink-faint);
+  margin:0 0 10px; font-weight:700;
+}
+ul.notes{margin:0; padding:0; list-style:none;}
+ul.notes li{
+  position:relative; padding:2px 0 12px 26px; font-size:17px; line-height:1.5; color:var(--ink);
+  opacity:0; transform:translateX(-8px);
+  animation:lineIn .5s ease forwards;
+}
+ul.notes li::before{
+  content:"❧"; position:absolute; left:0; top:2px; color:var(--accent); font-size:15px;
+}
+@keyframes lineIn{ to{opacity:1; transform:translateX(0);} }
+.slide.active ul.notes li:nth-child(1){animation-delay:.18s}
+.slide.active ul.notes li:nth-child(2){animation-delay:.30s}
+.slide.active ul.notes li:nth-child(3){animation-delay:.42s}
+.slide.active ul.notes li:nth-child(4){animation-delay:.54s}
+.slide.active ul.notes li:nth-child(5){animation-delay:.66s}
+
+.strong{color:var(--accent-dark); font-weight:700;}
+
+/* quote card (title/closing) */
+.quote-card{
+  position:relative; background:#fffef8; border:1px solid var(--paper-edge);
+  padding:26px 30px 24px; border-radius:2px; box-shadow:var(--shadow);
+  max-width:640px; margin-top:6px; transform:rotate(-.6deg);
+}
+.quote-card p{font-size:18px; line-height:1.6; font-style:italic; margin:0; color:var(--ink);}
+.quote-card::before{content:"“"; font-size:60px; color:var(--accent); position:absolute; top:-18px; left:12px; font-style:normal;}
+.quote-card svg{width:26px;height:26px;color:var(--accent);}
+
+/* postcards for global slide */
+.postcard-row{display:flex; gap:22px; flex-wrap:wrap; margin-top:8px;}
+.postcard{
+  flex:1 1 220px; background:#fffef8; border:1px solid var(--paper-edge); border-radius:3px;
+  padding:18px 20px; box-shadow:0 10px 22px -14px rgba(43,32,19,.4);
+  transform:rotate(var(--tilt,0deg));
+}
+.postcard h4{margin:0 0 4px; font-size:19px; letter-spacing:.5px;}
+.postcard p{margin:0; font-size:15.5px; color:var(--ink-soft);}
+.postcard .flag{display:inline-block; width:26px; height:18px; margin-right:8px; border-radius:2px; vertical-align:-3px;}
+.postcard .postcard-photo-wrap{
+  width:100%; height:130px; border-radius:2px; overflow:hidden; margin-bottom:12px;
+  box-shadow:inset 0 0 0 1px rgba(43,32,19,.08);
+  position:relative;
+}
+.postcard .postcard-photo-wrap img{width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.02) contrast(1.02);}
+.postcard .postcard-photo-wrap::after{
+  content:""; position:absolute; inset:0; box-shadow:inset 0 0 22px rgba(43,32,19,.18);
+}
+.postcard .postcard-head{display:flex; align-items:center; gap:8px;}
+
+/* observation photo cards (slide 2) */
+.obs-row{display:flex; gap:20px; flex-wrap:wrap;}
+.obs-card{
+  flex:1 1 220px; background:#fffef8; border:6px solid #fffef8; outline:1px solid var(--paper-edge);
+  box-shadow:0 12px 26px -14px rgba(43,32,19,.45); border-radius:2px; padding-bottom:10px;
+  transform:rotate(var(--tilt,0deg));
+}
+.obs-card .obs-art{
+  height:150px; display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+  background:linear-gradient(160deg, var(--accent-soft), var(--paper-2));
+}
+.obs-card .obs-art img{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+}
+.obs-card .obs-art .obs-badge{
+  position:absolute; bottom:8px; right:8px; z-index:2;
+  box-shadow:0 6px 14px -6px rgba(0,0,0,.5), inset 0 -4px 8px rgba(0,0,0,.18);
+}
+.obs-card p{font-size:14px; text-align:center; margin:8px 10px 0; color:var(--ink-soft);}
+
+.bubble-row{display:flex; gap:16px; flex-wrap:wrap; margin-top:18px;}
+.bubble{
+  background:var(--accent-soft); border-radius:16px; padding:12px 18px; font-size:15.5px;
+  position:relative; max-width:340px; color:var(--ink);
+}
+
+/* fun fact card */
+.fact-card{
+  margin-top:20px; background:#fffef8; border-left:4px solid var(--accent);
+  padding:16px 20px; border-radius:2px; box-shadow:0 10px 20px -14px rgba(43,32,19,.35);
+}
+.fact-card .fact-label{font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent-dark); font-weight:700; margin-bottom:6px;}
+.fact-card p{margin:0 0 10px; font-size:15.5px; line-height:1.5;}
+.quiz-q{font-weight:700;}
+.reveal-btn{
+  margin-top:6px; border:1.5px solid var(--accent); background:transparent; color:var(--accent-dark);
+  font-family:var(--serif); font-size:14px; padding:6px 14px; border-radius:20px; cursor:pointer;
+  transition:background .25s, color .25s, transform .2s;
+}
+.reveal-btn:hover{background:var(--accent); color:#fffef8; transform:translateY(-1px);}
+.answer{
+  max-height:0; overflow:hidden; opacity:0; transition:max-height .45s ease, opacity .4s ease, margin .4s ease;
+  font-size:15px; color:var(--accent-dark); font-weight:700;
+}
+.answer.shown{max-height:80px; opacity:1; margin-top:8px;}
+
+/* two column layout (writing & knitting) */
+.two-col{display:flex; gap:26px; flex-wrap:wrap;}
+.col-card{
+  flex:1 1 280px; background:#fffef8; border:1px solid var(--paper-edge); border-radius:3px;
+  padding:20px 22px; box-shadow:0 10px 22px -16px rgba(43,32,19,.35);
+}
+.col-card h4{margin:0 0 10px; font-size:19px; color:var(--accent-dark);}
+.col-card .col-photo-wrap{
+  width:100%; height:120px; border-radius:2px; overflow:hidden; margin-bottom:14px;
+  box-shadow:inset 0 0 0 1px rgba(43,32,19,.08);
+}
+.col-card .col-photo-wrap img{width:100%; height:100%; object-fit:cover; display:block;}
+
+/* summary table */
+.matrix-wrap{overflow-x:auto;}
+table.matrix{width:100%; border-collapse:collapse; margin-top:6px; font-size:15px;}
+table.matrix th{
+  text-align:left; font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-faint);
+  padding:8px 12px; border-bottom:2px solid var(--ink-faint);
+}
+table.matrix td{padding:12px; border-bottom:1px dashed var(--paper-edge); vertical-align:top; color:var(--ink);}
+table.matrix tr{opacity:0; transform:translateY(8px); animation:lineIn .5s ease forwards;}
+.slide.active table.matrix tr:nth-child(1){animation-delay:.15s}
+.slide.active table.matrix tr:nth-child(2){animation-delay:.24s}
+.slide.active table.matrix tr:nth-child(3){animation-delay:.33s}
+.slide.active table.matrix tr:nth-child(4){animation-delay:.42s}
+.slide.active table.matrix tr:nth-child(5){animation-delay:.51s}
+.slide.active table.matrix tr:nth-child(6){animation-delay:.60s}
+.slide.active table.matrix tr:nth-child(7){animation-delay:.69s}
+table.matrix tr:hover{background:var(--accent-soft);}
+table.matrix .hicon{display:inline-flex; margin-right:10px; vertical-align:-12px;}
+table.matrix .hphoto{
+  display:inline-block; width:34px; height:34px; border-radius:50%; overflow:hidden;
+  margin-right:10px; vertical-align:-12px; box-shadow:0 0 0 2px #fffef8, 0 4px 10px -4px rgba(43,32,19,.5);
+}
+table.matrix .hphoto img{width:100%; height:100%; object-fit:cover; display:block;}
+
+/* takeaway cards conclusion */
+.take-row{display:flex; gap:22px; flex-wrap:wrap; margin-top:6px;}
+.take-card{
+  flex:1 1 260px; background:#fffef8; border:1px solid var(--paper-edge); border-radius:3px;
+  padding:20px 22px; box-shadow:0 10px 22px -16px rgba(43,32,19,.35);
+}
+.take-card .icon-badge{margin-bottom:10px;}
+.take-card h4{margin:0 0 6px; font-size:18px;}
+.take-card p{margin:0; font-size:15px; color:var(--ink-soft); line-height:1.5;}
+.take-card .take-photo-wrap{
+  width:100%; height:110px; border-radius:2px; overflow:hidden; margin-bottom:14px;
+  box-shadow:inset 0 0 0 1px rgba(43,32,19,.08);
+}
+.take-card .take-photo-wrap img{width:100%; height:100%; object-fit:cover; display:block;}
+
+/* ============================================================
+   PHOTO FRAME — polaroid-style real photograph mount
+   ============================================================ */
+.photo-frame{
+  position:relative;
+  background:#fffef8;
+  padding:10px 10px 34px;
+  box-shadow:0 18px 34px -16px rgba(43,32,19,.5), 0 2px 0 rgba(255,255,255,.6) inset;
+  border-radius:2px;
+}
+.photo-frame .photo-inner{
+  position:relative; overflow:hidden; border-radius:1px;
+  background:var(--paper-2);
+}
+.photo-frame .photo-inner img{
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter:saturate(1.05) contrast(1.03) sepia(.06);
+}
+.photo-frame .photo-caption{
+  position:absolute; left:0; right:0; bottom:8px; text-align:center;
+  font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-faint); font-style:italic;
+}
+.hero-photo{
+  width:220px; transform:rotate(2.5deg);
+  animation:photoFloat 7s ease-in-out infinite;
+}
+.hero-photo .photo-inner{height:190px;}
+@keyframes photoFloat{ 0%,100%{transform:rotate(2.5deg) translateY(0);} 50%{transform:rotate(-1.5deg) translateY(-10px);} }
+
+.mini-photo{ width:118px; }
+.mini-photo .photo-inner{ height:96px; }
+
+/* collage of real photographs on title slide */
+.photo-collage{ position:relative; width:100%; height:220px; margin:6px 0 10px; }
+.photo-collage .photo-frame{ position:absolute; }
+.photo-collage .p1{ top:10px; left:1%; width:118px; transform:rotate(-6deg);}
+.photo-collage .p1 .photo-inner{height:96px;}
+.photo-collage .p2{ top:64px; left:20%; width:100px; transform:rotate(4deg);}
+.photo-collage .p2 .photo-inner{height:80px;}
+.photo-collage .p3{ top:0px; left:39%; width:150px; transform:rotate(-2deg); z-index:2;}
+.photo-collage .p3 .photo-inner{height:126px;}
+.photo-collage .p4{ top:58px; left:61%; width:104px; transform:rotate(6deg);}
+.photo-collage .p4 .photo-inner{height:84px;}
+.photo-collage .p5{ top:6px; left:81%; width:112px; transform:rotate(-4deg);}
+.photo-collage .p5 .photo-inner{height:92px;}
+.photo-collage .photo-frame{ animation:photoFloat 6.5s ease-in-out infinite; }
+.photo-collage .p2{ animation-delay:.6s; } .photo-collage .p3{ animation-delay:1.1s; } .photo-collage .p4{ animation-delay:.3s; } .photo-collage .p5{ animation-delay:.9s; }
+
+/* ============================================================
+   VOCABULARY BUTTON + PANEL
+   ============================================================ */
+.vocab-btn{
+  position:absolute; left:26px; top:26px; z-index:7;
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--accent); color:#fffef2; border:none;
+  font-family:var(--serif); font-size:14px; letter-spacing:.5px;
+  padding:9px 18px 9px 14px; border-radius:20px 4px 20px 4px;
+  cursor:pointer; box-shadow:0 8px 18px -8px rgba(43,32,19,.55);
+  transition:transform .25s, box-shadow .25s;
+}
+.vocab-btn:hover{transform:translateY(-2px) rotate(-.5deg); box-shadow:0 12px 22px -8px rgba(43,32,19,.6);}
+.vocab-btn svg{width:16px;height:16px; color:#fffef2;}
+.vocab-btn .ribbon-tail{
+  position:absolute; right:-9px; top:0; width:0; height:0;
+  border-top:16px solid transparent; border-bottom:16px solid transparent; border-left:9px solid var(--accent-dark);
+}
+
+.vocab-overlay{
+  position:absolute; inset:0; background:rgba(30,22,12,.32);
+  opacity:0; pointer-events:none; transition:opacity .35s ease; z-index:8; backdrop-filter:blur(1px);
+}
+.vocab-overlay.open{opacity:1; pointer-events:auto;}
+
+.vocab-panel{
+  position:absolute; top:0; right:0; height:100%; width:min(360px,86%);
+  background:linear-gradient(180deg,#FFFCF2,#F6EEDA);
+  box-shadow:-14px 0 30px -12px rgba(43,32,19,.5);
+  transform:translateX(105%);
+  transition:transform .5s cubic-bezier(.22,.68,.32,1);
+  z-index:9; display:flex; flex-direction:column;
+  border-left:2px solid var(--accent);
+}
+.vocab-panel.open{transform:translateX(0);}
+.vocab-head{
+  padding:22px 22px 12px; display:flex; justify-content:space-between; align-items:center;
+  border-bottom:1px dashed var(--paper-edge);
+}
+.vocab-head h3{margin:0; font-size:20px; color:var(--accent-dark);}
+.vocab-close{
+  border:none; background:none; font-size:22px; color:var(--ink-soft); cursor:pointer; line-height:1;
+  transition:transform .2s;
+}
+.vocab-close:hover{transform:rotate(90deg); color:var(--accent-dark);}
+.vocab-list{padding:16px 20px 24px; overflow-y:auto; flex:1;}
+.vocab-card{
+  perspective:1000px; height:96px; margin-bottom:16px; cursor:pointer;
+}
+.vocab-card-inner{
+  position:relative; width:100%; height:100%; transition:transform .6s cubic-bezier(.4,.2,.2,1);
+  transform-style:preserve-3d;
+}
+.vocab-card.flipped .vocab-card-inner{transform:rotateY(180deg);}
+.vocab-face{
+  position:absolute; inset:0; backface-visibility:hidden;
+  border-radius:4px; padding:14px 16px; display:flex; flex-direction:column; justify-content:center;
+  box-shadow:0 6px 14px -8px rgba(43,32,19,.4);
+}
+.vocab-front{background:#fffef8; border:1px solid var(--paper-edge);}
+.vocab-front .term{font-size:17px; font-weight:700; color:var(--ink);}
+.vocab-front .pos{font-size:12px; color:var(--accent-dark); font-style:italic;}
+.vocab-front .hint{font-size:11px; color:var(--ink-faint); margin-top:6px; letter-spacing:.5px;}
+.vocab-back{background:var(--accent); color:#fffef2; transform:rotateY(180deg);}
+.vocab-back .def{font-size:14px; line-height:1.45;}
+.vocab-panel-note{padding:10px 22px 18px; font-size:12px; color:var(--ink-faint); font-style:italic; border-top:1px dashed var(--paper-edge);}
+
+/* ============================================================
+   NAV CONTROLS
+   ============================================================ */
+.nav-arrow{
+  position:fixed; top:50%; transform:translateY(-50%); z-index:30;
+  width:48px; height:48px; border-radius:50%; border:1.5px solid var(--ink-soft);
+  background:rgba(255,252,240,.7); color:var(--ink);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  transition:background .25s, transform .25s, border-color .25s;
+  font-size:20px;
+}
+.nav-arrow:hover{background:var(--accent); color:#fffef2; border-color:var(--accent); transform:translateY(-50%) scale(1.08);}
+.nav-arrow.disabled{opacity:.25; pointer-events:none;}
+#prev-btn{left:18px;} #next-btn{right:18px;}
+
+#dots{
+  position:fixed; bottom:14px; left:0; right:0; z-index:30;
+  display:flex; justify-content:center; align-items:center; gap:9px; flex-wrap:wrap; padding:0 10px;
+}
+.dot{
+  width:10px; height:10px; border-radius:50%; background:var(--ink-faint); opacity:.4;
+  cursor:pointer; transition:all .3s ease; border:none; padding:0;
+}
+.dot.active{background:var(--accent); opacity:1; transform:scale(1.35);}
+.dot:hover{opacity:.8;}
+
+/* intro overlay */
+#intro-veil{
+  position:fixed; inset:0; z-index:100; background:var(--paper);
+  display:flex; align-items:center; justify-content:center;
+  transition:opacity .8s ease, visibility .8s;
+}
+#intro-veil.hide{opacity:0; visibility:hidden;}
+#intro-veil .loader-text{font-style:italic; color:var(--ink-soft); font-size:16px; letter-spacing:1px;}
+#intro-veil .loader-mark{
+  width:64px; height:64px; border:2px dashed var(--accent); border-radius:50%; margin:0 auto 16px;
+  display:flex; align-items:center; justify-content:center; animation:spin 3s linear infinite;
+  color:var(--accent-dark);
+}
+#intro-veil .loader-mark svg{width:28px;height:28px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* hint on first load */
+#swipe-hint{
+  position:fixed; bottom:44px; left:50%; transform:translateX(-50%); z-index:30;
+  font-size:12.5px; color:var(--ink-faint); letter-spacing:.5px; font-style:italic;
+  opacity:0; animation:hintFade 5s ease forwards;
+  pointer-events:none;
+}
+@keyframes hintFade{ 0%{opacity:0;} 15%{opacity:1;} 80%{opacity:1;} 100%{opacity:0;} }
+
+/* floating ambient icons */
+.ambient{position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0;}
+.ambient span{
+  position:absolute; opacity:.10; color:var(--accent-dark); font-size:34px;
+  animation:drift linear infinite;
+}
+@keyframes drift{
+  0%{transform:translateY(10%) rotate(0deg);}
+  100%{transform:translateY(-120%) rotate(20deg);}
+}
+
+@media (max-width:720px){
+  .sheet{width:100vw; height:100vh; border-radius:0;}
+  #app{padding:0;}
+  .nav-arrow{width:38px;height:38px; font-size:16px;}
+  .vocab-panel{width:100%;}
+  .stamp{width:64px;height:64px; top:14px; right:14px;}
+  .stamp svg{width:22px;height:22px;}
+  .vocab-btn{top:14px; left:14px; padding:7px 14px 7px 11px; font-size:12.5px;}
+  .sheet-scroll{padding:100px 20px 40px;}
+  .hero-photo{width:170px;}
+  .hero-photo .photo-inner{height:150px;}
+}
+</style>
+</head>
+<body>
+
+<div id="intro-veil">
+  <div style="text-align:center;">
+    <div class="loader-mark"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M50 22c-8-6-20-8-32-6v52c12-2 24 0 32 6 8-6 20-8 32-6V16c-12-2-24 0-32 6z"/><path d="M50 22v52"/></svg></div>
+    <div class="loader-text">opening the field journal…</div>
+  </div>
+</div>
+
+<div class="grain"></div>
+
+<div id="app">
+  <div id="chrome-top">
+    <div id="brand">Grade 10 English · Unit 8 · Hobbies &amp; Interests</div>
+    <div id="counter"><b id="counter-cur">01</b> / <span id="counter-total">12</span></div>
+  </div>
+  <div id="progress-wrap"><div id="progress-track"><div id="progress-fill"></div></div></div>
+
+  <div id="stage"></div>
+
+  <button id="prev-btn" class="nav-arrow" aria-label="Previous slide">&#10094;</button>
+  <button id="next-btn" class="nav-arrow" aria-label="Next slide">&#10095;</button>
+  <div id="dots"></div>
+  <div id="swipe-hint">use ← → keys, swipe, or the dots below to turn the page</div>
+</div>
+
+<script>
+/* ============================================================
+   ICONS — minimal line-art SVGs, colored via currentColor
+   ============================================================ */
+const ICONS = {
+  quote:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 35c0-10 8-16 18-16v8c-6 0-10 3-10 8h10v20H20V35z"/><path d="M54 35c0-10 8-16 18-16v8c-6 0-10 3-10 8h10v20H54V35z"/></svg>`,
+  eye:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 50c10-18 26-27 42-27s32 9 42 27c-10 18-26 27-42 27S18 68 8 50z"/><circle cx="50" cy="50" r="13"/></svg>`,
+  spark:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M50 12c8 14 8 20 20 24-12 4-12 10-20 24-8-14-8-20-20-24 12-4 12-10 20-24z"/><path d="M78 62c3 6 3 8 9 10-6 2-6 4-9 10-3-6-3-8-9-10 6-2 6-4 9-10z"/></svg>`,
+  globe:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="38"/><ellipse cx="50" cy="50" rx="16" ry="38"/><path d="M12 50h76M17 30h66M17 70h66"/></svg>`,
+  book:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M50 22c-8-6-20-8-32-6v52c12-2 24 0 32 6 8-6 20-8 32-6V16c-12-2-24 0-32 6z"/><path d="M50 22v52"/></svg>`,
+  dance:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="18" r="8"/><path d="M50 26v22M50 48l-22 24M50 48l24 20M50 34l-20-10M50 34l22-6"/></svg>`,
+  vase:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M40 14h20M43 14c-2 10-10 14-10 26 0 10 8 12 8 22 0 8-6 10-6 18h30c0-8-6-10-6-18 0-10 8-12 8-22 0-12-8-16-10-26"/></svg>`,
+  palette:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M50 12c-22 0-38 16-38 34 0 12 8 16 16 16 5 0 6-4 11-4 6 0 6 6 13 6 16 0 36-16 36-34 0-10-16-18-38-18z"/><circle cx="38" cy="34" r="3"/><circle cx="52" cy="26" r="3"/><circle cx="66" cy="34" r="3"/><circle cx="34" cy="50" r="3"/></svg>`,
+  camera:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="30" width="76" height="52" rx="6"/><path d="M34 30l6-10h20l6 10"/><circle cx="50" cy="56" r="16"/></svg>`,
+  quill:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M84 14C56 20 30 44 22 78c18-4 40-14 52-30M84 14c4 10-2 24-14 34M20 82l8-16"/></svg>`,
+  yarn:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="42" cy="52" r="26"/><path d="M20 40c14 6 20 18 14 34M30 28c14 8 18 24 8 40M66 30l16-14M64 44l18-4"/></svg>`,
+  grid:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="14" width="72" height="72" rx="4"/><path d="M14 38h72M14 62h72M38 14v72M62 14v72"/></svg>`,
+  star:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M50 12l11 24 26 3-19 18 5 27-23-13-23 13 5-27-19-18 26-3z"/></svg>`,
+  compass:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="36"/><path d="M62 38l-8 20-20 8 8-20z"/></svg>`,
+  leaf:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 80C20 40 45 18 82 18 82 58 58 80 20 80z"/><path d="M22 78C40 60 55 45 80 20"/></svg>`,
+  drum:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="50" cy="28" rx="30" ry="12"/><path d="M20 28v30c0 7 13 12 30 12s30-5 30-12V28"/><path d="M28 18l16 20M72 18L56 38"/></svg>`,
+  fish:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 50c14-15 36-22 52-22 15 0 26 10 26 22s-11 22-26 22c-16 0-38-7-52-22z"/><path d="M62 38l18-12v48l-18-12"/><circle cx="28" cy="46" r="2.6" fill="currentColor"/></svg>`,
+  mountain:`<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 82L36 32l13 17 9-13 34 46z"/><path d="M36 32l7 9 7-5"/></svg>`,
+};
+
+/* vivid, independent colors for each icon key — used for badges,
+   collages, and table rows so every hobby keeps its own identity
+   even when it appears outside its own slide's accent context. */
+const HOBBY_COLORS = {
+  quote:{main:"#B33A1E",dark:"#7A2513"},
+  eye:{main:"#3C6E47",dark:"#254A2E"},
+  spark:{main:"#B8862E",dark:"#7A5518"},
+  globe:{main:"#1F5673",dark:"#123B50"},
+  book:{main:"#2F5233",dark:"#1D3720"},
+  dance:{main:"#B7472A",dark:"#7C2E17"},
+  vase:{main:"#8B6F47",dark:"#5C4A2E"},
+  palette:{main:"#6C4F77",dark:"#48334F"},
+  camera:{main:"#1F4E5F",dark:"#123340"},
+  quill:{main:"#7A4B3A",dark:"#502F23"},
+  yarn:{main:"#A6423B",dark:"#6B2A25"},
+  grid:{main:"#4B4032",dark:"#2E251A"},
+  star:{main:"#C1440E",dark:"#832E0A"},
+  compass:{main:"#1F5673",dark:"#123B50"},
+  leaf:{main:"#3C6E47",dark:"#254A2E"},
+  drum:{main:"#B7472A",dark:"#7C2E17"},
+  fish:{main:"#2A6E7A",dark:"#194752"},
+  mountain:{main:"#5C6B47",dark:"#3A4530"},
+};
+
+/* ============================================================
+   PHOTOS — real photographs (Pexels, free-to-use) keyed by hobby.
+   Only the numeric id + a short alt description live here; the
+   actual delivery URL is built by photoUrl() below.
+   ============================================================ */
+const PHOTOS = {
+  reading:    {id:256455,   alt:"A young woman reading a book in a well-stocked library"},
+  dance:      {id:33572320, alt:"Traditional folk dancers performing to drums in rural India"},
+  paintingKid:{id:6157556,  alt:"A boy sitting on the floor painting a landscape"},
+  drum:       {id:17077450, alt:"Musicians in traditional dress playing hand drums"},
+  fishing:    {id:4828164,  alt:"An angler fishing quietly on an English river"},
+  hiking:     {id:2609459,  alt:"Hikers trekking a sunny mountain trail"},
+  antiques:   {id:6827340,  alt:"A room of collected antique furniture and decor"},
+  painting:   {id:6184418,  alt:"An artist painting on a canvas with a palette in hand"},
+  photography:{id:3497181,  alt:"A photographer framing a shot with a camera outdoors"},
+  writing:    {id:5357177,  alt:"A hand writing in an open journal"},
+  knitting:   {id:5709892,  alt:"Hands knitting with wool yarn and needles"},
+};
+/* Pexels' CDN accepts width/quality params directly on the canonical
+   photo URL — safe to hotlink, no key required. */
+function photoUrl(key, w){
+  const p = PHOTOS[key];
+  if(!p) return "";
+  return `https://images.pexels.com/photos/${p.id}/pexels-photo-${p.id}.jpeg?auto=compress&cs=tinysrgb&w=${w||600}`;
+}
+function photoAlt(key){ return (PHOTOS[key] && PHOTOS[key].alt) || ""; }
+
+/** A framed real photograph (polaroid-like), used for hero art. */
+function photoFrame(key, extraClass, w, caption){
+  return `<div class="photo-frame ${extraClass||''}">
+      <div class="photo-inner"><img src="${photoUrl(key,w||500)}" alt="${photoAlt(key)}" loading="lazy"></div>
+      ${caption ? `<div class="photo-caption">${caption}</div>` : ""}
+    </div>`;
+}
+
+function iconSpan(name){ return ICONS[name] || ""; }
+
+/** Build a colorful glossy icon badge. sizeClass: badge-lg | badge-md | badge-sm | badge-xs */
+function badge(iconKey, sizeClass, extraStyle){
+  const c = HOBBY_COLORS[iconKey] || {main:"#B33A1E",dark:"#7A2513"};
+  const sparkles = (sizeClass === 'badge-lg' || sizeClass === 'badge-md')
+    ? `<span class="spark-dot" style="width:7px;height:7px; top:8%; left:78%;"></span>
+       <span class="spark-dot" style="width:4px;height:4px; top:74%; left:14%; animation-delay:.9s;"></span>`
+    : "";
+  return `<div class="icon-badge ${sizeClass}" style="--accent:${c.main}; --accent-dark:${c.dark}; ${extraStyle||''}">${iconSpan(iconKey)}${sparkles}</div>`;
+}
+
+/* ============================================================
+   SLIDE DATA — drawn from English10_Common_Hobbies_Slide_Content.docx
+   ============================================================ */
+const SLIDES = [
+  { // 1
+    tag:"TITLE", icon:"quote", accent:{main:"#B33A1E",soft:"#EFD3C4",dark:"#7A2513"},
+    kicker:"Unit 8 · Hobbies and Interests · Pages 119–121",
+    title:"Common Hobbies<br>Across the World",
+    subtitle:"A field journal of what people do with their free time — and why it matters.",
+    quote:"“All is in a man's hands and he lets it all slip from cowardice, that's an axiom. It would be interesting to know what it is men are most afraid of. Taking a new step, uttering a new word is what they fear most….”",
+    vocab:[
+      {term:"Hobby", pos:"noun · /ˈhɒb.i/ (UK) /ˈhɑː.bi/ (US)", def:"An activity done regularly during one's leisure time for pleasure, relaxation, or personal enjoyment rather than as a main job."},
+      {term:"Interest", pos:"noun · /ˈɪn.trəst/ or /ˈɪn.tres.t/", def:"A feeling of curiosity or concern about something, or a topic/activity that catches a person's attention and makes them want to learn or know more about it."},
+    ],
+  },
+  { // 2
+    tag:"WARM-UP", icon:"eye", accent:{main:"#3C6E47",soft:"#D4E3D0",dark:"#254A2E"},
+    kicker:"Slide 2 · Getting Started",
+    title:"Pre-Learning Exercise",
+    subtitle:"Observation & warm-up questions — Page 119",
+    observations:[
+      {icon:"palette", photo:"paintingKid", text:"A boy sitting on a floor mat, drawing and painting a landscape on paper."},
+      {icon:"dance", photo:"dance", text:"A group of dancers performing traditional steps to the beats of a folk drum (Madal)."},
+      {icon:"drum", photo:"drum", text:"A young musician playing a traditional drum and singing into a microphone."},
+    ],
+    discussion:[
+      "a. What are the common hobbies that people around you practice?",
+      "b. What is your personal hobby, and why did you choose it?",
+    ],
+  },
+  { // 3
+    tag:"INTRO", icon:"spark", accent:{main:"#7A5A22",soft:"#E7DCC0",dark:"#4F3A15"},
+    kicker:"Slide 3 · Introduction",
+    title:"Introduction to Common Hobbies",
+    core:[
+      "Hobbies are not merely simple forms of entertainment. They are powerful outlets for <span class='strong'>igniting creativity</span> and discovering hidden personal talents.",
+      "<span class='strong'>The Selection Challenge:</span> choosing a personal hobby can be difficult — people want something personally interesting, yet enjoyable to share with friends.",
+      "<span class='strong'>Spectrum of Hobbies:</span> from active outdoor pursuits (fishing, camping, hunting, hiking) to quiet indoor skill-building activities (reading, browsing online courses).",
+    ],
+    photo:"hiking",
+    vocab:[
+      {term:"Igniting", pos:"verb", def:"Sparks, sets on fire, or activates an emotion or creative ability."},
+      {term:"Hone", pos:"verb", def:"To refine, sharpen, or perfect a skill over time."},
+    ],
+  },
+  { // 4
+    tag:"AROUND THE WORLD", icon:"globe", accent:{main:"#1F5673",soft:"#CFE2EA",dark:"#123B50"},
+    kicker:"Slide 4 · Global Popularity & Cultural Influences",
+    title:"Global Popularity & Cultural Influences",
+    intro:"The popularity of hobbies differs globally, depending on individual preferences and geographic or cultural context.",
+    postcards:[
+      {flag:"#B33A1E", icon:"fish", photo:"fishing", country:"England", fact:"Fishing (Angling) is the most prevalent hobby.", tilt:"-2deg"},
+      {flag:"#C0392B", icon:"mountain", photo:"hiking", country:"China", fact:"Hiking is the most in-demand hobby.", tilt:"1.5deg"},
+    ],
+    core:[
+      "<span class='strong'>Accessibility:</span> the best part of common hobbies is that they can be practiced without spending much money, and the skills involved are easy to master.",
+    ],
+    vocab:[
+      {term:"Prevalent", pos:"adjective", def:"Widespread, common, or predominant in a particular region or culture."},
+    ],
+  },
+  { // 5
+    tag:"HOBBY SPOTLIGHT", icon:"book", accent:{main:"#2F5233",soft:"#D6E4D1",dark:"#1D3720"},
+    kicker:"Slide 5 · Reading",
+    title:"Reading — The Ultimate Mind Expander",
+    photo:"reading",
+    core:[
+      "<span class='strong'>Universal Appeal:</span> reading is one of the most popular hobbies across many cultures — entertainment and personal growth in one.",
+      "<span class='strong'>Wide Selection:</span> readers can choose from a vast variety of genres, whether they seek knowledge or amusement.",
+      "<span class='strong'>Low Barrier to Entry:</span> no special or expensive gear needed — simply visit a local library or download free PDFs.",
+      "<span class='strong'>Social Connection:</span> book clubs offer chances to meet new people and share reviews.",
+    ],
+    vocab:[{term:"Genres", pos:"noun", def:"Specific categories or types of literature, art, or music (e.g., sci-fi, mystery, biography)."}],
+    fact:{
+      fact:"Reading for just 6 minutes a day can reduce stress levels by up to 68% — faster than music or walking!",
+      question:"True or False — you need expensive equipment to start reading as a hobby.",
+      answer:"False! You only need a library card or downloadable PDFs.",
+    },
+  },
+  { // 6
+    tag:"HOBBY SPOTLIGHT", icon:"dance", accent:{main:"#B7472A",soft:"#F0D3C4",dark:"#7C2E17"},
+    kicker:"Slide 6 · Dancing",
+    title:"Dancing — Expressing & Releasing Energy",
+    photo:"dance",
+    core:[
+      "<span class='strong'>Universal Joy:</span> almost everyone loves dancing, whether they consider themselves skilled or 'terrible' dancers.",
+      "<span class='strong'>Physical Benefits:</span> greatly improves flexibility and joint mobility as an enjoyable form of exercise.",
+      "<span class='strong'>Stress Relief:</span> an effective outlet to let off excess energy and steam.",
+      "<span class='strong'>Getting Started:</span> casually in a living room, or a step up with a dance studio or online courses.",
+    ],
+    vocab:[
+      {term:"Mobility", pos:"noun", def:"The ability to move freely and easily."},
+      {term:"Take it up a notch", pos:"idiom", def:"To increase the level, intensity, or quality of an activity."},
+    ],
+    fact:{
+      fact:"Dancing activates every single region of the human brain at once — musical processing, spatial orientation, and physical motor execution together!",
+      question:null, answer:null,
+    },
+  },
+  { // 7
+    tag:"HOBBY SPOTLIGHT", icon:"vase", accent:{main:"#8B6F47",soft:"#E8DEC7",dark:"#5C4A2E"},
+    kicker:"Slide 7 · Collecting Antiques",
+    title:"Collecting Antiques — Preserving History & Treasures",
+    photo:"antiques",
+    core:[
+      "<span class='strong'>Aesthetic & Historical Value:</span> appeals to people who appreciate quality craftsmanship, history, and tasteful home decor.",
+      "<span class='strong'>Timeless Quality:</span> older items carry unique character, value, and years of fascinating stories.",
+      "<span class='strong'>Restoration Craft:</span> includes the creative hobby of refurbishing and renewing old furniture into custom pieces.",
+    ],
+    vocab:[
+      {term:"Passionate", pos:"adjective", def:"Expressing strong enthusiasm, interest, or devotion."},
+      {term:"Appreciate", pos:"verb", def:"To recognize the full worth, value, or quality of something."},
+      {term:"Refurbishing", pos:"verb", def:"Renovating, redecorating, or restoring old items to an attractive, usable condition."},
+    ],
+    fact:{
+      fact:"The oldest known museum/antique collection in human history belonged to Babylonian Princess Ennigaldi-Nanna in 530 BCE!",
+      question:"What process involves taking an old piece of furniture and renewing/fixing it?",
+      answer:"Refurbishing!",
+    },
+  },
+  { // 8
+    tag:"HOBBY SPOTLIGHT", icon:"palette", accent:{main:"#6C4F77",soft:"#E1D4E6",dark:"#48334F"},
+    kicker:"Slide 8 · Painting",
+    title:"Painting — Creative & Therapeutic Art",
+    photo:"painting",
+    core:[
+      "<span class='strong'>Creative Freedom:</span> lets individuals express themselves freely without needing to be professional artists.",
+      "<span class='strong'>Therapeutic Effects:</span> a calm, therapeutic, and highly relaxing effect on the mind.",
+      "<span class='strong'>Simple Beginnings:</span> requires only basic paints and brushes from an art supply store.",
+      "<span class='strong'>Versatile Canvas:</span> small paper, easels, or large wall murals — the choice is yours.",
+    ],
+    vocab:[
+      {term:"Expressive", pos:"adjective", def:"Effectively conveying feelings, thoughts, or ideas."},
+      {term:"Therapeutic", pos:"adjective", def:"Having a healing, calming, or stress-relieving effect on the mind and body."},
+      {term:"Easel", pos:"noun", def:"A wooden standing frame used by artists to hold a canvas while painting."},
+      {term:"Murals", pos:"noun", def:"Large artwork painted directly onto a wall or solid surface."},
+    ],
+    fact:{
+      fact:"Leonardo da Vinci spent over 12 years painting just the lips of the Mona Lisa!",
+      question:"Has anyone here ever painted a mural, notebook cover, or room wall?", answer:"Open discussion — share with the class!",
+    },
+  },
+  { // 9
+    tag:"HOBBY SPOTLIGHT", icon:"camera", accent:{main:"#1F4E5F",soft:"#CFE0E4",dark:"#123340"},
+    kicker:"Slide 9 · Photography",
+    title:"Photography — Preserving Moments & Memories",
+    photo:"photography",
+    core:[
+      "<span class='strong'>High Accessibility:</span> no expensive professional camera needed — a standard smartphone camera is enough.",
+      "<span class='strong'>Key Technical Elements:</span> success relies on a good eye for framing, plus understanding lighting, depth, and exposure.",
+      "<span class='strong'>Core Value:</span> preserve cherished memories forever and display beautiful pictures on personal walls.",
+    ],
+    vocab:[{term:"Exposure", pos:"noun", def:"The total amount of light reaching a camera sensor, affecting image brightness."}],
+    fact:{
+      fact:"Over 1.8 trillion digital photos are taken worldwide every year — about 5 billion a day, mostly on smartphones!",
+      question:"Do you need an expensive DSLR camera to practice photography as a hobby?",
+      answer:"No! A good eye and a smartphone camera are all you need.",
+    },
+  },
+  { // 10
+    tag:"HOBBY SPOTLIGHT", icon:"quill", accent:{main:"#7A4B3A",soft:"#E5D3C4",dark:"#502F23"},
+    kicker:"Slide 10 · Writing & Knitting",
+    title:"Writing & Knitting — Expression & Practical Craft",
+    twoCol:[
+      {head:"1 · Writing", icon:"quill", photo:"writing",
+        items:[
+          "<span class='strong'>Mental Freedom:</span> absolute creative freedom — daily routines, new recipes, poems, or entire books.",
+          "<span class='strong'>Stress Management:</span> journaling helps handle stress, promotes relaxation, boosts productivity.",
+          "<span class='strong'>Sharing Knowledge:</span> blogs let you share specialized knowledge with like-minded people.",
+        ]},
+      {head:"2 · Knitting", icon:"yarn", photo:"knitting",
+        items:[
+          "<span class='strong'>Practical Craft:</span> create custom winter wardrobe items — mittens, hats, scarves, blankets — for warmth or gifts.",
+          "<span class='strong'>Portability & Health:</span> can be practiced anywhere — buses, in front of the TV — and improves hand coordination.",
+        ]},
+    ],
+    vocab:[
+      {term:"Niche", pos:"noun", def:"A specialized, specific segment or topic of interest."},
+      {term:"Wardrobe", pos:"noun", def:"A person's complete collection of clothing."},
+      {term:"Hanging out", pos:"idiom", def:"Spending informal leisure time relaxing with friends."},
+    ],
+    fact:{
+      fact:"Knitting was originally an all-male trade during the Middle Ages in Europe!",
+      question:"According to the text, what habit do many of the world's most successful people practice daily?",
+      answer:"Keeping daily journals!",
+    },
+  },
+  { // 11
+    tag:"SUMMARY", icon:"grid", accent:{main:"#4B4032",soft:"#DED2BC",dark:"#2E251A"},
+    kicker:"Slide 11 · At a Glance",
+    title:"Summary Matrix of Common Hobbies",
+    matrix:[
+      {icon:"book", photo:"reading", name:"Reading", benefit:"Expands knowledge, improves oneself, and relaxes the mind", tool:"Books, library card, or digital PDFs"},
+      {icon:"dance", photo:"dance", name:"Dancing", benefit:"Improves flexibility, joint mobility, and releases excess energy", tool:"Music and open floor space"},
+      {icon:"vase", photo:"antiques", name:"Collecting Antiques", benefit:"Preserves history, appreciates quality, and restores decor", tool:"Eye for tasteful decor & vintage interest"},
+      {icon:"palette", photo:"painting", name:"Painting", benefit:"Therapeutic, highly relaxing, and expresses creativity freely", tool:"Paints, brushes, easel, or wall mural"},
+      {icon:"camera", photo:"photography", name:"Photography", benefit:"Preserves memories forever and decorates living spaces", tool:"Smartphone / camera & sense of lighting & exposure"},
+      {icon:"quill", photo:"writing", name:"Writing", benefit:"Relieves stress, boosts productivity, and connects with minds", tool:"Journal, blog platform, or pen & paper"},
+      {icon:"yarn", photo:"knitting", name:"Knitting", benefit:"Exercises hand coordination and creates winter clothes/gifts", tool:"Yarn, knitting needles, and leisure time"},
+    ],
+  },
+  { // 12
+    tag:"CONCLUSION", icon:"star", accent:{main:"#B33A1E",soft:"#EFD3C4",dark:"#7A2513"},
+    kicker:"Slide 12 · Conclusion & Closing Quote",
+    title:"Every Hobby Tells a Story",
+    takeaways:[
+      {icon:"spark", photo:"painting", head:"Personal Transformation", text:"Hobbies are essential tools for personal transformation, creative expression, physical vitality, and mental peace."},
+      {icon:"leaf", photo:"hiking", head:"Everyday Enrichment", text:"Whether painting, writing, dancing, or taking photos — practicing a hobby enriches daily life and gives free time meaning."},
+    ],
+    quote:"“Taking a new step, uttering a new word, is what people fear most — yet it is exactly the first brushstroke, the first page, the first step of a dance that turns idle time into a hobby worth keeping.”",
+  },
+];
+
+/* ============================================================
+   RENDER HELPERS
+   ============================================================ */
+function vocabButtonHTML(idx){
+  return `<button class="vocab-btn" data-open-vocab="${idx}">
+      ${iconSpan('spark')} Reveal Vocabulary <span class="ribbon-tail"></span>
+    </button>`;
+}
+
+function factCardHTML(f){
+  if(!f) return "";
+  let q = "";
+  if(f.question){
+    q = `<p class="quiz-q">${f.question}</p>
+         <button class="reveal-btn" data-reveal>Reveal answer</button>
+         <div class="answer">${f.answer}</div>`;
+  }
+  return `<div class="fact-card">
+      <div class="fact-label">Fun Fact${f.question ? ' & Quick Quiz' : ''}</div>
+      <p>${f.fact}</p>
+      ${q}
+    </div>`;
+}
+
+function renderSlide(s, i){
+  const stampTag = String(i+1).padStart(2,'0');
+  let inner = "";
+
+  if(s.tag === "TITLE"){
+    inner = `
+      <div class="tape" style="top:26px; left:38%; transform:rotate(-4deg);"></div>
+      <p class="kicker">${s.kicker}</p>
+      <h1 class="title">${s.title}</h1>
+      <p class="subtitle">${s.subtitle}</p>
+      <div class="photo-collage">
+        <div class="p1">${photoFrame('reading')}</div>
+        <div class="p2">${photoFrame('painting')}</div>
+        <div class="p3">${photoFrame('dance')}</div>
+        <div class="p4">${photoFrame('photography')}</div>
+        <div class="p5">${photoFrame('knitting')}</div>
+      </div>
+      <div class="quote-card">${badge('quote','badge-sm')}<p style="margin-top:10px;">${s.quote}</p></div>
+    `;
+  } else if(s.observations){ // slide 2
+    inner = `
+      <p class="kicker">${s.kicker}</p>
+      <h2 class="title">${s.title}</h2>
+      <p class="subtitle">${s.subtitle}</p>
+      <div class="obs-row">
+        ${s.observations.map((o,k)=>`
+          <div class="obs-card" style="--tilt:${(k%2?1:-1)*1.5}deg">
+            <div class="obs-art">
+              <img src="${photoUrl(o.photo,480)}" alt="${photoAlt(o.photo)}" loading="lazy">
+              <div class="obs-badge">${badge(o.icon,'badge-xs')}</div>
+            </div>
+            <p>${o.text}</p>
+          </div>`).join("")}
+      </div>
+      <div class="section-block" style="margin-top:24px;">
+        <h3>Class Discussion</h3>
+        <div class="bubble-row">
+          ${s.discussion.map(d=>`<div class="bubble">${d}</div>`).join("")}
+        </div>
+      </div>
+    `;
+  } else if(s.postcards){ // slide 4
+    inner = `
+      <p class="kicker">${s.kicker}</p>
+      <h2 class="title">${s.title}</h2>
+      <p class="subtitle">${s.intro}</p>
+      <div class="postcard-row">
+        ${s.postcards.map(p=>`
+          <div class="postcard" style="--tilt:${p.tilt}">
+            <div class="postcard-photo-wrap"><img src="${photoUrl(p.photo,480)}" alt="${photoAlt(p.photo)}" loading="lazy"></div>
+            <div class="postcard-head">${badge(p.icon,'badge-xs')}
+              <h4><span class="flag" style="background:${p.flag}"></span>${p.country}</h4>
+            </div>
+            <p>${p.fact}</p>
+          </div>`).join("")}
+      </div>
+      <div class="section-block" style="margin-top:22px;">
+        <ul class="notes">${s.core.map(c=>`<li>${c}</li>`).join("")}</ul>
+      </div>
+    `;
+  } else if(s.twoCol){ // slide 10
+    inner = `
+      <p class="kicker">${s.kicker}</p>
+      <h2 class="title">${s.title}</h2>
+      <div class="two-col">
+        ${s.twoCol.map(c=>`
+          <div class="col-card">
+            <div class="col-photo-wrap"><img src="${photoUrl(c.photo,480)}" alt="${photoAlt(c.photo)}" loading="lazy"></div>
+            <h4>${badge(c.icon,'badge-xs',';vertical-align:-8px;display:inline-flex;margin-right:8px;')} ${c.head}</h4>
+            <ul class="notes">${c.items.map(it=>`<li>${it}</li>`).join("")}</ul>
+          </div>`).join("")}
+      </div>
+      ${factCardHTML(s.fact)}
+    `;
+  } else if(s.matrix){ // slide 11
+    inner = `
+      <p class="kicker">${s.kicker}</p>
+      <h2 class="title">${s.title}</h2>
+      <div class="matrix-wrap">
+        <table class="matrix">
+          <thead><tr><th>Hobby</th><th>Primary Benefit</th><th>Key Tool / Requirement</th></tr></thead>
+          <tbody>
+            ${s.matrix.map(r=>`
+              <tr><td><span class="hphoto"><img src="${photoUrl(r.photo,120)}" alt="${photoAlt(r.photo)}" loading="lazy"></span>${r.name}</td><td>${r.benefit}</td><td>${r.tool}</td></tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+  } else if(s.takeaways){ // slide 12
+    inner = `
+      <p class="kicker">${s.kicker}</p>
+      <h1 class="title">${s.title}</h1>
+      <div class="take-row">
+        ${s.takeaways.map(t=>`
+          <div class="take-card">
+            <div class="take-photo-wrap"><img src="${photoUrl(t.photo,480)}" alt="${photoAlt(t.photo)}" loading="lazy"></div>
+            <h4>${badge(t.icon,'badge-xs',';vertical-align:-8px;display:inline-flex;margin-right:8px;')}${t.head}</h4><p>${t.text}</p></div>`).join("")}
+      </div>
+      <div class="quote-card" style="margin-top:22px;">${badge('quote','badge-sm')}<p style="margin-top:10px;">${s.quote}</p></div>
+    `;
+  } else { // generic hobby-spotlight slides (3,5,6,7,8,9)
+    inner = `
+      <p class="kicker">${s.kicker}</p>
+      <h2 class="title">${s.title}</h2>
+      <div class="content-row">
+        <div class="content-main">
+          <ul class="notes">${s.core.map(c=>`<li>${c}</li>`).join("")}</ul>
+          ${factCardHTML(s.fact)}
+        </div>
+        <div class="content-side">${photoFrame(s.photo,'hero-photo')}</div>
+      </div>
+    `;
+  }
+
+  const vocabBtn = (s.vocab && s.vocab.length) ? vocabButtonHTML(i) : "";
+  const vocabPanel = (s.vocab && s.vocab.length) ? `
+    <div class="vocab-overlay" data-vocab-overlay="${i}"></div>
+    <div class="vocab-panel" data-vocab-panel="${i}">
+      <div class="vocab-head"><h3>Key Vocabulary</h3><button class="vocab-close" data-close-vocab="${i}">&times;</button></div>
+      <div class="vocab-list">
+        ${s.vocab.map(v=>`
+          <div class="vocab-card" data-flip>
+            <div class="vocab-card-inner">
+              <div class="vocab-face vocab-front">
+                <div class="term">${v.term}</div>
+                <div class="pos">${v.pos}</div>
+                <div class="hint">tap to reveal definition</div>
+              </div>
+              <div class="vocab-face vocab-back"><div class="def">${v.def}</div></div>
+            </div>
+          </div>`).join("")}
+      </div>
+      <div class="vocab-panel-note">Tap a card to flip it and study the definition.</div>
+    </div>
+  ` : "";
+
+  return `
+    <div class="slide" data-index="${i}" style="--accent:${s.accent.main}; --accent-soft:${s.accent.soft}; --accent-dark:${s.accent.dark};">
+      <div class="sheet">
+        <div class="ambient">${ambientIcons(s.icon)}</div>
+        ${vocabBtn}
+        <div class="stamp">${iconSpan(s.icon)}<div class="stamp-tag">${stampTag}</div></div>
+        <div class="sheet-scroll">${inner}</div>
+        ${vocabPanel}
+      </div>
+    </div>
+  `;
+}
+
+function ambientIcons(iconName){
+  let out = "";
+  const positions = [
+    {l:"4%", dur:"22s", delay:"0s", size:"30px"},
+    {l:"22%", dur:"28s", delay:"4s", size:"22px"},
+    {l:"60%", dur:"24s", delay:"2s", size:"26px"},
+    {l:"85%", dur:"30s", delay:"6s", size:"20px"},
+  ];
+  positions.forEach(p=>{
+    out += `<span style="left:${p.l}; bottom:-10%; width:${p.size}; height:${p.size}; animation-duration:${p.dur}; animation-delay:${p.delay};">${iconSpan(iconName)}</span>`;
+  });
+  return out;
+}
+
+/* ============================================================
+   APP LOGIC
+   ============================================================ */
+const stage = document.getElementById('stage');
+const dotsWrap = document.getElementById('dots');
+let current = 0;
+
+function buildStage(){
+  stage.innerHTML = SLIDES.map((s,i)=>renderSlide(s,i)).join("");
+  dotsWrap.innerHTML = SLIDES.map((s,i)=>`<button class="dot" data-dot="${i}" aria-label="Go to slide ${i+1}: ${s.title ? s.title.replace(/<[^>]+>/g,'') : s.tag}"></button>`).join("");
+  document.getElementById('counter-total').textContent = String(SLIDES.length).padStart(2,'0');
+}
+
+function goTo(idx){
+  if(idx < 0 || idx >= SLIDES.length) return;
+  const dir = idx > current ? 'next' : 'prev';
+  const slides = document.querySelectorAll('.slide');
+  slides.forEach((el,i)=>{
+    el.classList.remove('active','leaving-prev','leaving-next');
+    if(i === current && i !== idx){
+      el.classList.add(dir === 'next' ? 'leaving-next' : 'leaving-prev');
+    }
+  });
+  current = idx;
+  const activeEl = slides[current];
+  activeEl.classList.add('active');
+  // reset any active vocab panel state on the outgoing/incoming slide
+  document.querySelectorAll('.vocab-panel.open').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.vocab-overlay.open').forEach(p=>p.classList.remove('open'));
+
+  document.getElementById('counter-cur').textContent = String(current+1).padStart(2,'0');
+  document.getElementById('progress-fill').style.width = `${((current+1)/SLIDES.length)*100}%`;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active', i===current));
+  document.getElementById('prev-btn').classList.toggle('disabled', current===0);
+  document.getElementById('next-btn').classList.toggle('disabled', current===SLIDES.length-1);
+
+  // apply accent variables to #app for ambient background wash
+  const s = SLIDES[current];
+  document.getElementById('app').style.setProperty('--accent', s.accent.main);
+  document.getElementById('app').style.setProperty('--accent-soft', s.accent.soft);
+  document.getElementById('app').style.setProperty('--accent-dark', s.accent.dark);
+}
+
+function wire(){
+  document.getElementById('prev-btn').addEventListener('click', ()=>goTo(current-1));
+  document.getElementById('next-btn').addEventListener('click', ()=>goTo(current+1));
+
+  dotsWrap.addEventListener('click', e=>{
+    const btn = e.target.closest('[data-dot]');
+    if(btn) goTo(parseInt(btn.dataset.dot,10));
+  });
+
+  document.addEventListener('keydown', e=>{
+    if(e.key === 'ArrowRight' || e.key === 'PageDown'){ goTo(current+1); }
+    if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ goTo(current-1); }
+  });
+
+  // touch swipe (horizontal) on the stage, but don't hijack vertical scroll inside a sheet
+  let touchStartX = 0, touchStartY = 0;
+  stage.addEventListener('touchstart', e=>{
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, {passive:true});
+  stage.addEventListener('touchend', e=>{
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if(Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy)*1.4){
+      if(dx < 0) goTo(current+1); else goTo(current-1);
+    }
+  }, {passive:true});
+
+  // vocabulary panel open/close (event delegation)
+  stage.addEventListener('click', e=>{
+    const openBtn = e.target.closest('[data-open-vocab]');
+    if(openBtn){
+      const idx = openBtn.dataset.openVocab;
+      document.querySelector(`[data-vocab-panel="${idx}"]`).classList.add('open');
+      document.querySelector(`[data-vocab-overlay="${idx}"]`).classList.add('open');
+      return;
+    }
+    const closeBtn = e.target.closest('[data-close-vocab]');
+    if(closeBtn){
+      const idx = closeBtn.dataset.closeVocab;
+      document.querySelector(`[data-vocab-panel="${idx}"]`).classList.remove('open');
+      document.querySelector(`[data-vocab-overlay="${idx}"]`).classList.remove('open');
+      return;
+    }
+    const overlay = e.target.closest('[data-vocab-overlay]');
+    if(overlay){
+      overlay.classList.remove('open');
+      document.querySelector(`[data-vocab-panel="${overlay.dataset.vocabOverlay}"]`).classList.remove('open');
+      return;
+    }
+    const flip = e.target.closest('[data-flip]');
+    if(flip){
+      flip.classList.toggle('flipped');
+      return;
+    }
+    const reveal = e.target.closest('[data-reveal]');
+    if(reveal){
+      const ans = reveal.nextElementSibling;
+      ans.classList.toggle('shown');
+      reveal.textContent = ans.classList.contains('shown') ? 'Hide answer' : 'Reveal answer';
+      return;
+    }
+  });
+}
+
+/* boot */
+buildStage();
+wire();
+goTo(0);
+setTimeout(()=>document.getElementById('intro-veil').classList.add('hide'), 900);
+
+</script>
+</body>
+</html>
