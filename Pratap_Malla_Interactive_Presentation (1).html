@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+<title>Pratap Malla · The Golden Age of Kantipur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --maroon:#7A2436;
+  --maroon-dark:#3E1119;
+  --maroon-deep:#2A0C11;
+  --gold:#D4AF37;
+  --gold-light:#F3DE9A;
+  --gold-soft:#F0D68C;
+  --ivory:#F8F1E0;
+  --ivory-dim:#EFE4C8;
+  --indigo:#152840;
+  --indigo-deep:#0B1622;
+  --terracotta:#C1652F;
+  --success:#3F7D58;
+  --success-bg:#E5F1E8;
+  --error:#B3432B;
+  --error-bg:#FBEAE3;
+  --ink:#2B1A12;
+  --font-display:'Yatra One', 'Poppins', serif;
+  --font-body:'Poppins', -apple-system, sans-serif;
+  --shadow-soft: 0 10px 30px rgba(42,12,17,0.18);
+  --shadow-deep: 0 20px 50px rgba(11,22,34,0.45);
+  --radius:18px;
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{
+  font-family:var(--font-body);
+  background:var(--ivory);
+  color:var(--ink);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+img,svg{display:block; max-width:100%;}
+button{font-family:inherit; cursor:pointer; border:none; background:none;}
+.hidden{display:none !important;}
+::selection{background:var(--gold-soft); color:var(--maroon-deep);}
+
+/* subtle carved-paper texture */
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(212,175,55,0.05), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(122,36,54,0.05), transparent 45%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ============================================================
+   INTRO / MOTIVATIONAL OPENING SEQUENCE
+   ============================================================ */
+#intro{
+  position:fixed; inset:0; z-index:100;
+  background: linear-gradient(180deg, var(--indigo-deep) 0%, var(--indigo) 32%, #3B242B 58%, var(--maroon) 100%);
+  overflow-y:auto; overflow-x:hidden;
+  display:flex; align-items:center; justify-content:center;
+  transition:opacity 0.9s ease, visibility 0.9s ease;
+  scrollbar-width:thin;
+}
+#intro.fade-out{opacity:0; visibility:hidden; pointer-events:none;}
+
+/* real photograph of Hanuman Dhoka / Kathmandu Durbar Square as the intro backdrop */
+.intro-photo{
+  position:absolute; inset:0; z-index:0;
+  overflow:hidden;
+}
+.intro-photo img{
+  width:100%; height:100%;
+  object-fit:cover; object-position:center 68%;
+  filter:saturate(0.85) brightness(0.55) contrast(1.05);
+  transform:scale(1.02);
+}
+.intro-photo::after{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    linear-gradient(180deg, var(--indigo-deep) 0%, rgba(11,22,34,0.75) 18%, rgba(59,36,43,0.35) 45%, rgba(122,36,54,0.55) 78%, var(--maroon) 100%);
+}
+.intro-photo.img-error img{ display:none; }
+.intro-photo.img-error{
+  background:linear-gradient(180deg, var(--indigo-deep) 0%, var(--indigo) 32%, #3B242B 58%, var(--maroon) 100%);
+}
+
+.stars{ position:absolute; inset:0 0 30% 0; z-index:1; animation: stars-dim 5s ease forwards; }
+.stars span{
+  position:absolute; border-radius:50%;
+  background:#fff;
+  animation: twinkle ease-in-out infinite;
+}
+@keyframes twinkle{ 0%,100%{ opacity:0.15; } 50%{ opacity:0.9; } }
+@keyframes stars-dim{ 0%,50%{ opacity:1; } 100%{ opacity:0.35; } }
+
+.mist{
+  position:absolute; left:-10%; width:120%; height:120px; z-index:2;
+  background:linear-gradient(180deg, transparent, rgba(248,241,224,0.05) 40%, transparent);
+  filter:blur(6px);
+  animation: mist-drift 18s ease-in-out infinite alternate;
+}
+.mist.m1{ bottom:22%; animation-duration:22s; }
+.mist.m2{ bottom:14%; animation-duration:16s; opacity:0.7; }
+@keyframes mist-drift{ from{ transform:translateX(-4%);} to{ transform:translateX(4%);} }
+
+.sun{
+  position:absolute;
+  left:50%; bottom:-60px;
+  width:min(42vw,300px); height:min(42vw,300px);
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle at 50% 40%, var(--gold-light), var(--gold) 55%, var(--terracotta) 100%);
+  box-shadow:0 0 90px 30px rgba(212,175,55,0.35), 0 0 160px 60px rgba(212,175,55,0.15);
+  animation: sunrise 4.5s cubic-bezier(.2,.7,.3,1) forwards, sun-pulse 3.5s ease-in-out infinite 4.5s;
+  opacity:0;
+}
+@keyframes sunrise{
+  0%{ bottom:-40%; opacity:0; }
+  25%{ opacity:1; }
+  100%{ bottom:12%; opacity:0.9; }
+}
+@keyframes sun-pulse{
+  0%,100%{ box-shadow:0 0 90px 30px rgba(212,175,55,0.35), 0 0 160px 60px rgba(212,175,55,0.15); }
+  50%{ box-shadow:0 0 110px 40px rgba(212,175,55,0.48), 0 0 190px 75px rgba(212,175,55,0.22); }
+}
+
+.rays{
+  position:absolute; left:50%; bottom:12%;
+  width:min(42vw,300px); height:min(42vw,300px);
+  transform:translate(-50%,0);
+  border-radius:50%;
+  animation: rays-spin 50s linear infinite, rays-fade 4.5s ease forwards;
+  background: repeating-conic-gradient(rgba(243,222,154,0.16) 0deg 4deg, transparent 4deg 16deg);
+  opacity:0;
+}
+@keyframes rays-fade{ 0%,40%{opacity:0;} 100%{opacity:1;} }
+@keyframes rays-spin{ to{ transform:translate(-50%,0) rotate(360deg); } }
+
+.embers span{
+  position:absolute; bottom:-10px;
+  width:4px; height:4px; border-radius:50%;
+  background:var(--gold-light);
+  opacity:0;
+  animation: float-up linear infinite;
+  box-shadow:0 0 6px 1px rgba(243,222,154,0.8);
+}
+@keyframes float-up{
+  0%{ opacity:0; transform:translateY(0) translateX(0); }
+  10%{ opacity:0.9; }
+  90%{ opacity:0.5; }
+  100%{ opacity:0; transform:translateY(-100vh) translateX(20px); }
+}
+
+.intro-content{
+  position:relative; z-index:5;
+  text-align:center;
+  padding:2.5rem 1.5rem 3rem;
+  max-width:760px;
+  width:100%;
+}
+.intro-eyebrow{
+  font-family:var(--font-body);
+  letter-spacing:0.35em;
+  font-size:clamp(0.66rem,2vw,0.85rem);
+  color:var(--gold-light);
+  text-transform:uppercase;
+  opacity:0;
+  animation: rise-in 1s ease forwards;
+  animation-delay:0.4s;
+}
+.gold-divider{
+  display:flex; align-items:center; justify-content:center; gap:0.6rem;
+  margin:0.7rem auto 0.3rem;
+  opacity:0;
+  animation: rise-in 1s ease forwards;
+  animation-delay:0.65s;
+}
+.gold-divider span{ width:34px; height:1px; background:linear-gradient(90deg, transparent, var(--gold)); }
+.gold-divider span:last-child{ background:linear-gradient(90deg, var(--gold), transparent); }
+.gold-divider i{
+  width:7px; height:7px; background:var(--gold); transform:rotate(45deg);
+  box-shadow:0 0 8px 2px rgba(212,175,55,0.6);
+}
+.intro-title{
+  font-family:var(--font-display);
+  font-weight:400;
+  font-size:clamp(2.5rem,9vw,5rem);
+  line-height:1.05;
+  margin:0.4rem 0;
+  background:linear-gradient(180deg, #FFFBEF 0%, var(--gold-light) 55%, var(--gold) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  text-shadow:0 4px 40px rgba(212,175,55,0.4);
+  opacity:0;
+  animation: rise-in 1.1s ease forwards, title-shimmer 5s ease-in-out infinite 2s;
+  animation-delay:0.9s;
+  filter:drop-shadow(0 0 18px rgba(212,175,55,0.25));
+}
+@keyframes title-shimmer{
+  0%,100%{ filter:drop-shadow(0 0 18px rgba(212,175,55,0.25)); }
+  50%{ filter:drop-shadow(0 0 30px rgba(212,175,55,0.45)); }
+}
+.intro-sub{
+  font-size:clamp(0.9rem,2.6vw,1.2rem);
+  color:var(--ivory-dim);
+  font-weight:300;
+  letter-spacing:0.03em;
+  opacity:0;
+  animation: rise-in 1s ease forwards;
+  animation-delay:1.5s;
+}
+@keyframes rise-in{
+  from{ opacity:0; transform:translateY(18px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+/* --- video cards: two-up grid --- */
+.video-block{
+  margin:1.9rem auto 0;
+  width:100%;
+  max-width:560px;
+  opacity:0;
+  animation: rise-in 1s ease forwards;
+  animation-delay:1.95s;
+}
+.video-label{
+  font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--gold-soft); font-weight:600; margin-bottom:0.9rem;
+  display:flex; align-items:center; justify-content:center; gap:0.4rem;
+  flex-wrap:wrap;
+}
+.video-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:clamp(0.8rem,3vw,1.3rem);
+  justify-items:center;
+}
+.video-card{
+  width:100%;
+  max-width:200px;
+  opacity:0;
+  animation: rise-in 0.8s ease forwards;
+}
+.video-card:nth-child(1){ animation-delay:2.05s; }
+.video-card:nth-child(2){ animation-delay:2.25s; }
+.video-frame{
+  position:relative;
+  display:block;
+  padding:6px;
+  border-radius:16px;
+  background:linear-gradient(160deg, var(--gold-light), var(--gold) 45%, var(--terracotta) 100%);
+  box-shadow:var(--shadow-deep);
+  text-decoration:none;
+  transition:transform 0.3s cubic-bezier(.2,.8,.3,1.1), box-shadow 0.3s ease;
+}
+.video-frame:hover{ transform:translateY(-4px) scale(1.02); box-shadow:0 24px 55px rgba(11,22,34,0.55); }
+.video-frame:active{ transform:translateY(-1px) scale(0.99); }
+.video-frame .video-inner{
+  position:relative; width:100%;
+  aspect-ratio:9/16;
+  max-height:34vh;
+  border-radius:11px; overflow:hidden;
+  background:linear-gradient(160deg,#1a0d10,#000);
+  isolation:isolate;
+}
+.video-frame .video-inner img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; display:block;
+  transition:transform 0.6s ease;
+}
+.video-frame:hover .video-inner img{ transform:scale(1.06); }
+.video-inner.video-fallback img{ display:none; }
+.video-inner.video-fallback::before{
+  content:"✦";
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.6rem; color:var(--gold-soft);
+}
+/* diagonal shimmer sweep on hover */
+.video-frame::after{
+  content:"";
+  position:absolute; inset:0; z-index:3;
+  background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.35) 50%, transparent 60%);
+  transform:translateX(-120%);
+  pointer-events:none;
+}
+.video-frame:hover::after{
+  animation: shimmer-sweep 0.9s ease;
+}
+@keyframes shimmer-sweep{
+  to{ transform:translateX(120%); }
+}
+.play-overlay{
+  position:absolute; inset:0; z-index:2;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.45rem;
+  background:linear-gradient(180deg, rgba(11,22,34,0.1) 0%, rgba(11,22,34,0.6) 100%);
+}
+.play-btn{
+  width:44px; height:44px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg, var(--gold-light), var(--gold));
+  color:var(--maroon-deep); font-size:1rem;
+  box-shadow:0 8px 22px rgba(0,0,0,0.4), 0 0 0 0 rgba(212,175,55,0.5);
+  transition:transform 0.25s ease;
+  animation: play-pulse 2.6s ease-in-out infinite;
+}
+@keyframes play-pulse{
+  0%,100%{ box-shadow:0 8px 22px rgba(0,0,0,0.4), 0 0 0 0 rgba(212,175,55,0.45); }
+  50%{ box-shadow:0 8px 22px rgba(0,0,0,0.4), 0 0 0 10px rgba(212,175,55,0); }
+}
+.video-frame:hover .play-btn{ transform:scale(1.12); }
+.play-caption{
+  font-size:0.66rem; letter-spacing:0.04em; color:var(--ivory);
+  background:rgba(11,22,34,0.55); padding:0.22rem 0.55rem; border-radius:999px;
+  text-align:center;
+}
+.video-card-title{
+  margin-top:0.55rem;
+  font-size:0.72rem; line-height:1.3;
+  color:var(--ivory-dim); text-align:center;
+  min-height:1.9em;
+}
+
+@media (max-width:480px){
+  .video-grid{ gap:0.7rem; }
+  .video-card{ max-width:150px; }
+  .video-frame .video-inner{ max-height:28vh; }
+}
+
+.intro-cta{
+  margin-top:1.8rem;
+  opacity:0;
+  animation: rise-in 1s ease forwards;
+  animation-delay:2.55s;
+}
+.btn-primary{
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:clamp(0.95rem,2.2vw,1.05rem);
+  color:var(--maroon-deep);
+  background:linear-gradient(135deg, var(--gold-light), var(--gold));
+  padding:0.95rem 2.4rem;
+  border-radius:999px;
+  box-shadow:0 12px 30px rgba(212,175,55,0.35);
+  letter-spacing:0.02em;
+  transition:transform 0.25s ease, box-shadow 0.25s ease;
+}
+.btn-primary:hover{ transform:translateY(-3px) scale(1.03); box-shadow:0 16px 36px rgba(212,175,55,0.45); }
+.btn-primary:active{ transform:translateY(0) scale(0.98); }
+
+.skip-btn{
+  position:absolute; top:1.4rem; right:1.4rem; z-index:6;
+  color:var(--ivory-dim);
+  font-size:0.85rem;
+  padding:0.5rem 1rem;
+  border:1px solid rgba(248,241,224,0.35);
+  border-radius:999px;
+  opacity:0;
+  animation: rise-in 0.8s ease forwards;
+  animation-delay:0.6s;
+  transition: background 0.2s ease, color 0.2s ease;
+  background:rgba(11,22,34,0.25);
+  backdrop-filter:blur(4px);
+}
+.skip-btn:hover{ background:rgba(248,241,224,0.14); color:var(--ivory); }
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+#app{
+  position:relative; z-index:1;
+  min-height:100vh;
+  display:flex; flex-direction:column;
+  opacity:0;
+  transition:opacity 0.8s ease;
+}
+#app.visible{opacity:1;}
+
+.topbar{
+  position:sticky; top:0; z-index:20;
+  background:linear-gradient(180deg, var(--maroon) 0%, var(--maroon-dark) 100%);
+  padding:0.9rem clamp(1rem,4vw,2.5rem);
+  box-shadow:var(--shadow-soft);
+}
+.topbar-inner{
+  max-width:980px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:1rem; flex-wrap:wrap;
+}
+.brand{
+  display:flex; align-items:center; gap:0.7rem;
+}
+.brand-icon{ width:34px; height:34px; flex-shrink:0; }
+.brand-text{ color:var(--ivory); line-height:1.15; }
+.brand-text .eyebrow{
+  font-size:0.65rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold-soft);
+  display:block;
+}
+.brand-text .title{
+  font-family:var(--font-display); font-size:clamp(1.05rem,2.6vw,1.35rem); font-weight:400;
+}
+
+.steps{
+  display:flex; gap:0.5rem; align-items:center;
+  flex-wrap:wrap;
+}
+.step-dot{
+  display:flex; align-items:center; gap:0.4rem;
+  padding:0.35rem 0.7rem 0.35rem 0.4rem;
+  border-radius:999px;
+  background:rgba(248,241,224,0.08);
+  color:var(--ivory-dim);
+  font-size:0.72rem; font-weight:500;
+  border:1px solid rgba(248,241,224,0.15);
+  transition:all 0.25s ease;
+  white-space:nowrap;
+}
+.step-dot .num{
+  width:20px; height:20px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(248,241,224,0.14);
+  font-size:0.68rem; font-weight:700;
+  flex-shrink:0;
+}
+.step-dot.active{
+  background:linear-gradient(135deg, var(--gold-light), var(--gold));
+  color:var(--maroon-deep);
+  border-color:transparent;
+}
+.step-dot.active .num{ background:rgba(42,12,17,0.18); }
+.step-dot.done{ color:var(--gold-soft); border-color:rgba(212,175,55,0.4); }
+.step-dot.done .num{ background:rgba(212,175,55,0.22); }
+
+.score-badge{
+  display:flex; align-items:center; gap:0.35rem;
+  background:rgba(248,241,224,0.1);
+  border:1px solid rgba(212,175,55,0.35);
+  padding:0.35rem 0.8rem;
+  border-radius:999px;
+  color:var(--gold-light);
+  font-size:0.78rem; font-weight:600;
+}
+
+main{
+  flex:1;
+  max-width:900px;
+  width:100%;
+  margin:0 auto;
+  padding:clamp(1.2rem,4vw,2.5rem) clamp(1rem,4vw,1.5rem) 3rem;
+  position:relative; z-index:1;
+}
+
+.section-panel{
+  display:none;
+  animation: panel-in 0.55s ease;
+}
+.section-panel.active{ display:block; }
+@keyframes panel-in{
+  from{ opacity:0; transform:translateY(14px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+.section-head{
+  text-align:center;
+  margin-bottom:1.8rem;
+}
+.section-head .kicker{
+  font-size:0.72rem; letter-spacing:0.28em; text-transform:uppercase;
+  color:var(--terracotta); font-weight:600;
+}
+.section-head h2{
+  font-family:var(--font-display); font-weight:400;
+  font-size:clamp(1.6rem,4.4vw,2.3rem);
+  color:var(--maroon-dark);
+  margin:0.35rem 0 0.5rem;
+}
+.section-head p{
+  color:#6b5240; font-size:clamp(0.9rem,2vw,1rem); max-width:560px; margin:0 auto;
+  line-height:1.5;
+}
+
+/* pagoda roof cap decoration for cards */
+.roof-cap{
+  width:64px; height:22px; margin:0 auto -1px;
+  display:block;
+}
+
+/* ============================================================
+   CARD BASE
+   ============================================================ */
+.card{
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-soft);
+  border:1px solid rgba(122,36,54,0.08);
+  padding:clamp(1.1rem,3.5vw,1.9rem);
+  position:relative;
+  overflow:hidden;
+}
+.card::before{
+  content:"";
+  position:absolute; top:0; left:0; right:0; height:5px;
+  background:linear-gradient(90deg, var(--maroon), var(--gold), var(--terracotta));
+}
+
+/* ============================================================
+   SECTION A — FILL IN THE BLANKS
+   ============================================================ */
+.wordbank{
+  display:flex; flex-wrap:wrap; gap:0.6rem;
+  justify-content:center;
+  margin-bottom:1.6rem;
+  padding:1rem;
+  background:var(--ivory-dim);
+  border-radius:var(--radius);
+  border:1px dashed rgba(122,36,54,0.25);
+}
+.word-chip{
+  background:linear-gradient(135deg, var(--gold-light), var(--gold));
+  color:var(--maroon-deep);
+  font-weight:600; font-size:clamp(0.82rem,2vw,0.92rem);
+  padding:0.5rem 1.05rem;
+  border-radius:999px;
+  box-shadow:0 4px 10px rgba(212,175,55,0.35);
+  transition:transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+.word-chip:hover:not(:disabled){ transform:translateY(-2px); box-shadow:0 8px 16px rgba(212,175,55,0.45); }
+.word-chip:active:not(:disabled){ transform:translateY(0) scale(0.96); }
+.word-chip:disabled{
+  opacity:0.28; cursor:not-allowed;
+  background:#ddd; color:#999; box-shadow:none;
+}
+.word-chip.selected-source{
+  outline:3px solid var(--maroon);
+  outline-offset:2px;
+}
+
+.blank-list{ display:flex; flex-direction:column; gap:0.9rem; }
+.blank-item{
+  display:flex; align-items:baseline; gap:0.55rem;
+  background:var(--ivory);
+  border:1px solid rgba(122,36,54,0.1);
+  border-radius:12px;
+  padding:0.85rem 1rem;
+  font-size:clamp(0.92rem,2.2vw,1.02rem);
+  line-height:1.6;
+  transition:all 0.25s ease;
+  cursor:pointer;
+}
+.blank-item .qnum{
+  font-family:var(--font-display); color:var(--terracotta); font-size:1.1em; flex-shrink:0;
+}
+.blank-item.active-target{
+  border-color:var(--gold); box-shadow:0 0 0 3px rgba(212,175,55,0.25); background:#fff;
+}
+.blank-slot{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:110px;
+  padding:0.15rem 0.6rem;
+  border-bottom:2.5px solid var(--maroon);
+  font-weight:700; color:var(--maroon-dark);
+  text-align:center;
+  margin:0 0.15rem;
+}
+.blank-slot.empty{ color:transparent; }
+.blank-slot.filled{ animation: pop-in 0.3s ease; }
+.blank-slot.correct{ border-color:var(--success); color:var(--success); }
+.blank-slot.wrong{ border-color:var(--error); color:var(--error); text-decoration:line-through; }
+@keyframes pop-in{ 0%{transform:scale(0.7); opacity:0;} 60%{transform:scale(1.08);} 100%{transform:scale(1); opacity:1;} }
+
+/* ============================================================
+   SECTION B — MULTIPLE CHOICE
+   ============================================================ */
+.mcq-card{ margin-bottom:1.3rem; }
+.mcq-question{
+  font-weight:600; font-size:clamp(1rem,2.4vw,1.15rem);
+  color:var(--maroon-dark); margin-bottom:1rem; line-height:1.5;
+}
+.mcq-question .qtag{
+  display:inline-block; background:var(--maroon); color:var(--gold-light);
+  font-family:var(--font-display); font-size:0.85rem;
+  width:26px; height:26px; border-radius:50%;
+  text-align:center; line-height:26px; margin-right:0.5rem;
+}
+.mcq-options{ display:flex; flex-direction:column; gap:0.65rem; }
+.mcq-option{
+  display:flex; align-items:center; gap:0.7rem;
+  text-align:left;
+  background:var(--ivory);
+  border:1.5px solid rgba(122,36,54,0.12);
+  border-radius:12px;
+  padding:0.75rem 1rem;
+  font-size:clamp(0.88rem,2vw,0.98rem);
+  color:var(--ink);
+  transition:all 0.2s ease;
+  width:100%;
+}
+.mcq-option .opt-letter{
+  width:26px; height:26px; border-radius:50%; flex-shrink:0;
+  background:#fff; border:1.5px solid var(--maroon);
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.75rem; font-weight:700; color:var(--maroon);
+}
+.mcq-option:hover:not(.locked){ border-color:var(--gold); background:#fff; transform:translateX(3px); }
+.mcq-option.correct-answer{ background:var(--success-bg); border-color:var(--success); color:#1f4a2f; }
+.mcq-option.correct-answer .opt-letter{ background:var(--success); border-color:var(--success); color:#fff; }
+.mcq-option.wrong-answer{ background:var(--error-bg); border-color:var(--error); color:#6b1f0f; }
+.mcq-option.wrong-answer .opt-letter{ background:var(--error); border-color:var(--error); color:#fff; }
+.mcq-option.locked{ cursor:default; }
+.mcq-option.dim{ opacity:0.5; }
+
+.mcq-feedback{
+  margin-top:0.7rem; font-size:0.85rem; font-weight:600;
+  display:flex; align-items:center; gap:0.4rem;
+  min-height:1.2rem;
+}
+.mcq-feedback.correct{ color:var(--success); }
+.mcq-feedback.wrong{ color:var(--error); }
+
+/* ============================================================
+   SECTION C — Q&A REVEAL
+   ============================================================ */
+.qa-card{ margin-bottom:1.1rem; }
+.qa-question{
+  display:flex; justify-content:space-between; align-items:center; gap:1rem;
+  cursor:pointer;
+}
+.qa-question h3{
+  font-size:clamp(0.95rem,2.2vw,1.08rem); color:var(--maroon-dark); font-weight:600; line-height:1.5;
+}
+.qa-toggle{
+  flex-shrink:0; width:34px; height:34px; border-radius:50%;
+  background:var(--ivory-dim); border:1.5px solid var(--gold);
+  display:flex; align-items:center; justify-content:center;
+  transition:transform 0.35s ease, background 0.25s ease;
+  font-size:1.1rem; color:var(--maroon);
+}
+.qa-card.open .qa-toggle{ transform:rotate(135deg); background:var(--gold); color:#fff; }
+.qa-answer{
+  max-height:0; overflow:hidden;
+  transition:max-height 0.5s ease, opacity 0.4s ease, margin-top 0.4s ease;
+  opacity:0;
+  color:#4a3a2c; line-height:1.65; font-size:clamp(0.88rem,2vw,0.98rem);
+}
+.qa-card.open .qa-answer{ max-height:560px; opacity:1; margin-top:0.9rem; }
+.qa-answer-inner{
+  background:var(--ivory); border-left:3px solid var(--gold);
+  border-radius:0 10px 10px 0; padding:0.85rem 1rem;
+}
+.qa-hint-inner{
+  background:#FBF3E3; border-left:3px solid var(--terracotta);
+  border-radius:0 10px 10px 0; padding:0.85rem 1rem;
+  font-size:clamp(0.85rem,2vw,0.95rem);
+  color:#6b4423;
+}
+.qa-hint-inner .hint-label{
+  font-weight:700; color:var(--terracotta); margin-right:0.3rem;
+}
+.qa-answer-inner .answer-label{
+  font-weight:700; color:var(--maroon); margin-right:0.3rem; display:block; margin-bottom:0.25rem;
+  font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase;
+}
+.reveal-answer-btn{
+  margin-top:0.7rem;
+  display:inline-flex; align-items:center; gap:0.4rem;
+  background:linear-gradient(135deg, var(--gold-light), var(--gold));
+  color:var(--maroon-deep); font-weight:700; font-size:0.82rem;
+  padding:0.55rem 1.1rem; border-radius:999px;
+  box-shadow:0 6px 14px rgba(212,175,55,0.3);
+  transition:transform 0.2s ease;
+}
+.reveal-answer-btn:hover{ transform:translateY(-2px); }
+.qa-answer-block{ margin-top:0.8rem; animation:panel-in 0.4s ease; }
+
+/* ============================================================
+   SECTION D — REFLECTION
+   ============================================================ */
+.reflect-card p.prompt{
+  font-size:clamp(0.95rem,2.2vw,1.05rem); line-height:1.6; color:var(--ink); margin-bottom:1.1rem;
+}
+textarea.reflect-input{
+  width:100%; min-height:110px; resize:vertical;
+  border:1.5px solid rgba(122,36,54,0.2); border-radius:12px;
+  padding:0.85rem 1rem; font-family:inherit; font-size:0.95rem;
+  background:var(--ivory);
+  transition:border-color 0.2s ease;
+}
+textarea.reflect-input:focus{ outline:none; border-color:var(--gold); background:#fff; }
+.chip-hint-row{ display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1rem; }
+.hint-chip{
+  font-size:0.78rem; padding:0.4rem 0.85rem; border-radius:999px;
+  background:var(--ivory-dim); color:var(--maroon-dark);
+  border:1px solid rgba(122,36,54,0.15);
+}
+.reveal-heritage{
+  margin-top:1.3rem; display:none;
+}
+.reveal-heritage.show{ display:block; animation:panel-in 0.5s ease; }
+.heritage-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:0.8rem; margin-top:0.8rem;
+}
+.heritage-item{
+  background:var(--ivory); border:1px solid rgba(122,36,54,0.12); border-radius:12px;
+  padding:0.8rem 1rem; font-size:0.85rem; line-height:1.5; color:#4a3a2c;
+}
+.heritage-item strong{ display:block; color:var(--maroon-dark); font-size:0.92rem; margin-bottom:0.2rem; }
+
+/* ============================================================
+   NAV FOOTER
+   ============================================================ */
+.nav-footer{
+  display:flex; justify-content:space-between; align-items:center;
+  gap:1rem; margin-top:2rem; flex-wrap:wrap;
+}
+.btn-ghost{
+  padding:0.75rem 1.4rem; border-radius:999px;
+  border:1.5px solid var(--maroon);
+  color:var(--maroon); font-weight:600; font-size:0.9rem;
+  transition:all 0.2s ease;
+  background:#fff;
+}
+.btn-ghost:hover{ background:var(--maroon); color:#fff; }
+.btn-ghost:disabled{ opacity:0.35; cursor:not-allowed; border-color:#ccc; color:#999; background:#fff; }
+.btn-gold{
+  padding:0.75rem 1.6rem; border-radius:999px;
+  background:linear-gradient(135deg, var(--gold-light), var(--gold));
+  color:var(--maroon-deep); font-weight:700; font-size:0.9rem;
+  box-shadow:0 8px 20px rgba(212,175,55,0.32);
+  transition:transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-gold:hover{ transform:translateY(-2px); box-shadow:0 12px 26px rgba(212,175,55,0.4); }
+.btn-gold:active{ transform:translateY(0); }
+
+/* ============================================================
+   SUMMARY / FINALE
+   ============================================================ */
+#panel-summary .card{ text-align:center; padding:clamp(1.8rem,5vw,3rem) clamp(1.2rem,4vw,2rem); }
+.trophy{ width:84px; height:84px; margin:0 auto 1rem; }
+.summary-score{
+  font-family:var(--font-display); font-size:clamp(2.4rem,7vw,3.4rem);
+  color:var(--maroon-dark); margin:0.3rem 0;
+}
+.summary-score span{ color:var(--gold); }
+.summary-msg{ color:#6b5240; font-size:1rem; max-width:440px; margin:0.4rem auto 1.6rem; line-height:1.55; }
+.confetti-piece{
+  position:fixed; top:-20px; z-index:200; pointer-events:none;
+  border-radius:2px;
+  animation: confetti-fall linear forwards;
+}
+@keyframes confetti-fall{
+  to{ transform:translateY(105vh) rotate(540deg); opacity:0.9; }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:640px){
+  .topbar-inner{ justify-content:center; }
+  .steps{ order:3; width:100%; justify-content:center; }
+  .step-dot span.label{ display:none; }
+  .blank-item{ flex-wrap:wrap; }
+}
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     INTRO SEQUENCE
+     ============================================================ -->
+<section id="intro" aria-label="Introduction">
+  <button class="skip-btn" id="skipBtn">Skip intro →</button>
+  <div class="intro-photo" id="introPhoto">
+    <img
+      src="https://commons.wikimedia.org/wiki/Special:FilePath/Darbur%20Square%20Architecture%20at%20Dusk%20-%20Kathmandu%20-%20Nepal%20-%2001%20(13464959073).jpg?width=1600"
+      alt="Hanuman Dhoka Durbar Square, Kathmandu, at dusk"
+      loading="eager"
+      onerror="document.getElementById('introPhoto').classList.add('img-error')">
+  </div>
+  <div class="stars" id="stars"></div>
+  <div class="mist m1"></div>
+  <div class="mist m2"></div>
+  <div class="rays"></div>
+  <div class="sun"></div>
+  <div class="embers" id="embers"></div>
+
+  <div class="intro-content">
+    <span class="intro-eyebrow">Kathmandu · Malla Dynasty · 17th Century</span>
+    <div class="gold-divider"><span></span><i></i><span></span></div>
+    <h1 class="intro-title">Pratap Malla</h1>
+    <p class="intro-sub">Poet-King of Kantipur. Builder of temples. Patron of scholars.<br>Step into the golden courtyard of his legacy.</p>
+
+    <div class="video-block">
+      <div class="video-label">🎬 Watch · Golden Kantipur &amp; a Word on Legacy</div>
+      <div class="video-grid">
+        <div class="video-card">
+          <a class="video-frame" href="https://www.youtube.com/watch?v=Km6L88-Hw94" target="_blank" rel="noopener noreferrer" aria-label="Watch: Kathmandu Durbar Square – Uncovering the Majestic History and Culture of Nepal (opens on YouTube in a new tab)">
+            <div class="video-inner" id="videoInner1">
+              <img
+                src="https://img.youtube.com/vi/Km6L88-Hw94/hqdefault.jpg"
+                alt="Kathmandu Durbar Square history and culture video thumbnail"
+                loading="lazy"
+                onerror="document.getElementById('videoInner1').classList.add('video-fallback')">
+              <div class="play-overlay">
+                <span class="play-btn">▶</span>
+                <span class="play-caption">Durbar Square History</span>
+              </div>
+            </div>
+          </a>
+          <div class="video-card-title">Uncovering the majestic history of Durbar Square</div>
+        </div>
+        <div class="video-card">
+          <a class="video-frame" href="https://www.youtube.com/watch?v=Bi-7pho5XB8" target="_blank" rel="noopener noreferrer" aria-label="Watch: Believe in Yourself, a motivational animated short (opens on YouTube in a new tab)">
+            <div class="video-inner" id="videoInner2">
+              <img
+                src="https://img.youtube.com/vi/Bi-7pho5XB8/hqdefault.jpg"
+                alt="Believe in Yourself motivational video thumbnail"
+                loading="lazy"
+                onerror="document.getElementById('videoInner2').classList.add('video-fallback')">
+              <div class="play-overlay">
+                <span class="play-btn">▶</span>
+                <span class="play-caption">Believe in Yourself</span>
+              </div>
+            </div>
+          </a>
+          <div class="video-card-title">A small bird finds the courage to try</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="intro-cta">
+      <button class="btn-primary" id="enterBtn">Enter the Palace ✦</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MAIN APP
+     ============================================================ -->
+<div id="app">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="19" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+          <path d="M20 8 L26 18 L20 15 L14 18 Z" fill="#D4AF37"/>
+          <rect x="14" y="18" width="12" height="12" fill="#D4AF37" opacity="0.85"/>
+          <circle cx="20" cy="24" r="2.4" fill="#7A2436"/>
+        </svg>
+        <div class="brand-text">
+          <span class="eyebrow">Unit 9 · Biography</span>
+          <span class="title">Pratap Malla</span>
+        </div>
+      </div>
+      <div class="steps" id="stepsNav"></div>
+      <div class="score-badge">✦ <span id="scoreDisplay">0</span> / <span id="scoreMax">11</span></div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- SECTION A -->
+    <section class="section-panel" id="panel-A" data-step="0">
+      <div class="section-head">
+        <span class="kicker">Part A</span>
+        <h2>Fill in the Blanks</h2>
+        <p>Tap a golden word below, then tap the blank you want to fill. Use each word once — fill all seven blanks from the text.</p>
+      </div>
+      <div class="card">
+        <div class="wordbank" id="wordbank"></div>
+        <div class="blank-list" id="blankList"></div>
+      </div>
+      <div class="nav-footer">
+        <span></span>
+        <button class="btn-gold" id="checkBlanksBtn">Check My Answers ✓</button>
+      </div>
+    </section>
+
+    <!-- SECTION B -->
+    <section class="section-panel" id="panel-B" data-step="1">
+      <div class="section-head">
+        <span class="kicker">Part B</span>
+        <h2>Choose the Best Answer</h2>
+        <p>Tap the option you believe is correct. The right answer glows gold-green — wrong picks are shown in rust.</p>
+      </div>
+      <div id="mcqList"></div>
+      <div class="nav-footer">
+        <button class="btn-ghost" id="backToA">← Back</button>
+        <button class="btn-gold" id="forwardToC">Continue →</button>
+      </div>
+    </section>
+
+    <!-- SECTION C -->
+    <section class="section-panel" id="panel-C" data-step="2">
+      <div class="section-head">
+        <span class="kicker">Part C</span>
+        <h2>Answer &amp; Reveal</h2>
+        <p>Tap a question for a hint first — then reveal the full answer when you're ready.</p>
+      </div>
+      <div id="qaList"></div>
+      <div class="nav-footer">
+        <button class="btn-ghost" id="backToB">← Back</button>
+        <button class="btn-gold" id="forwardToD">Continue →</button>
+      </div>
+    </section>
+
+    <!-- SECTION D -->
+    <section class="section-panel" id="panel-D" data-step="3">
+      <div class="section-head">
+        <span class="kicker">Part D</span>
+        <h2>Reflect &amp; Discover</h2>
+      </div>
+      <div class="card reflect-card">
+        <p class="prompt">Pratap Malla contributed a lot to Nepali culture during his reign. Can you name some of his contributions that still exist today? Write your own answer first.</p>
+        <textarea class="reflect-input" id="reflectInput" placeholder="Type what you already know here..."></textarea>
+        <div class="nav-footer" style="margin-top:1rem;">
+          <span></span>
+          <button class="btn-gold" id="revealHeritageBtn">Reveal Heritage ✦</button>
+        </div>
+        <div class="reveal-heritage" id="heritageBox">
+          <div class="heritage-grid">
+            <div class="heritage-item"><strong>Hanuman Dhoka Palace</strong>Named after the Hanuman statue he placed at the gate; still the historic royal palace of Kathmandu Durbar Square.</div>
+            <div class="heritage-item"><strong>Rani Pokhari</strong>The pond he built in Kathmandu to console his grieving queen after the loss of their son.</div>
+            <div class="heritage-item"><strong>Krishna Temple &amp; Taleju Courtyard</strong>Temples he renovated and embellished within Durbar Square.</div>
+            <div class="heritage-item"><strong>The Fifteen-Language Stone Inscription</strong>A stone slab near Hanuman Dhoka engraved with verses in fifteen languages, said to gush milk if read fluently.</div>
+            <div class="heritage-item"><strong>Nepal Bhasa &amp; Sanskrit Poetry</strong>His literary works and dramas, composed under his pen name "Kabindra," remain part of Nepal's literary heritage.</div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-footer">
+        <button class="btn-ghost" id="backToC">← Back</button>
+        <button class="btn-gold" id="forwardToSummary">Finish Journey →</button>
+      </div>
+    </section>
+
+    <!-- SUMMARY -->
+    <section class="section-panel" id="panel-summary" data-step="4">
+      <div class="card">
+        <svg class="trophy" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 10h24v14a12 12 0 0 1-24 0z" fill="#D4AF37"/>
+          <path d="M20 12h-8a2 2 0 0 0-2 2c0 6 4 10 10 11" fill="none" stroke="#D4AF37" stroke-width="3"/>
+          <path d="M44 12h8a2 2 0 0 1 2 2c0 6-4 10-10 11" fill="none" stroke="#D4AF37" stroke-width="3"/>
+          <rect x="29" y="36" width="6" height="10" fill="#D4AF37"/>
+          <rect x="20" y="46" width="24" height="6" rx="2" fill="#7A2436"/>
+        </svg>
+        <span class="kicker" style="color:var(--terracotta); font-size:0.75rem; letter-spacing:0.25em; text-transform:uppercase; font-weight:600;">Journey Complete</span>
+        <div class="summary-score" id="finalScore">0<span>/11</span></div>
+        <p class="summary-msg" id="summaryMsg">You've walked through the golden courtyard of Pratap Malla's Kantipur. Review anytime, or restart the journey.</p>
+        <div class="nav-footer" style="justify-content:center;">
+          <button class="btn-ghost" id="reviewBtn">← Review Answers</button>
+          <button class="btn-gold" id="restartBtn">Restart Journey ↻</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+const BLANKS = [
+  { text: "Queen Rajendra Laxmi ruled the country as a", after: "because her son Rana Bahadur Shah was too young.", answer: "regent" },
+  { text: "Many buildings were", after: "as they were destroyed by the earthquake.", answer: "renovated" },
+  { text: "Many temples had their", after: "made of gold.", answer: "pinnacles" },
+  { text: "As the original trophy was stolen, they made the exact", after: "of it.", answer: "replica" },
+  { text: "Madhav Prasad Ghimire was", after: "the title 'Rastrakavi' in 2003.", answer: "conferred" },
+  { text: "The government", after: "Jhamak Kumari Ghimire for her contribution to Nepali literature.", answer: "patronised" },
+  { text: "The British soldiers tried to", after: "Nepal but the brave Nepali people chased them away.", answer: "invade" },
+];
+
+const MCQ = [
+  {
+    q: "Why did Pratap Malla keep his father in jail?",
+    options: ["Pratap Malla was insane.", "Pratap Malla wanted to be the king soon.", "Pratap Malla's father was insane.", "Pratap Malla had no experience of administration."],
+    correct: 2
+  },
+  {
+    q: "What made Kantipur a strong state during Pratap Malla's reign?",
+    options: ["Pratap Malla's bravery", "Pratap Malla's diplomacy", "Pratap Malla's love for poetry", "Pratap Malla's love for art and culture"],
+    correct: 1
+  },
+  {
+    q: "Which of the following was not renovated by Pratap Malla?",
+    options: ["Pashupatinath", "Temple of Taleju", "Temple of Degutale", "Temple of Budhanilkantha"],
+    correct: 3
+  },
+  {
+    q: "According to the text, which of the following did not happen during Pratap Malla's reign?",
+    options: ["Trade with India and China", "Promotion of art and culture", "Invasion of Kantipur", "Presence of learned men at the palace"],
+    correct: 2
+  }
+];
+
+const QA = [
+  { q: "Name two countries that had trade with Kantipur.",
+    hint: "Think of Kantipur's giant neighbours — one to the south, one across the Himalayas to the north.",
+    a: "Two countries that had trade with Kantipur were India and China." },
+  { q: "How did Pratap Malla keep his kingdom safe from Lalitpur and Bhaktapur?",
+    hint: "It wasn't brute force. Think about clever alliances — sometimes befriending one neighbour against the other.",
+    a: "Pratap Malla kept his kingdom safe from Lalitpur and Bhaktapur with the diplomatic technique of siding and aligning." },
+  { q: "Where did Pratap Malla place the image of Lord Hanuman? Why?",
+    hint: "Picture the entrance to his palace. What would a king place there to guard against evil?",
+    a: "Pratap Malla placed the image of Lord Hanuman by the side of his palace gate to ward off the evils." },
+  { q: "Pratap Malla conferred himself with the title 'Kabeendra'. Do you think this title suits him? Give reasons.",
+    hint: "'Kabeendra' means 'king of poets.' What was Pratap Malla especially gifted at?",
+    a: "Yes, this title is suitable for him because he knew dozens of languages and composed beautiful poems in Sanskrit, Nepali Bhasa, Nepali, Bengali and Hindi." },
+  { q: "Pratap Malla used to invite the intellectuals at his palace. What does this indicate about his personality as a king?",
+    hint: "What kind of ruler chooses to surround himself with scholars and thinkers?",
+    a: "This indicates that he was a wise king who respected and patronised the scholars." }
+];
+
+const TOTAL_SCORE = BLANKS.length + MCQ.length; // 7 + 4 = 11
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  blanksFilled: new Array(BLANKS.length).fill(null), // word chosen per blank index
+  activeBlankIndex: null,
+  blanksChecked: false,
+  mcqAnswered: new Array(MCQ.length).fill(null), // chosen option index
+  qaStage: new Array(QA.length).fill(0), // 0=closed, 1=hint shown, 2=answer shown
+  currentStep: 0
+};
+
+const STEP_IDS = ["A", "B", "C", "D", "summary"];
+const STEP_LABELS = ["Blanks", "Choose", "Reveal", "Reflect", "Done"];
+
+/* ============================================================
+   INTRO SEQUENCE
+   ============================================================ */
+function buildStars(){
+  const wrap = document.getElementById('stars');
+  if(!wrap) return;
+  const count = 40;
+  for(let i=0;i<count;i++){
+    const s = document.createElement('span');
+    const size = 1 + Math.random()*1.8;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = (Math.random()*100) + '%';
+    s.style.top = (Math.random()*75) + '%';
+    s.style.animationDuration = (1.8 + Math.random()*2.5) + 's';
+    s.style.animationDelay = (Math.random()*3) + 's';
+    wrap.appendChild(s);
+  }
+}
+buildStars();
+
+function buildEmbers(){
+  const wrap = document.getElementById('embers');
+  const count = 16;
+  for(let i=0;i<count;i++){
+    const s = document.createElement('span');
+    const left = Math.random()*100;
+    const duration = 6 + Math.random()*6;
+    const delay = Math.random()*6;
+    s.style.left = left + 'vw';
+    s.style.animationDuration = duration + 's';
+    s.style.animationDelay = delay + 's';
+    wrap.appendChild(s);
+  }
+}
+buildEmbers();
+
+function enterApp(){
+  const intro = document.getElementById('intro');
+  const app = document.getElementById('app');
+  intro.classList.add('fade-out');
+  app.classList.add('visible');
+  setTimeout(()=>{ intro.style.display = 'none'; }, 950);
+}
+document.getElementById('enterBtn').addEventListener('click', enterApp);
+document.getElementById('skipBtn').addEventListener('click', enterApp);
+// auto-advance safety: if user never clicks, still allow scroll/keys after a while (no forced auto-nav to respect user control)
+
+/* ============================================================
+   RENDER: TOP STEPS NAV
+   ============================================================ */
+function renderSteps(){
+  const nav = document.getElementById('stepsNav');
+  nav.innerHTML = '';
+  STEP_IDS.forEach((id, idx)=>{
+    const dot = document.createElement('button');
+    dot.className = 'step-dot' + (idx === state.currentStep ? ' active' : (idx < state.currentStep ? ' done' : ''));
+    dot.innerHTML = `<span class="num">${idx < state.currentStep ? '✓' : idx+1}</span><span class="label">${STEP_LABELS[idx]}</span>`;
+    dot.addEventListener('click', ()=> goToStep(idx));
+    nav.appendChild(dot);
+  });
+}
+
+function goToStep(idx){
+  state.currentStep = idx;
+  document.querySelectorAll('.section-panel').forEach(p=>p.classList.remove('active'));
+  const panel = document.getElementById('panel-' + STEP_IDS[idx]);
+  panel.classList.add('active');
+  renderSteps();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ============================================================
+   SECTION A — FILL IN THE BLANKS
+   ============================================================ */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+const wordOrder = shuffle(BLANKS.map((b,i)=>i));
+
+function renderWordbank(){
+  const wb = document.getElementById('wordbank');
+  wb.innerHTML = '';
+  wordOrder.forEach(origIdx=>{
+    const word = BLANKS[origIdx].answer;
+    const used = state.blanksFilled.includes(origIdx);
+    const btn = document.createElement('button');
+    btn.className = 'word-chip';
+    btn.textContent = word;
+    btn.disabled = used;
+    btn.dataset.wordIdx = origIdx;
+    btn.addEventListener('click', ()=> onWordChipClick(origIdx));
+    wb.appendChild(btn);
+  });
+}
+
+function renderBlanks(){
+  const list = document.getElementById('blankList');
+  list.innerHTML = '';
+  BLANKS.forEach((b, idx)=>{
+    const row = document.createElement('div');
+    row.className = 'blank-item' + (state.activeBlankIndex === idx ? ' active-target' : '');
+    row.dataset.idx = idx;
+
+    const filledWordIdx = state.blanksFilled[idx];
+    let slotClass = 'blank-slot' + (filledWordIdx === null ? ' empty' : ' filled');
+    if(state.blanksChecked && filledWordIdx !== null){
+      slotClass += (filledWordIdx === idx) ? ' correct' : ' wrong';
+    }
+    const slotText = filledWordIdx !== null ? BLANKS[filledWordIdx].answer : '______';
+
+    row.innerHTML = `
+      <span class="qnum">${String.fromCharCode(97+idx)}.</span>
+      <span>${b.text} <span class="${slotClass}">${slotText}</span> ${b.after}</span>
+    `;
+    row.addEventListener('click', ()=>{
+      state.activeBlankIndex = idx;
+      renderBlanks();
+    });
+    list.appendChild(row);
+  });
+}
+
+function onWordChipClick(wordIdx){
+  // choose target blank: active one if empty, else first empty blank
+  let target = state.activeBlankIndex;
+  if(target === null || state.blanksFilled[target] !== null){
+    target = state.blanksFilled.findIndex(v => v === null);
+  }
+  if(target === -1 || target === null) return; // all filled
+  state.blanksFilled[target] = wordIdx;
+  state.activeBlankIndex = state.blanksFilled.findIndex(v => v === null);
+  state.blanksChecked = false;
+  renderWordbank();
+  renderBlanks();
+  updateScore();
+}
+
+document.getElementById('checkBlanksBtn').addEventListener('click', ()=>{
+  state.blanksChecked = true;
+  renderBlanks();
+  updateScore();
+});
+
+/* ============================================================
+   SECTION B — MCQ
+   ============================================================ */
+function renderMCQ(){
+  const wrap = document.getElementById('mcqList');
+  wrap.innerHTML = '';
+  MCQ.forEach((item, qIdx)=>{
+    const card = document.createElement('div');
+    card.className = 'card mcq-card';
+    const answered = state.mcqAnswered[qIdx];
+
+    const optsHtml = item.options.map((opt, oIdx)=>{
+      let cls = 'mcq-option';
+      if(answered !== null){
+        cls += ' locked';
+        if(oIdx === item.correct) cls += ' correct-answer';
+        else if(oIdx === answered) cls += ' wrong-answer';
+        else cls += ' dim';
+      }
+      return `<button class="${cls}" data-q="${qIdx}" data-o="${oIdx}">
+        <span class="opt-letter">${String.fromCharCode(105+oIdx)}</span>
+        <span>${opt}</span>
+      </button>`;
+    }).join('');
+
+    let feedback = '';
+    if(answered !== null){
+      if(answered === item.correct){
+        feedback = `<div class="mcq-feedback correct">✓ Correct! Well reasoned.</div>`;
+      } else {
+        feedback = `<div class="mcq-feedback wrong">✕ Not quite — the golden option shows the right answer.</div>`;
+      }
+    }
+
+    card.innerHTML = `
+      <div class="mcq-question"><span class="qtag">${String.fromCharCode(97+qIdx)}</span>${item.q}</div>
+      <div class="mcq-options">${optsHtml}</div>
+      ${feedback}
+    `;
+    wrap.appendChild(card);
+  });
+
+  wrap.querySelectorAll('.mcq-option').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const qIdx = parseInt(btn.dataset.q, 10);
+      const oIdx = parseInt(btn.dataset.o, 10);
+      if(state.mcqAnswered[qIdx] !== null) return;
+      state.mcqAnswered[qIdx] = oIdx;
+      renderMCQ();
+      updateScore();
+    });
+  });
+}
+
+/* ============================================================
+   SECTION C — Q&A REVEAL
+   ============================================================ */
+function renderQA(){
+  const wrap = document.getElementById('qaList');
+  wrap.innerHTML = '';
+  QA.forEach((item, idx)=>{
+    const stage = state.qaStage[idx];
+    const isOpen = stage > 0;
+    const card = document.createElement('div');
+    card.className = 'card qa-card' + (isOpen ? ' open' : '');
+
+    let bodyHtml = '';
+    if(stage >= 1){
+      bodyHtml += `<div class="qa-hint-inner"><span class="hint-label">💡 Hint:</span>${item.hint}</div>`;
+    }
+    if(stage === 1){
+      bodyHtml += `<button class="reveal-answer-btn" data-idx="${idx}">✦ Reveal Full Answer</button>`;
+    }
+    if(stage === 2){
+      bodyHtml += `<div class="qa-answer-block"><div class="qa-answer-inner"><span class="answer-label">Answer</span>${item.a}</div></div>`;
+    }
+
+    card.innerHTML = `
+      <div class="qa-question">
+        <h3>${String.fromCharCode(97+idx)}. ${item.q}</h3>
+        <div class="qa-toggle">${isOpen ? '×' : '+'}</div>
+      </div>
+      <div class="qa-answer">${bodyHtml}</div>
+    `;
+    card.querySelector('.qa-question').addEventListener('click', ()=>{
+      // toggle: closed -> hint; open (hint or answer) -> closed
+      state.qaStage[idx] = isOpen ? 0 : 1;
+      renderQA();
+    });
+    const revealBtn = card.querySelector('.reveal-answer-btn');
+    if(revealBtn){
+      revealBtn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        state.qaStage[idx] = 2;
+        renderQA();
+      });
+    }
+    wrap.appendChild(card);
+  });
+}
+
+/* ============================================================
+   SCORE
+   ============================================================ */
+function updateScore(){
+  let score = 0;
+  if(state.blanksChecked){
+    state.blanksFilled.forEach((wordIdx, blankIdx)=>{
+      if(wordIdx === blankIdx) score++;
+    });
+  } else {
+    // partial credit not shown until checked, but count correctly-placed for live badge feel
+    state.blanksFilled.forEach((wordIdx, blankIdx)=>{
+      if(wordIdx === blankIdx) score++;
+    });
+  }
+  state.mcqAnswered.forEach((ans, idx)=>{
+    if(ans === MCQ[idx].correct) score++;
+  });
+  document.getElementById('scoreDisplay').textContent = score;
+  document.getElementById('finalScore').innerHTML = score + '<span>/' + TOTAL_SCORE + '</span>';
+  const msgEl = document.getElementById('summaryMsg');
+  if(msgEl){
+    let msg = "You've walked through the golden courtyard of Pratap Malla's Kantipur.";
+    if(score === TOTAL_SCORE) msg = "A flawless journey! You know King Pratap Malla's reign inside and out. 👑";
+    else if(score >= TOTAL_SCORE*0.7) msg = "Excellent work! You've grasped most of the golden age of Kantipur. ✦";
+    else if(score >= TOTAL_SCORE*0.4) msg = "Good effort — review the sections you missed and try again.";
+    else msg = "This is just the beginning of your journey — revisit the sections above to learn more.";
+    msgEl.textContent = msg;
+  }
+}
+
+/* ============================================================
+   NAVIGATION WIRING
+   ============================================================ */
+document.getElementById('backToA').addEventListener('click', ()=> goToStep(0));
+document.getElementById('forwardToC').addEventListener('click', ()=> goToStep(2));
+document.getElementById('backToB').addEventListener('click', ()=> goToStep(1));
+document.getElementById('forwardToD').addEventListener('click', ()=> goToStep(3));
+document.getElementById('backToC').addEventListener('click', ()=> goToStep(2));
+document.getElementById('forwardToSummary').addEventListener('click', ()=>{
+  goToStep(4);
+  launchConfetti();
+});
+document.getElementById('reviewBtn').addEventListener('click', ()=> goToStep(0));
+document.getElementById('restartBtn').addEventListener('click', ()=>{
+  state.blanksFilled = new Array(BLANKS.length).fill(null);
+  state.activeBlankIndex = null;
+  state.blanksChecked = false;
+  state.mcqAnswered = new Array(MCQ.length).fill(null);
+  state.qaStage = new Array(QA.length).fill(0);
+  document.getElementById('reflectInput').value = '';
+  document.getElementById('heritageBox').classList.remove('show');
+  renderWordbank();
+  renderBlanks();
+  renderMCQ();
+  renderQA();
+  updateScore();
+  goToStep(0);
+});
+
+document.getElementById('revealHeritageBtn').addEventListener('click', ()=>{
+  document.getElementById('heritageBox').classList.add('show');
+});
+
+/* ============================================================
+   CONFETTI
+   ============================================================ */
+function launchConfetti(){
+  const colors = ['#D4AF37','#F3DE9A','#7A2436','#C1652F','#3F7D58'];
+  const count = 60;
+  for(let i=0;i<count;i++){
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    const size = 6 + Math.random()*6;
+    piece.style.width = size + 'px';
+    piece.style.height = (size*0.4) + 'px';
+    piece.style.left = (Math.random()*100) + 'vw';
+    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+    piece.style.animationDuration = (2.5 + Math.random()*2) + 's';
+    piece.style.animationDelay = (Math.random()*0.6) + 's';
+    document.body.appendChild(piece);
+    setTimeout(()=> piece.remove(), 5200);
+  }
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderSteps();
+renderWordbank();
+renderBlanks();
+renderMCQ();
+renderQA();
+updateScore();
+goToStep(0);
+
+</script>
+</body>
+</html>
