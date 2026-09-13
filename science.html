@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Conservation &amp; Medicinal Plants of Nepal — Class 10 Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===================== TOKENS ===================== */
+:root{
+  --forest-deep:#101E15;
+  --forest:#1B3327;
+  --forest-mid:#2C5240;
+  --forest-soft:#3E6B54;
+  --sage:#8FA687;
+  --sage-pale:#E4EBDE;
+  --gold:#CE9A34;
+  --gold-soft:#F2DFA9;
+  --clay:#B15A38;
+  --clay-soft:#EFD3C4;
+  --paper:#FFFFFF;
+  --panel:#F5F3EC;
+  --ink:#1A1F1B;
+  --ink-soft:#4B564D;
+  --line:#DCE2D8;
+  --shadow: 0 18px 40px -18px rgba(16,30,21,.35);
+  --serif: 'Fraunces', Georgia, serif;
+  --sans: 'Work Sans', -apple-system, Segoe UI, sans-serif;
+  --radius: 18px;
+  --maxw: 1180px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; font-family:var(--sans); color:var(--ink); background:var(--paper);
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%; display:block;}
+a{color:inherit;}
+button{font-family:inherit;}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 clamp(20px,5vw,48px);}
+::selection{background:var(--gold-soft);}
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+}
+
+/* ===================== ICON SPRITE ===================== */
+svg.icon{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+
+/* ===================== TOPBAR ===================== */
+#topbar{
+  position:fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px clamp(18px,4vw,40px);
+  background:rgba(16,30,21,.86); backdrop-filter:blur(10px);
+  color:#fff; transform:translateY(-110%); transition:transform .45s cubic-bezier(.22,.9,.32,1);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+#topbar.show{transform:translateY(0);}
+.tb-left{display:flex; align-items:center; gap:12px;}
+.tb-back{
+  display:flex; align-items:center; gap:8px; background:none; border:1px solid rgba(255,255,255,.25);
+  color:#fff; padding:8px 14px 8px 10px; border-radius:999px; cursor:pointer; font-size:.9rem;
+  transition:background .25s, border-color .25s;
+}
+.tb-back:hover{background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.5);}
+.tb-back svg{width:18px;height:18px;}
+.tb-title{font-family:var(--serif); font-size:1.02rem; letter-spacing:.2px; opacity:.95;}
+.tb-nav{display:flex; gap:6px;}
+.tb-pill{
+  font-size:.82rem; padding:7px 13px; border-radius:999px; border:1px solid transparent;
+  background:rgba(255,255,255,.08); cursor:pointer; color:#fff; opacity:.75; transition:.25s;
+}
+.tb-pill:hover{opacity:1; background:rgba(255,255,255,.18);}
+.tb-pill.current{opacity:1; background:var(--gold); color:#241a05; font-weight:600;}
+@media (max-width:720px){ .tb-nav{display:none;} }
+
+/* ===================== SCREENS ===================== */
+.screen{display:none;}
+.screen.active{display:block; animation:screenIn .55s cubic-bezier(.16,.8,.3,1);}
+@keyframes screenIn{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+
+/* ===================== HOME ===================== */
+#screen-home{background:var(--paper);}
+.hero{
+  position:relative; min-height:100svh; display:flex; flex-direction:column; justify-content:flex-end;
+  color:#fff; overflow:hidden; padding-bottom:56px;
+}
+.hero-media{position:absolute; inset:0; z-index:0;}
+.hero-media img{width:100%; height:100%; object-fit:cover; animation:kenburns 26s ease-in-out infinite alternate;}
+@keyframes kenburns{ from{transform:scale(1);} to{transform:scale(1.09) translate(-1%,-1%);} }
+.hero-scrim{
+  position:absolute; inset:0; z-index:1;
+  background:
+    linear-gradient(180deg, rgba(16,26,18,.35) 0%, rgba(14,24,17,.35) 35%, rgba(11,20,14,.86) 100%);
+}
+.hero-topline{position:relative; z-index:2; padding:34px clamp(20px,5vw,48px) 0; display:flex; justify-content:space-between; align-items:center;}
+.brandmark{display:flex; align-items:center; gap:10px; font-family:var(--serif); font-size:1rem; letter-spacing:.3px;}
+.brandmark .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+.unit-tag{font-size:.78rem; border:1px solid rgba(255,255,255,.35); padding:5px 12px; border-radius:999px; letter-spacing:.4px;}
+
+.hero-content{position:relative; z-index:2; padding:0 clamp(20px,5vw,48px);}
+.hero-content h1{
+  font-family:var(--serif); font-weight:600; line-height:1.02;
+  font-size:clamp(2.6rem, 6.4vw, 5.2rem); margin:0 0 18px; max-width:14ch;
+}
+.hero-content h1 em{font-style:italic; color:var(--gold-soft); font-weight:500;}
+.hero-content p{
+  font-size:clamp(1rem,1.6vw,1.2rem); max-width:56ch; color:rgba(255,255,255,.86); line-height:1.6; margin:0 0 30px;
+}
+.hero-hint{display:flex; align-items:center; gap:10px; font-size:.92rem; color:rgba(255,255,255,.75);}
+.hero-hint svg{animation:bob 1.8s ease-in-out infinite;}
+@keyframes bob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(6px);} }
+
+.leaves{position:absolute; inset:0; z-index:1; pointer-events:none; opacity:.5;}
+.leaf{position:absolute; opacity:0; animation:drift 16s linear infinite;}
+.leaf svg{width:22px;height:22px; color:rgba(242,223,169,.55);}
+@keyframes drift{
+  0%{opacity:0; transform:translate(0,0) rotate(0deg);}
+  8%{opacity:.7;}
+  92%{opacity:.55;}
+  100%{opacity:0; transform:translate(-40px,-620px) rotate(220deg);}
+}
+
+/* Topic picker */
+.picker{padding:clamp(56px,9vw,96px) 0 100px; background:var(--paper); position:relative;}
+.picker-head{max-width:640px; margin-bottom:44px;}
+.eyebrow{font-family:var(--serif); font-style:italic; color:var(--forest-soft); font-size:1.05rem; margin:0 0 6px;}
+.picker-head h2{font-family:var(--serif); font-size:clamp(1.8rem,3.4vw,2.6rem); margin:0 0 10px; color:var(--forest);}
+.picker-head p{color:var(--ink-soft); font-size:1.02rem; margin:0; line-height:1.6;}
+
+.card-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px;}
+@media (max-width:980px){ .card-grid{grid-template-columns:1fr;} }
+
+.topic-card{
+  position:relative; border-radius:var(--radius); overflow:hidden; cursor:pointer; border:none; text-align:left;
+  background:var(--forest); color:#fff; padding:0; height:420px; display:flex; flex-direction:column; justify-content:flex-end;
+  box-shadow:var(--shadow); transition:transform .5s cubic-bezier(.16,.8,.3,1), box-shadow .5s;
+  opacity:0; transform:translateY(28px);
+}
+.topic-card.in-view{opacity:1; transform:translateY(0);}
+.topic-card:hover{transform:translateY(-8px); box-shadow:0 26px 54px -18px rgba(16,30,21,.5);}
+.topic-card .tc-media{position:absolute; inset:0;}
+.topic-card .tc-media img{width:100%; height:100%; object-fit:cover; transition:transform .8s ease;}
+.topic-card:hover .tc-media img{transform:scale(1.08);}
+.topic-card .tc-scrim{position:absolute; inset:0; background:linear-gradient(180deg, rgba(16,26,18,.05) 0%, rgba(12,20,14,.92) 88%);}
+.topic-card .tc-body{position:relative; padding:26px 24px 28px; z-index:2;}
+.topic-card .tc-tag{font-size:.75rem; letter-spacing:.5px; color:var(--gold-soft); margin-bottom:8px; display:block;}
+.topic-card h3{font-family:var(--serif); font-size:1.55rem; margin:0 0 10px; line-height:1.15;}
+.topic-card p{font-size:.92rem; color:rgba(255,255,255,.82); line-height:1.5; margin:0 0 16px; max-width:36ch;}
+.tc-cta{display:inline-flex; align-items:center; gap:8px; font-size:.86rem; font-weight:600; color:#fff;}
+.tc-cta svg{width:16px;height:16px; transition:transform .3s;}
+.topic-card:hover .tc-cta svg{transform:translateX(5px);}
+.tc-icon{
+  position:absolute; top:20px; right:20px; z-index:2; width:44px; height:44px; border-radius:50%;
+  background:rgba(255,255,255,.14); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center;
+  border:1px solid rgba(255,255,255,.25);
+}
+.tc-icon svg{width:22px;height:22px;color:#fff;}
+
+/* ===================== SHARED TOPIC-PAGE STYLES ===================== */
+.topic-page{padding-top:0;}
+.tp-hero{
+  position:relative; padding:150px clamp(20px,5vw,48px) 70px; color:#fff; overflow:hidden;
+}
+.tp-hero-media{position:absolute; inset:0; z-index:0;}
+.tp-hero-media img{width:100%;height:100%;object-fit:cover;}
+.tp-hero-scrim{position:absolute; inset:0; z-index:1;}
+.tp-hero-inner{position:relative; z-index:2; max-width:800px;}
+.tp-hero .section-num{font-family:var(--serif); font-style:italic; font-size:1.05rem; color:var(--gold-soft); margin:0 0 10px;}
+.tp-hero h1{font-family:var(--serif); font-size:clamp(2.1rem,4.6vw,3.6rem); margin:0 0 16px; line-height:1.08;}
+.tp-hero p{font-size:1.05rem; color:rgba(255,255,255,.88); line-height:1.65; max-width:62ch; margin:0;}
+
+.tp-body{background:var(--paper); padding:70px 0 40px;}
+.tp-section{padding:0 0 68px;}
+.tp-section-head{max-width:680px; margin-bottom:32px;}
+.tp-section-head .kicker{font-family:var(--serif); font-style:italic; color:var(--forest-soft); font-size:1rem; margin:0 0 6px;}
+.tp-section-head h2{font-family:var(--serif); font-size:clamp(1.5rem,2.6vw,2.1rem); margin:0 0 10px; color:var(--forest);}
+.tp-section-head p{color:var(--ink-soft); margin:0; line-height:1.6;}
+
+.reveal{opacity:0; transform:translateY(22px); transition:opacity .7s cubic-bezier(.16,.8,.3,1), transform .7s cubic-bezier(.16,.8,.3,1);}
+.reveal.in-view{opacity:1; transform:translateY(0);}
+
+/* Info callout (law / stat) */
+.callout{
+  display:flex; gap:18px; align-items:flex-start; background:var(--panel); border-radius:var(--radius);
+  padding:26px 28px; margin:8px 0 0;
+}
+.callout .ci{
+  width:50px;height:50px;border-radius:14px; background:var(--forest); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.callout h4{margin:0 0 6px; font-family:var(--serif); font-size:1.12rem; color:var(--forest);}
+.callout p{margin:0; color:var(--ink-soft); line-height:1.6; font-size:.96rem;}
+
+/* Feature grid (icon + title + text) used across in-situ/ex-situ etc */
+.feat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+.feat-grid.cols-2{grid-template-columns:repeat(2,1fr);}
+.feat-grid.cols-4{grid-template-columns:repeat(4,1fr);}
+@media (max-width:900px){ .feat-grid, .feat-grid.cols-2, .feat-grid.cols-4{grid-template-columns:1fr 1fr;} }
+@media (max-width:600px){ .feat-grid, .feat-grid.cols-2, .feat-grid.cols-4{grid-template-columns:1fr;} }
+
+.feat-card{
+  background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:26px 22px;
+  transition:transform .4s cubic-bezier(.16,.8,.3,1), box-shadow .4s, border-color .4s;
+}
+.feat-card:hover{transform:translateY(-6px); box-shadow:var(--shadow); border-color:transparent;}
+.feat-ico{
+  width:48px;height:48px;border-radius:12px; background:var(--sage-pale); color:var(--forest);
+  display:flex; align-items:center; justify-content:center; margin-bottom:16px;
+}
+.feat-card.clay .feat-ico{background:var(--clay-soft); color:var(--clay);}
+.feat-card.gold .feat-ico{background:var(--gold-soft); color:#8a611a;}
+.feat-card h4{font-family:var(--serif); font-size:1.12rem; margin:0 0 8px; color:var(--ink);}
+.feat-card p{margin:0; color:var(--ink-soft); font-size:.92rem; line-height:1.55;}
+
+/* Species / plant profile cards with real photos */
+.profile-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px;}
+@media (max-width:980px){ .profile-grid{grid-template-columns:1fr 1fr;} }
+@media (max-width:640px){ .profile-grid{grid-template-columns:1fr;} }
+
+.profile-card{
+  border-radius:var(--radius); overflow:hidden; background:var(--paper); border:1px solid var(--line);
+  transition:transform .45s cubic-bezier(.16,.8,.3,1), box-shadow .45s;
+}
+.profile-card:hover{transform:translateY(-6px); box-shadow:var(--shadow);}
+.photo-frame{position:relative; aspect-ratio:4/3; background:linear-gradient(135deg,var(--forest-mid),var(--forest)); overflow:hidden;}
+.photo-frame img{width:100%;height:100%;object-fit:cover; transition:transform .8s ease;}
+.profile-card:hover .photo-frame img{transform:scale(1.06);}
+.photo-frame .pf-fallback{
+  position:absolute; inset:0; display:none; align-items:center; justify-content:center; color:rgba(255,255,255,.75);
+}
+.photo-frame.img-fallback img{display:none;}
+.photo-frame.img-fallback .pf-fallback{display:flex;}
+.photo-frame .pf-fallback svg{width:54px;height:54px;}
+.profile-body{padding:20px 20px 24px;}
+.profile-body .p-name-np{font-size:.86rem; color:var(--forest-soft); margin:0 0 2px;}
+.profile-body h4{font-family:var(--serif); font-size:1.3rem; margin:0 0 2px; color:var(--ink);}
+.profile-body .p-sci{font-style:italic; color:var(--ink-soft); font-size:.86rem; margin:0 0 12px;}
+.profile-body p.p-desc{margin:0 0 14px; font-size:.92rem; color:var(--ink-soft); line-height:1.55;}
+.uses{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
+.uses li{display:flex; gap:10px; align-items:flex-start; font-size:.88rem; color:var(--ink); line-height:1.45;}
+.uses li svg{width:16px;height:16px; margin-top:2px; color:var(--gold); flex-shrink:0;}
+
+/* icon-only profile (no photo, e.g. Yarsagumba / Champ / Lauth Salla) */
+.icon-frame{aspect-ratio:4/3; background:linear-gradient(150deg,var(--forest),var(--forest-mid)); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;}
+.icon-frame svg{width:64px;height:64px; color:rgba(255,255,255,.85);}
+.icon-frame::after{content:""; position:absolute; inset:0; background:radial-gradient(circle at 30% 20%, rgba(255,255,255,.12), transparent 60%);}
+
+/* Stat strip */
+.stat-strip{
+  display:flex; align-items:center; gap:26px; background:var(--forest); color:#fff; border-radius:var(--radius);
+  padding:34px 32px; flex-wrap:wrap;
+}
+.stat-num{font-family:var(--serif); font-size:clamp(2.6rem,5vw,3.6rem); font-weight:600; color:var(--gold-soft); line-height:1;}
+.stat-strip p{margin:0; color:rgba(255,255,255,.85); max-width:44ch; font-size:.98rem; line-height:1.6;}
+
+/* Simple two-col list (community / research etc) already covered by feat-grid */
+
+/* Endangered species mini badges (Champ / Lauth Salla text tiles) */
+.badge-row{display:flex; flex-wrap:wrap; gap:14px; margin-top:26px;}
+.badge{
+  display:flex; align-items:center; gap:10px; background:var(--panel); border-radius:999px; padding:10px 18px 10px 12px;
+  font-size:.88rem; color:var(--ink);
+}
+.badge .b-ico{width:30px;height:30px;border-radius:50%;background:var(--forest); color:#fff; display:flex; align-items:center; justify-content:center;}
+.badge .b-ico svg{width:16px;height:16px;}
+.badge b{font-weight:600;}
+.badge span.sci{font-style:italic; color:var(--ink-soft); font-size:.82rem;}
+
+/* Cross-links footer on topic pages */
+.tp-footer{background:var(--forest-deep); color:#fff; padding:60px 0 50px;}
+.tp-footer h3{font-family:var(--serif); font-size:1.5rem; margin:0 0 22px; text-align:center;}
+.footer-links{display:flex; gap:16px; justify-content:center; flex-wrap:wrap;}
+.footer-link{
+  display:flex; align-items:center; gap:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14);
+  padding:14px 20px; border-radius:14px; cursor:pointer; color:#fff; transition:.3s; min-width:220px;
+}
+.footer-link:hover{background:rgba(255,255,255,.13); transform:translateY(-3px);}
+.footer-link .fl-ico{width:36px;height:36px;border-radius:10px;background:var(--gold); color:#241a05; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+.footer-link .fl-ico svg{width:18px;height:18px;}
+.footer-link .fl-text b{display:block; font-size:.92rem;}
+.footer-link .fl-text span{font-size:.78rem; color:rgba(255,255,255,.6);}
+.home-link{display:flex; justify-content:center; margin-top:26px;}
+.home-btn{
+  display:inline-flex; align-items:center; gap:8px; background:none; border:1px solid rgba(255,255,255,.3); color:#fff;
+  padding:11px 22px; border-radius:999px; cursor:pointer; font-size:.9rem; transition:.3s;
+}
+.home-btn:hover{background:rgba(255,255,255,.12);}
+
+/* Home page closing footer */
+.site-footer{background:var(--forest-deep); color:rgba(255,255,255,.6); text-align:center; padding:26px 0; font-size:.85rem;}
+
+/* Section divider deco (subtle mountain line, not a colour bar) */
+.mtn-divider{width:100%; height:40px; overflow:hidden; line-height:0;}
+.mtn-divider svg{width:100%; height:100%; display:block;}
+
+/* utility */
+.mt-lg{margin-top:56px;}
+</style>
+</head>
+<body>
+
+<!-- ===================== ICON SPRITE ===================== -->
+<svg style="display:none">
+<defs>
+<symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 3C10 3 3 10 3 20c10 0 17-7 17-17Z"/><path d="M8.5 15.5 20 4"/></symbol>
+<symbol id="i-tree" viewBox="0 0 24 24"><path d="M12 2 6 11h3l-4 6h5v5h4v-5h5l-4-6h3L12 2Z"/></symbol>
+<symbol id="i-gavel" viewBox="0 0 24 24"><path d="m14 4 6 6"/><path d="m4 14 6 6"/><path d="M6.5 12.5 12.5 6.5l5 5-6 6-5-5Z"/><path d="M3 21h8"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/></symbol>
+<symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c0-1-1-2-1-3 2 1 4 4 4 7a7 7 0 1 1-14 0c0-5 4-6 4-9 0-1.5 1-3.5 4-4Z"/></symbol>
+<symbol id="i-village" viewBox="0 0 24 24"><path d="M4 21V10l5-4 5 4v11"/><path d="M14 21v-7l5-3 1 1v9"/><path d="M2 21h20"/></symbol>
+<symbol id="i-greenhouse" viewBox="0 0 24 24"><path d="M3 10 12 4l9 6"/><path d="M4 10v11h16V10"/><path d="M9 10v11M15 10v11M4 15h16"/></symbol>
+<symbol id="i-microscope" viewBox="0 0 24 24"><path d="M6 21h10"/><path d="M9 21c-1-3 0-5 2-6"/><path d="M8 12l4-2 3 6-4 2Z"/><path d="M14 5l2 2"/><path d="M4 10l3-1"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5c3-1.5 6-1.5 8 0v14c-2-1.5-5-1.5-8 0Z"/><path d="M20 5c-3-1.5-6-1.5-8 0v14c2-1.5 5-1.5 8 0Z"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4Z"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
+<symbol id="i-waterfall" viewBox="0 0 24 24"><path d="M5 3v10a2 2 0 0 0 2 2h2"/><path d="M9 21V9"/><path d="M15 21v-8"/><path d="M19 3v6a2 2 0 0 1-2 2h-2"/></symbol>
+<symbol id="i-cage" viewBox="0 0 24 24"><path d="M5 4v16M9 4v16M15 4v16M19 4v16"/><path d="M5 8h14M5 16h14"/></symbol>
+<symbol id="i-binoculars" viewBox="0 0 24 24"><circle cx="7" cy="16" r="3"/><circle cx="17" cy="16" r="3"/><path d="M9 8h6M9 8l-2 8M15 8l2 8M9 8V5h6v3"/></symbol>
+<symbol id="i-cow" viewBox="0 0 24 24"><path d="M4 10c0-3 3-5 8-5s8 2 8 5v3c0 4-3 7-8 7s-8-3-8-7Z"/><path d="M4 10 2 8M20 10l2-2M9 6 8 3M15 6l1-3"/></symbol>
+<symbol id="i-mushroom" viewBox="0 0 24 24"><path d="M3 11c0-4 4-7 9-7s9 3 9 7Z"/><path d="M10 11v6a2 2 0 0 0 4 0v-6"/></symbol>
+<symbol id="i-vial" viewBox="0 0 24 24"><path d="M10 2h4"/><path d="M11 2v7L5 20a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-6-11V2"/><path d="M7 16h10"/></symbol>
+<symbol id="i-book-open" viewBox="0 0 24 24"><path d="M4 5c3-1.5 6-1.5 8 0v14c-2-1.5-5-1.5-8 0Z"/><path d="M20 5c-3-1.5-6-1.5-8 0v14c2-1.5 5-1.5 8 0Z"/></symbol>
+<symbol id="i-paw" viewBox="0 0 24 24"><circle cx="6" cy="10" r="2"/><circle cx="11" cy="7" r="2"/><circle cx="16" cy="7" r="2"/><circle cx="20" cy="10" r="2"/><path d="M13 22c-4 0-6-2-6-4.5S9 13 13 13s6 2 6 4.5S17 22 13 22Z"/></symbol>
+<symbol id="i-arrow-r" viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></symbol>
+<symbol id="i-arrow-l" viewBox="0 0 24 24"><path d="M20 12H4M10 6l-6 6 6 6"/></symbol>
+<symbol id="i-mountain" viewBox="0 0 24 24"><path d="m3 20 6-11 4 6 2-3 6 8Z"/></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="i-flower" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2"/><path d="M12 3c2 0 3 1.5 3 3.5S13 10 12 10s-3-1.5-3-3.5S10 3 12 3ZM12 21c2 0 3-1.5 3-3.5S13 14 12 14s-3 1.5-3 3.5S10 21 12 21ZM3 12c0-2 1.5-3 3.5-3S10 11 10 12s-1.5 3-3.5 3S3 14 3 12ZM21 12c0 2-1.5 3-3.5 3S14 13 14 12s1.5-3 3.5-3S21 10 21 12Z"/></symbol>
+<symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M5 7l-3 6a3 3 0 0 0 6 0Zm14 0-3 6a3 3 0 0 0 6 0Z"/></symbol>
+<symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 22V13"/><path d="M12 13c-5 0-8-3-8-8 5 0 8 3 8 8Z"/><path d="M12 13c5 0 8-4 8-9-5 0-8 4-8 9Z"/></symbol>
+</defs>
+</svg>
+
+<!-- ===================== TOPBAR ===================== -->
+<nav id="topbar">
+  <div class="tb-left">
+    <button class="tb-back" data-goto="home"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><use href="#i-arrow-l"/></svg> Menu</button>
+    <span class="tb-title" id="tb-title">Unit 6</span>
+  </div>
+  <div class="tb-nav">
+    <button class="tb-pill" data-goto="plants">6.3 Plants</button>
+    <button class="tb-pill" data-goto="wildlife">6.4 Wildlife</button>
+    <button class="tb-pill" data-goto="medicinal">6.5 Medicinal</button>
+  </div>
+</nav>
+
+<main id="app">
+
+<!-- =========================================================== -->
+<!-- HOME -->
+<!-- =========================================================== -->
+<section class="screen active" id="screen-home" data-screen="home">
+  <div class="hero">
+    <div class="hero-media"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Beauty_of_Chitwan_National_Park.jpg" alt="Forest landscape of Chitwan National Park, Nepal" class="real"></div>
+    <div class="hero-scrim"></div>
+    <div class="leaves" id="leafLayer"></div>
+
+    <div class="hero-topline">
+      <div class="brandmark"><span class="dot"></span> Class 10 · Science</div>
+      <div class="unit-tag">Unit 6</div>
+    </div>
+
+    <div class="hero-content">
+      <h1>Conservation &amp; <em>Medicinal Plants</em> of Nepal</h1>
+      <p>Endangered flora, wildlife protection, and the traditional medicinal plants that make Nepal's biodiversity a national treasure — an interactive study deck built from your textbook chapter.</p>
+      <div class="hero-hint">
+        <svg class="icon" viewBox="0 0 24 24" style="width:20px;height:20px"><use href="#i-chevron-down"/></svg>
+        Tap a topic below to jump straight in
+      </div>
+    </div>
+  </div>
+
+  <div class="picker">
+    <div class="wrap">
+      <div class="picker-head">
+        <p class="eyebrow">Choose where to begin</p>
+        <h2>Three sections, one chapter</h2>
+        <p>Every card opens its own scrollable page — read top to bottom, or jump between sections any time using the menu bar.</p>
+      </div>
+
+      <div class="card-grid">
+        <button class="topic-card reveal" data-goto="plants">
+          <div class="tc-media"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Nardostachys_grandiflora.jpg" alt="Nardostachys jatamansi, a rare Himalayan medicinal herb" class="real"></div>
+          <div class="tc-scrim"></div>
+          <div class="tc-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#i-sprout"/></svg></div>
+          <div class="tc-body">
+            <span class="tc-tag">Section 6.3</span>
+            <h3>Endangered Plants</h3>
+            <p>Conserving Nepal's rare flora — Jatamasi, Champ, Sarpagandha, Panchaule &amp; Lauth Salla.</p>
+            <span class="tc-cta">Explore the section <svg class="icon" viewBox="0 0 24 24"><use href="#i-arrow-r"/></svg></span>
+          </div>
+        </button>
+
+        <button class="topic-card reveal" data-goto="wildlife" style="transition-delay:.08s">
+          <div class="tc-media"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Bengal_tiger_(Panthera_tigris_tigris)_female_3.jpg" alt="Bengal tiger in the wild" class="real"></div>
+          <div class="tc-scrim"></div>
+          <div class="tc-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#i-paw"/></svg></div>
+          <div class="tc-body">
+            <span class="tc-tag">Section 6.4</span>
+            <h3>Wildlife Conservation</h3>
+            <p>Protecting the Bengal Tiger, One-horned Rhino, Red Panda &amp; other iconic species.</p>
+            <span class="tc-cta">Explore the section <svg class="icon" viewBox="0 0 24 24"><use href="#i-arrow-r"/></svg></span>
+          </div>
+        </button>
+
+        <button class="topic-card reveal" data-goto="medicinal" style="transition-delay:.16s">
+          <div class="tc-media"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tulsi_or_Tulasi_Holy_basil.jpg" alt="Tulsi, holy basil plant" class="real"></div>
+          <div class="tc-scrim"></div>
+          <div class="tc-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#i-flower"/></svg></div>
+          <div class="tc-body">
+            <span class="tc-tag">Section 6.5</span>
+            <h3>Medicinal Plants</h3>
+            <p>700+ medicinal flowering species — Yarsagumba, Mugwort, Aloe Vera &amp; Tulsi.</p>
+            <span class="tc-cta">Explore the section <svg class="icon" viewBox="0 0 24 24"><use href="#i-arrow-r"/></svg></span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-footer">Class 10 Science &nbsp;|&nbsp; Unit 6: Conservation &amp; Medicinal Plants &nbsp;|&nbsp; Based on the national Science textbook, Chapter 6</div>
+</section>
+
+<!-- =========================================================== -->
+<!-- 6.3 ENDANGERED PLANTS -->
+<!-- =========================================================== -->
+<section class="screen topic-page" id="screen-plants" data-screen="plants" data-title="6.3 · Endangered Plants">
+
+  <div class="tp-hero">
+    <div class="tp-hero-media"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/An_absolutely_heavenly_scene_inside_the_forest_(49696625262).jpg" alt="Dense Himalayan forest understorey" class="real"></div>
+    <div class="tp-hero-scrim" style="background:linear-gradient(180deg, rgba(16,26,18,.55) 0%, rgba(11,20,14,.92) 100%);"></div>
+    <div class="tp-hero-inner">
+      <p class="section-num">Section 6.3</p>
+      <h1>Conservation of Endangered &amp; Rare Plants</h1>
+      <p>Species such as Jatamasi, Champ, Sarpagandha, Panchaule and Lauth Salla are declining rapidly from unsustainable harvesting, habitat degradation and over-exploitation — Nepal answers with law, protected land, and careful science.</p>
+    </div>
+  </div>
+
+  <div class="tp-body">
+    <div class="wrap">
+
+      <!-- Law callout -->
+      <div class="tp-section" style="padding-bottom:52px;">
+        <div class="callout reveal">
+          <div class="ci"><svg class="icon" viewBox="0 0 24 24"><use href="#i-gavel"/></svg></div>
+          <div>
+            <h4>Control of International Trade of Endangered Wild Fauna and Flora Act, 2073 (2017)</h4>
+            <p>Nepal's national law enforcing plant and wildlife trade protection, aligned with CITES — the Convention on International Trade in Endangered Species.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rare species gallery -->
+      <div class="tp-section">
+        <div class="tp-section-head reveal">
+          <p class="kicker">Five species under pressure</p>
+          <h2>Nepal's most threatened flora</h2>
+          <p>These plants share the same story: high demand for traditional medicine, slow growth, and habitats that are shrinking fast.</p>
+        </div>
+
+        <div class="profile-grid">
+          <div class="profile-card reveal">
+            <div class="photo-frame"><img class="real" src="https://commons.wikimedia.org/wiki/Special:FilePath/Nardostachys_grandiflora.jpg" alt="Jatamasi plant"><div class="pf-fallback"><svg class="icon" viewBox="0 0 24 24"><use href="#i-sprout"/></svg></div></div>
+            <div class="profile-body">
+              <p class="p-name-np">जटामसी</p>
+              <h4>Jatamasi</h4>
+              <p class="p-sci">Nardostachys jatamansi</p>
+              <p class="p-desc">An alpine herb harvested for its aromatic rhizome, used as incense and sedative — over-collection above 3,000m has made it critically endangered.</p>
+            </div>
+          </div>
+
+          <div class="profile-card reveal" style="transition-delay:.06s">
+            <div class="photo-frame"><img class="real" src="https://commons.wikimedia.org/wiki/Special:FilePath/Sarpagandha_(Rauvolfia_serpentina).jpg" alt="Sarpagandha plant"><div class="pf-fallback"><svg class="icon" viewBox="0 0 24 24"><use href="#i-sprout"/></svg></div></div>
+            <div class="profile-body">
+              <p class="p-name-np">सर्पगन्धा</p>
+              <h4>Sarpagandha</h4>
+              <p class="p-sci">Rauvolfia serpentina</p>
+              <p class="p-desc">Its root yields reserpine, used to treat high blood pressure — a medicinal value that has driven it to the edge of extinction in the wild.</p>
+            </div>
+          </div>
+
+          <div class="profile-card reveal" style="transition-delay:.12s">
+            <div class="photo-frame"><img class="real" src="https://commons.wikimedia.org/wiki/Special:FilePath/Dactylorhiza_hatagirea_1.jpg" alt="Panchaule orchid"><div class="pf-fallback"><svg class="icon" viewBox="0 0 24 24"><use href="#i-sprout"/></svg></div></div>
+            <div class="profile-body">
+              <p class="p-name-np">पञ्च औंले</p>
+              <h4>Panchaule</h4>
+              <p class="p-sci">Dactylorhiza hatagirea</p>
+              <p class="p-desc">A high-altitude orchid whose palm-shaped tuber is prized as a tonic — illegal collection has pushed it onto CITES Appendix II.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="badge-row reveal">
+          <div class="badge"><span class="b-ico"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><use href="#i-tree"/></svg></span><b>Champ</b> <span class="sci">Michelia champaca</span> — fragrant timber tree, felled faster than it regrows</div>
+          <div class="badge"><span class="b-ico"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><use href="#i-tree"/></svg></span><b>Lauth Salla</b> <span class="sci">Taxus wallichiana</span> — Himalayan yew, source of a cancer-drug compound</div>
+        </div>
+      </div>
+
+      <!-- In-situ -->
+      <div class="tp-section">
+        <div class="tp-section-head reveal">
+          <p class="kicker">Protecting plants where they grow</p>
+          <h2>In-Situ Conservation</h2>
+          <p>Keeping species inside their natural habitat, so seed dispersal and ecological interactions continue undisturbed.</p>
+        </div>
+        <div class="feat-grid">
+          <div class="feat-card reveal">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-shield"/></svg></div>
+            <h4>Protected areas</h4>
+            <p>National parks, wildlife reserves and conservation areas protect plant species directly inside their original ecosystems.</p>
+          </div>
+          <div class="feat-card reveal" style="transition-delay:.06s">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-flame"/></svg></div>
+            <h4>Controlling fire &amp; overgrazing</h4>
+            <p>Preventing wildfire outbreaks and managing cattle grazing preserves undergrowth, letting saplings regenerate naturally.</p>
+          </div>
+          <div class="feat-card reveal" style="transition-delay:.12s">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-village"/></svg></div>
+            <h4>Community forestry</h4>
+            <p>Local communities manage and protect forests directly — one of Nepal's most successful decentralised models, restoring millions of hectares.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex-situ -->
+      <div class="tp-section">
+        <div class="tp-section-head reveal">
+          <p class="kicker">Backed by science and the law</p>
+          <h2>Ex-Situ Conservation &amp; Legal Protection</h2>
+          <p>Conservation outside the natural habitat — cultivated, studied, and protected by enforcement and public awareness.</p>
+        </div>
+        <div class="feat-grid cols-4">
+          <div class="feat-card gold reveal">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-greenhouse"/></svg></div>
+            <h4>Botanical gardens</h4>
+            <p>Seeds and saplings of rare species are collected and cultivated in controlled sites like the Central Botanical Garden, Godavari.</p>
+          </div>
+          <div class="feat-card gold reveal" style="transition-delay:.06s">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-microscope"/></svg></div>
+            <h4>Tissue culture</h4>
+            <p>Micropropagation mass-produces thousands of disease-free saplings rapidly from a single parent plant.</p>
+          </div>
+          <div class="feat-card reveal" style="transition-delay:.12s">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-scale"/></svg></div>
+            <h4>Strict laws</h4>
+            <p>Enforced anti-poaching and anti-smuggling laws deter illegal collection, transport, and international trade of protected flora.</p>
+          </div>
+          <div class="feat-card reveal" style="transition-delay:.18s">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-book"/></svg></div>
+            <h4>Public awareness</h4>
+            <p>Educating communities on the ecological and economic value of sustainable harvesting reduces destructive exploitation.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="tp-footer">
+    <div class="wrap">
+      <h3>Continue exploring Unit 6</h3>
+      <div class="footer-links">
+        <button class="footer-link" data-goto="wildlife"><span class="fl-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-paw"/></svg></span><span class="fl-text"><b>6.4 Wildlife Conservation</b><span>Tiger, Rhino, Red Panda</span></span></button>
+        <button class="footer-link" data-goto="medicinal"><span class="fl-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-flower"/></svg></span><span class="fl-text"><b>6.5 Medicinal Plants</b><span>Yarsagumba, Tulsi &amp; more</span></span></button>
+      </div>
+      <div class="home-link"><button class="home-btn" data-goto="home"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><use href="#i-arrow-l"/></svg> Back to menu</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================== -->
+<!-- 6.4 WILDLIFE CONSERVATION -->
+<!-- =========================================================== -->
+<section class="screen topic-page" id="screen-wildlife" data-screen="wildlife" data-title="6.4 · Wildlife Conservation">
+
+  <div class="tp-hero">
+    <div class="tp-hero-media"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Indian_rhinoceros_(Rhinoceros_unicornis)_4.jpg" alt="Greater one-horned rhinoceros near Chitwan" class="real"></div>
+    <div class="tp-hero-scrim" style="background:linear-gradient(180deg, rgba(20,16,10,.5) 0%, rgba(14,12,9,.92) 100%);"></div>
+    <div class="tp-hero-inner">
+      <p class="section-num">Section 6.4</p>
+      <h1>Conservation Measures for Wildlife</h1>
+      <p>The Bengal Tiger, One-horned Rhinoceros and Red Panda face severe survival threats from poaching, human-wildlife conflict, and fragmented habitats — here's how Nepal is fighting back.</p>
+    </div>
+  </div>
+
+  <div class="tp-body">
+    <div class="wrap">
+
+      <!-- Species profiles -->
+      <div class="tp-section">
+        <div class="tp-section-head reveal">
+          <p class="kicker">Three flagship species</p>
+          <h2>Icons of the Himalayan lowlands and hills</h2>
+        </div>
+        <div class="profile-grid">
+          <div class="profile-card reveal">
+            <div class="photo-frame"><img class="real" src="https://commons.wikimedia.org/wiki/Special:FilePath/Bengal_tiger_(Panthera_tigris_tigris)_female_3.jpg" alt="Bengal tiger"><div class="pf-fallback"><svg class="icon" viewBox="0 0 24 24"><use href="#i-paw"/></svg></div></div>
+            <div class="profile-body">
+              <h4>Bengal Tiger</h4>
+              <p class="p-sci">Panthera tigris tigris</p>
+              <p class="p-desc">Nepal's apex predator of the Terai grasslands — numbers are recovering in Chitwan and Bardia thanks to strict anti-poaching enforcement.</p>
+            </div>
+          </div>
+          <div class="profile-card reveal" style="transition-delay:.06s">
+            <div class="photo-frame"><img class="real" src="https://commons.wikimedia.org/wiki/Special:FilePath/Indian_rhinoceros_(Rhinoceros_unicornis)_4.jpg" alt="One-horned rhinoceros"><div class="pf-fallback"><svg class="icon" viewBox="0 0 24 24"><use href="#i-paw"/></svg></div></div>
+            <div class="profile-body">
+              <h4>One-Horned Rhino</h4>
+              <p class="p-sci">Rhinoceros unicornis</p>
+              <p class="p-desc">Once down to a few hundred, Chitwan's rhino population has rebounded through zero-poaching years and habitat management.</p>
+            </div>
+          </div>
+          <div class="profile-card reveal" style="transition-delay:.12s">
+            <div class="photo-frame"><img class="real" src="https://commons.wikimedia.org/wiki/Special:FilePath/Red_Panda_(24986761703).jpg" alt="Red panda"><div class="pf-fallback"><svg class="icon" viewBox="0 0 24 24"><use href="#i-paw"/></svg></div></div>
+            <div class="profile-body">
+              <h4>Red Panda</h4>
+              <p class="p-sci">Ailurus fulgens</p>
+              <p class="p-desc">A shy bamboo-forest dweller of the eastern hills, threatened by logging and fragmentation of its cool, mossy habitat.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- In-situ -->
+      <div class="tp-section">
+        <div class="tp-section-head reveal">
+          <p class="kicker">Protecting animals in the wild</p>
+          <h2>In-Situ Conservation</h2>
+        </div>
+        <div class="feat-grid">
+          <div class="feat-card clay reveal">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-shield"/></svg></div>
+            <h4>Protected areas</h4>
+            <p>Chitwan National Park — Nepal's first — and Bardia National Park give rhinos, tigers and wild elephants room to roam.</p>
+          </div>
+          <div class="feat-card clay reveal" style="transition-delay:.06s">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-camera"/></svg></div>
+            <h4>Anti-poaching patrols</h4>
+            <p>Nepal Army personnel and forest guards use camera traps, acoustic monitoring, and real-time SMART patrolling.</p>
+          </div>
+          <div class="feat-card clay reveal" style="transition-delay:.12s">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-waterfall"/></svg></div>
+            <h4>Habitat management</h4>
+            <p>Controlled grass burning, artificial waterholes, and ecological corridors keep migration routes open and safe.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex-situ -->
+      <div class="tp-section">
+        <div class="tp-section-head reveal">
+          <p class="kicker">Safeguarded outside the wild</p>
+          <h2>Ex-Situ Conservation</h2>
+        </div>
+        <div class="feat-grid cols-2">
+          <div class="feat-card reveal">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-cage"/></svg></div>
+            <h4>Zoological parks</h4>
+            <p>The Central Zoo in Jawalakhel raises and cares for species in a protected environment, doubling as public education.</p>
+          </div>
+          <div class="feat-card reveal" style="transition-delay:.06s">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-village"/></svg></div>
+            <h4>Breeding centers</h4>
+            <p>Dedicated centers for gharials in Chitwan, and Vulture Safe Zones, raise critically endangered species for release into the wild.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Community & research -->
+      <div class="tp-section">
+        <div class="tp-section-head reveal">
+          <p class="kicker">The human side of conservation</p>
+          <h2>Community Involvement &amp; Research</h2>
+        </div>
+        <div class="feat-grid">
+          <div class="feat-card gold reveal">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-binoculars"/></svg></div>
+            <h4>Study &amp; research</h4>
+            <p>Wildlife surveys, radio-collaring and population censuses track health, reproduction, movement, and threat levels.</p>
+          </div>
+          <div class="feat-card gold reveal" style="transition-delay:.06s">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-village"/></svg></div>
+            <h4>Awareness &amp; ecotourism</h4>
+            <p>Community programs encourage sustainable ecotourism — home-stays and guided safaris — returning revenue to local households.</p>
+          </div>
+          <div class="feat-card gold reveal" style="transition-delay:.12s">
+            <div class="feat-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-cow"/></svg></div>
+            <h4>Human-wildlife conflict</h4>
+            <p>Predator-proof corrals, solar-powered fencing, and compensation programs reduce crop damage and livestock loss.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="tp-footer">
+    <div class="wrap">
+      <h3>Continue exploring Unit 6</h3>
+      <div class="footer-links">
+        <button class="footer-link" data-goto="plants"><span class="fl-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-sprout"/></svg></span><span class="fl-text"><b>6.3 Endangered Plants</b><span>Jatamasi, Sarpagandha &amp; more</span></span></button>
+        <button class="footer-link" data-goto="medicinal"><span class="fl-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-flower"/></svg></span><span class="fl-text"><b>6.5 Medicinal Plants</b><span>Yarsagumba, Tulsi &amp; more</span></span></button>
+      </div>
+      <div class="home-link"><button class="home-btn" data-goto="home"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><use href="#i-arrow-l"/></svg> Back to menu</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================== -->
+<!-- 6.5 MEDICINAL PLANTS -->
+<!-- =========================================================== -->
+<section class="screen topic-page" id="screen-medicinal" data-screen="medicinal" data-title="6.5 · Medicinal Plants">
+
+  <div class="tp-hero">
+    <div class="tp-hero-media"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tulsi_or_Tulasi_Holy_basil.jpg" alt="Tulsi, holy basil" class="real"></div>
+    <div class="tp-hero-scrim" style="background:linear-gradient(180deg, rgba(20,18,8,.5) 0%, rgba(14,13,8,.92) 100%);"></div>
+    <div class="tp-hero-inner">
+      <p class="section-num">Section 6.5</p>
+      <h1>Medicinal Plants of Nepal: Nature's Gift for Health</h1>
+      <p>From tropical Terai plains to alpine Himalayan peaks, Nepal's altitudinal range creates habitats for a vast repository of medicinal plants — Karnali province alone shows exceptional diversity in wild medicinal flora.</p>
+    </div>
+  </div>
+
+  <div class="tp-body">
+    <div class="wrap">
+
+      <div class="tp-section" style="padding-bottom:52px;">
+        <div class="stat-strip reveal">
+          <div class="stat-num" id="statNum">0</div>
+          <p>flowering plant species in Nepal have recorded medicinal use — one of the richest pharmacopoeias of any country its size.</p>
+        </div>
+      </div>
+
+      <div class="tp-section">
+        <div class="tp-section-head reveal">
+          <p class="kicker">Four everyday healers</p>
+          <h2>Plants you'll find in almost any Nepali household</h2>
+        </div>
+
+        <div class="profile-grid">
+          <div class="profile-card reveal">
+            <div class="icon-frame"><svg class="icon" viewBox="0 0 24 24"><use href="#i-mushroom"/></svg></div>
+            <div class="profile-body">
+              <p class="p-name-np">यार्सागुम्बा</p>
+              <h4>Yarsagumba</h4>
+              <p class="p-sci">Ophiocordyceps sinensis</p>
+              <p class="p-desc">A parasitic fungus-caterpillar complex from alpine grasslands (3,000–5,000m) — among Nepal's most valuable, and strictly regulated, forest products.</p>
+              <ul class="uses">
+                <li><svg class="icon" viewBox="0 0 24 24"><use href="#i-vial"/></svg> Energy booster — eases fatigue, boosts stamina</li>
+                <li><svg class="icon" viewBox="0 0 24 24"><use href="#i-vial"/></svg> Traditionally used to support immunity</li>
+                <li><svg class="icon" viewBox="0 0 24 24"><use href="#i-gavel"/></svg> High market value makes strict regulation essential</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="profile-card reveal" style="transition-delay:.06s">
+            <div class="photo-frame"><img class="real" src="https://commons.wikimedia.org/wiki/Special:FilePath/ArtemisiaVulgaris.jpg" alt="Mugwort plant"><div class="pf-fallback"><svg class="icon" viewBox="0 0 24 24"><use href="#i-sprout"/></svg></div></div>
+            <div class="profile-body">
+              <p class="p-name-np">तितेपाती</p>
+              <h4>Mugwort</h4>
+              <p class="p-sci">Artemisia vulgaris</p>
+              <p class="p-desc">A common perennial herb across mid-hill pastures, roadsides and wasteland throughout Nepal — abundant well beyond its role as a wayside weed.</p>
+              <ul class="uses">
+                <li><svg class="icon" viewBox="0 0 24 24"><use href="#i-vial"/></svg> Natural insect repellent and pest deterrent</li>
+                <li><svg class="icon" viewBox="0 0 24 24"><use href="#i-vial"/></svg> Extracts used in soaps and essential oils</li>
+                <li><svg class="icon" viewBox="0 0 24 24"><use href="#i-sprout"/></svg> Dried foliage used as bedding and compost</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="profile-card reveal" style="transition-delay:.12s">
+            <div class="photo-frame"><img class="real" src="https://commons.wikimedia.org/wiki/Special:FilePath/Aloe_vera_flower_inset.jpg" alt="Aloe vera plant"><div class="pf-fallback"><svg class="icon" viewBox="0 0 24 24"><use href="#i-sprout"/></svg></div></div>
+            <div class="profile-body">
+              <p class="p-name-np">घिउकुमारी</p>
+              <h4>Aloe Vera</h4>
+              <p class="p-sci">Aloe barbadensis</p>
+              <p class="p-desc">A succulent with thick, fleshy, serrated leaves filled with clear gel — one of the most versatile plants grown at home.</p>
+              <ul class="uses">
+                <li><svg class="icon" viewBox="0 0 24 24"><use href="#i-vial"/></svg> Soothes sunburn, acne and speeds wound healing</li>
+                <li><svg class="icon" viewBox="0 0 24 24"><use href="#i-vial"/></svg> Strengthens hair roots, reduces dandruff</li>
+                <li><svg class="icon" viewBox="0 0 24 24"><use href="#i-vial"/></svg> Rich in Vitamins A, C and E</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="profile-card reveal" style="transition-delay:.18s">
+            <div class="photo-frame"><img class="real" src="https://commons.wikimedia.org/wiki/Special:FilePath/Tulsi_or_Tulasi_Holy_basil.jpg" alt="Tulsi, holy basil plant"><div class="pf-fallback"><svg class="icon" viewBox="0 0 24 24"><use href="#i-sprout"/></svg></div></div>
+            <div class="profile-body">
+              <p class="p-name-np">तुलसी</p>
+              <h4>Tulsi</h4>
+              <p class="p-sci">Ocimum sanctum</p>
+              <p class="p-desc">A sacred aromatic plant grown across homes and temples throughout Nepal — revered in Hindu tradition and prized for everyday medicine.</p>
+              <ul class="uses">
+                <li><svg class="icon" viewBox="0 0 24 24"><use href="#i-vial"/></svg> Eases coughs, colds, asthma and sore throat</li>
+                <li><svg class="icon" viewBox="0 0 24 24"><use href="#i-vial"/></svg> Adaptogenic — lowers stress and fever</li>
+                <li><svg class="icon" viewBox="0 0 24 24"><use href="#i-vial"/></svg> Potent antibacterial and antiviral properties</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="tp-footer">
+    <div class="wrap">
+      <h3>Protecting Nepal's natural heritage</h3>
+      <div class="footer-links">
+        <button class="footer-link" data-goto="plants"><span class="fl-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-sprout"/></svg></span><span class="fl-text"><b>6.3 Endangered Plants</b><span>Jatamasi, Sarpagandha &amp; more</span></span></button>
+        <button class="footer-link" data-goto="wildlife"><span class="fl-ico"><svg class="icon" viewBox="0 0 24 24"><use href="#i-paw"/></svg></span><span class="fl-text"><b>6.4 Wildlife Conservation</b><span>Tiger, Rhino, Red Panda</span></span></button>
+      </div>
+      <div class="home-link"><button class="home-btn" data-goto="home"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><use href="#i-arrow-l"/></svg> Back to menu</button></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  var screens = ["home","plants","wildlife","medicinal"];
+  var topbar = document.getElementById("topbar");
+  var tbTitle = document.getElementById("tb-title");
+
+  function setActive(name){
+    if(screens.indexOf(name) === -1) name = "home";
+    screens.forEach(function(s){
+      var el = document.getElementById("screen-" + s);
+      if(!el) return;
+      if(s === name){ el.classList.add("active"); }
+      else{ el.classList.remove("active"); }
+    });
+
+    // topbar
+    if(name === "home"){
+      topbar.classList.remove("show");
+    } else {
+      topbar.classList.add("show");
+      var el = document.getElementById("screen-" + name);
+      tbTitle.textContent = el.getAttribute("data-title") || "";
+    }
+    document.querySelectorAll(".tb-pill").forEach(function(p){
+      p.classList.toggle("current", p.getAttribute("data-goto") === name);
+    });
+
+    window.scrollTo({top:0, behavior:"instant" in window ? "instant" : "auto"});
+    revealScan();
+  }
+
+  function goTo(name, push){
+    setActive(name);
+    if(push !== false){
+      history.pushState({screen:name}, "", "#" + name);
+    }
+  }
+
+  document.addEventListener("click", function(e){
+    var t = e.target.closest("[data-goto]");
+    if(!t) return;
+    e.preventDefault();
+    goTo(t.getAttribute("data-goto"));
+  });
+
+  window.addEventListener("popstate", function(e){
+    var name = (e.state && e.state.screen) || (location.hash || "#home").slice(1);
+    setActive(name);
+  });
+
+  // initial route
+  var initial = (location.hash || "#home").replace("#","");
+  setActive(screens.indexOf(initial) !== -1 ? initial : "home");
+
+  // ---------------- reveal on scroll ----------------
+  var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        en.target.classList.add("in-view");
+        io.unobserve(en.target);
+      }
+    });
+  }, {threshold:.15, rootMargin:"0px 0px -40px 0px"}) : null;
+
+  function revealScan(){
+    if(!io){
+      document.querySelectorAll(".reveal").forEach(function(el){ el.classList.add("in-view"); });
+      return;
+    }
+    document.querySelectorAll(".reveal:not(.in-view)").forEach(function(el){ io.observe(el); });
+  }
+  revealScan();
+
+  // ---------------- stat counter ----------------
+  var counted = false;
+  var statEl = document.getElementById("statNum");
+  if(statEl && "IntersectionObserver" in window){
+    var cio = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting && !counted){
+          counted = true;
+          animateCount(statEl, 700, 1300, "+");
+          cio.disconnect();
+        }
+      });
+    }, {threshold:.5});
+    cio.observe(statEl);
+  }
+  function animateCount(el, target, duration, suffix){
+    var start = null;
+    function step(ts){
+      if(start === null) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target) + (progress >= 1 ? (suffix||"") : "");
+      if(progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ---------------- broken-image fallback ----------------
+  document.querySelectorAll("img.real").forEach(function(img){
+    img.addEventListener("error", function(){
+      var frame = img.closest(".photo-frame");
+      if(frame){ frame.classList.add("img-fallback"); }
+      else { img.style.display = "none"; }
+    }, {once:true});
+  });
+
+  // ---------------- drifting leaves in hero ----------------
+  var leafLayer = document.getElementById("leafLayer");
+  if(leafLayer){
+    var LEAF_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 3C10 3 3 10 3 20c10 0 17-7 17-17Z"/></svg>';
+    var count = window.innerWidth < 700 ? 6 : 12;
+    for(var i=0;i<count;i++){
+      var d = document.createElement("div");
+      d.className = "leaf";
+      d.innerHTML = LEAF_SVG;
+      d.style.left = (Math.random()*100) + "%";
+      d.style.bottom = (-10 - Math.random()*20) + "%";
+      d.style.animationDelay = (Math.random()*16) + "s";
+      d.style.animationDuration = (13 + Math.random()*10) + "s";
+      leafLayer.appendChild(d);
+    }
+  }
+})();
+</script>
+</body>
+</html>
