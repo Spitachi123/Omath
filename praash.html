@@ -6,10 +6,7 @@
 <title>Wisdom of Little Girls — Ethics &amp; Morality</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
   :root{
@@ -17,7 +14,7 @@
     --paper:#f3ecdc;
     --paper-2:#eae1cc;
     --dusk:#1b2a44;
-    --dusk-2:#0f1b30;
+    --dusk-2:#0f1523;
     --gold:#e3a542;
     --gold-2:#c9852a;
     --brick:#b23a2e;
@@ -41,18 +38,20 @@
     letter-spacing:-0.01em;
   }
 
+  img{ max-width:100%; display:block; }
+
   /* ---------- Scroll snap deck ---------- */
   #deck{
     height:100vh;
     overflow-y:scroll;
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
     scroll-behavior:smooth;
+    -webkit-overflow-scrolling:touch;
   }
   .slide{
     min-height:100vh;
     width:100%;
     scroll-snap-align:start;
-    scroll-snap-stop:always;
     position:relative;
     display:flex;
     flex-direction:column;
@@ -60,7 +59,7 @@
     padding: 6rem 6vw;
   }
   @media (max-width:820px){
-    .slide{ padding: 6rem 6vw 4rem; }
+    .slide{ padding: 5.5rem 6vw 3.5rem; min-height:auto; }
   }
 
   .paper{
@@ -75,18 +74,14 @@
     color: var(--paper);
   }
 
-  .eyebrow{
-    font-size: 0.78rem;
+  .folio{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
     color: var(--gold-2);
-    font-weight:600;
+    font-size: 1rem;
   }
-
-  .stitch-border{
-    border-top: 2px dashed rgba(35,32,27,0.22);
-  }
-  .stitch-border-light{
-    border-top: 2px dashed rgba(243,236,220,0.28);
-  }
+  .dusk-bg .folio{ color: var(--gold); }
 
   /* -------- nav dots -------- */
   #navdots{
@@ -118,7 +113,7 @@
     position:fixed; top:0; left:0; height:3px;
     background: linear-gradient(90deg, var(--brick), var(--gold));
     z-index:60;
-    transition: width .25s ease-out;
+    width:0%;
   }
 
   .scrolldown{
@@ -140,8 +135,8 @@
   /* reveal-on-view */
   .reveal{
     opacity:0;
-    transform: translateY(26px);
-    transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
+    transform: translateY(24px);
+    transition: opacity .75s cubic-bezier(.2,.7,.2,1), transform .75s cubic-bezier(.2,.7,.2,1);
   }
   .reveal.in{ opacity:1; transform:translateY(0); }
   .reveal-d1{ transition-delay:.08s; }
@@ -150,19 +145,20 @@
   .reveal-d4{ transition-delay:.32s; }
 
   /* -------- flip cards -------- */
-  .flip-scene{ perspective: 1400px; }
+  .flip-scene{ perspective: 1400px; height:150px; }
   .flip-card{
     position:relative;
     width:100%;
     height:100%;
     transform-style: preserve-3d;
-    transition: transform .65s cubic-bezier(.3,.9,.25,1);
+    transition: transform .6s cubic-bezier(.3,.9,.25,1);
     cursor:pointer;
   }
   .flip-card.flipped{ transform: rotateY(180deg); }
   .flip-face{
     position:absolute; inset:0;
     backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
     border-radius:14px;
     display:flex; flex-direction:column;
     padding: 1rem 1.1rem;
@@ -180,23 +176,42 @@
     border: 1px solid rgba(227,165,66,0.4);
   }
   .flip-hint{
-    font-size:.68rem; letter-spacing:.08em; opacity:.55; text-transform:uppercase;
+    font-size:.68rem; letter-spacing:.08em; opacity:.55;
+  }
+  .flip-word{ font-size:1.22rem; font-weight:600; }
+  .flip-def{ font-size:0.95rem; line-height:1.5; text-align:center; margin:0; }
+
+  .vocab-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:14px;
   }
 
-  /* image duotone unify */
+  .vocab-heading{
+    display:flex; align-items:center; gap:10px; margin-bottom:12px;
+  }
+  .vocab-heading span{
+    font-size:0.8rem; font-weight:600; color:var(--pine); letter-spacing:.02em;
+  }
+  .vocab-heading .rule{ flex:1; height:1px; background:var(--line); }
+
+  /* image frame */
   .duotone{
     position:relative; overflow:hidden; border-radius: 18px;
+    background: var(--paper-2);
+    aspect-ratio: 4/3;
   }
+  .duotone.tall{ aspect-ratio: 3/4; }
   .duotone img{
     width:100%; height:100%; object-fit:cover; display:block;
-    filter: sepia(28%) saturate(140%) contrast(96%) brightness(92%);
+    filter: sepia(26%) saturate(135%) contrast(96%) brightness(90%);
     transform: scale(1.02);
-    transition: transform 8s ease;
+    transition: transform 6s ease;
   }
-  .duotone:hover img{ transform: scale(1.12); }
+  .duotone:hover img{ transform: scale(1.1); }
   .duotone::after{
     content:''; position:absolute; inset:0;
-    background: linear-gradient(160deg, rgba(27,42,68,0.32), rgba(178,58,46,0.16) 60%, rgba(0,0,0,0.08));
+    background: linear-gradient(160deg, rgba(27,42,68,0.34), rgba(178,58,46,0.16) 60%, rgba(0,0,0,0.1));
     mix-blend-mode: multiply;
   }
   .duotone::before{
@@ -209,6 +224,7 @@
   .frame-caption{
     font-family:'Fraunces', serif;
     font-style:italic;
+    margin-top:10px; font-size:0.95rem; opacity:.75;
   }
 
   .btn{
@@ -220,15 +236,13 @@
     background:transparent;
     cursor:pointer;
     transition: all .3s ease;
+    color:inherit;
+    text-decoration:none;
+    font-family:inherit;
   }
   .btn:hover{ background: var(--ink); color: var(--paper); }
   .btn-light{ border-color: rgba(243,236,220,0.55); color:var(--paper); }
   .btn-light:hover{ background: var(--paper); color: var(--dusk-2); }
-
-  .tag-num{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-  }
 
   .card-hover{
     transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease;
@@ -242,7 +256,66 @@
     font-family:'Fraunces', serif;
     color: var(--gold);
     opacity:.5;
+    font-size:3.4rem;
+    line-height:0;
   }
+
+  .story-grid{
+    display:grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap:48px;
+    align-items:start;
+  }
+  .story-grid.reverse .story-text{ order:2; }
+  .story-grid.reverse .story-image{ order:1; }
+
+  @media (max-width: 900px){
+    .story-grid, .story-grid.reverse{ grid-template-columns:1fr; }
+    .story-grid .story-text, .story-grid.reverse .story-text{ order:1; }
+    .story-grid .story-image, .story-grid.reverse .story-image{ order:0; }
+  }
+
+  .story-text p{
+    font-size:1.06rem; line-height:1.75; margin:0 0 16px; color:rgba(35,32,27,0.88);
+  }
+
+  .principle-grid, .moral-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+    gap:18px;
+  }
+  .principle-card{
+    background:linear-gradient(160deg,#fffdf6,var(--paper-2));
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:26px 22px;
+  }
+  .principle-icon{ font-size:1.8rem; margin-bottom:14px; }
+  .principle-title{ font-size:1.18rem; font-weight:600; margin-bottom:8px; color:var(--brick); }
+  .principle-body{ font-size:0.95rem; line-height:1.55; opacity:.82; }
+
+  .qa-grid{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  @media (max-width:760px){ .qa-grid{ grid-template-columns:1fr; } }
+  .qa-card{
+    background:rgba(243,236,220,0.06);
+    border:1px solid rgba(227,165,66,0.25);
+    border-radius:16px;
+    padding:28px 26px;
+  }
+  .qa-icon{ font-size:1.6rem; margin-bottom:10px; }
+  .qa-title{ font-size:1.2rem; font-weight:600; margin-bottom:10px; color:var(--gold); }
+  .qa-body{ color:rgba(243,236,220,0.82); line-height:1.65; font-size:0.98rem; }
+
+  .moral-card{
+    background:rgba(243,236,220,0.07);
+    border:1px solid rgba(227,165,66,0.28);
+    border-top:3px solid var(--gold);
+    border-radius:12px;
+    padding:22px 20px;
+    text-align:left;
+  }
+  .moral-title{ font-weight:600; font-size:1.05rem; margin-bottom:10px; color:var(--paper); }
+  .moral-body{ font-size:0.9rem; line-height:1.55; color:rgba(243,236,220,0.78); }
 
   ::-webkit-scrollbar{ width:9px; }
   ::-webkit-scrollbar-track{ background: var(--dusk-2); }
@@ -250,515 +323,382 @@
 
   @media (prefers-reduced-motion: reduce){
     .reveal, .flip-card, .duotone img, .chevron{ transition:none !important; animation:none !important; }
+    .reveal{ opacity:1; transform:none; }
   }
 </style>
 </head>
 <body>
-<div id="root"></div>
 
-<script type="text/babel" data-presets="react">
-const { useState, useEffect, useRef, useCallback } = React;
+<div id="progressbar"></div>
+<div id="navdots"></div>
 
-/* ---------------- DATA ---------------- */
+<div id="deck">
 
-const IMG = {
-  puddle: "https://picsum.photos/seed/tolstoy-puddle-lane/1200/900",
-  girlsMeet: "https://picsum.photos/seed/tolstoy-easter-village/1200/900",
-  splash: "https://picsum.photos/seed/tolstoy-mud-splash/1200/900",
-  quarrel: "https://picsum.photos/seed/tolstoy-village-quarrel/1200/900",
-  digging: "https://picsum.photos/seed/tolstoy-channel-dig/1200/900",
-  stream: "https://picsum.photos/seed/tolstoy-stream-chip/1200/900",
-  homes: "https://picsum.photos/seed/tolstoy-village-homes/1200/900",
-  title: "https://picsum.photos/seed/tolstoy-easter-dawn/1600/1000",
-};
+  <!-- TITLE -->
+  <section class="slide dusk-bg" id="s-title" style="overflow:hidden;" data-label="Title">
+    <div style="position:absolute; inset:0; opacity:0.45;">
+      <img src="https://images.unsplash.com/photo-1774966961772-c73ad3a60b10?auto=format&fit=crop&w=1600&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:grayscale(15%) brightness(70%);" />
+    </div>
+    <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(15,21,35,0.6), rgba(15,21,35,0.94));"></div>
 
-const vocab = {
-  part1: [
-    { w: "Sledging", d: "Riding or sliding over snow on a sled." },
-    { w: "Homesteads", d: "A house together with its surrounding land." },
-    { w: "Finery", d: "Elegant, expensive festive clothes." },
-    { w: "Kerchiefs", d: "Square pieces of cloth worn on the head." },
-  ],
-  part2: [
-    { w: "Plumped", d: "Set down or stamped heavily into water or mud." },
-    { w: "Scrambled", d: "Moved or climbed quickly and awkwardly out of trouble." },
-    { w: "Frock", d: "A dress or gown worn by a girl or woman." },
-    { w: "Splash", d: "To cause liquid to strike or scatter around." },
-  ],
-  part3: [
-    { w: "Seized", d: "Took hold of suddenly or forcibly." },
-    { w: "Quarrel", d: "An angry argument or disagreement." },
-    { w: "Affair", d: "An event, situation, or matter of concern." },
-    { w: "Blows", d: "Hard physical strikes or fighting." },
-  ],
-  part4: [
-    { w: "Pacify", d: "To calm anger or bring peace to a dispute." },
-    { w: "Rejoicing", d: "Expressing great joy and celebration." },
-    { w: "Folly", d: "Lack of good sense; foolish behavior." },
-    { w: "Chip", d: "A small piece of cut wood." },
-  ],
-  part5: [
-    { w: "Lassies", d: "An affectionate term for young girls." },
-    { w: "Ashamed", d: "Feeling embarrassed or guilty about one's actions." },
-    { w: "Wisdom", d: "The quality of having experience, knowledge, and good judgment." },
-  ],
-};
+    <div style="position:relative; z-index:2; max-width:920px;">
+      <div class="reveal in folio" style="margin-bottom:18px;">A chapter study in ethics &amp; morality</div>
+      <h1 class="reveal in display" style="font-size:clamp(2.6rem, 7vw, 5.2rem); font-weight:700; line-height:1.03; margin:0 0 20px; color:var(--paper);">
+        Ethics &amp; Morality
+      </h1>
+      <p class="reveal in reveal-d2" style="font-size:clamp(1.05rem, 1.7vw, 1.3rem); color:rgba(243,236,220,0.82); max-width:560px; line-height:1.6; margin-bottom:36px;">
+        A close reading of <em>Wisdom of Little Girls</em> by Leo Tolstoy — an Easter-morning fable about a puddle, a torn dress, and the grown-ups who forgot how to forgive.
+      </p>
+      <button class="btn btn-light reveal in reveal-d3" data-goto="s-ethics">Begin the story</button>
+    </div>
 
-const principles = [
-  { icon: "🤝", title: "Honesty", body: "Truthfulness in thoughts, words, and actions creates lifelong credibility." },
-  { icon: "🛡", title: "Integrity", body: "Consistently adhering to strong moral principles, even when unobserved." },
-  { icon: "⏱", title: "Punctuality", body: "Showing respect for time through discipline and organization." },
-  { icon: "🧭", title: "Leadership", body: "Guiding and inspiring others positively toward shared ethical goals." },
-  { icon: "⚖", title: "Responsibility", body: "Taking ownership of obligations and accepting consequences." },
-  { icon: "❤", title: "Trust & Respect", body: "Fostering mutual dignity, care, and peaceful human relationships." },
-];
+    <div class="scrolldown reveal in reveal-d4" style="color:var(--paper);">
+      SCROLL
+      <span class="chevron"></span>
+    </div>
+  </section>
 
-const morals = [
-  { title: "Quick Forgiveness", body: "Children do not hold grudges. Forgiving minor mistakes quickly prevents unnecessary conflict and restores peace." },
-  { title: "Child Wisdom vs. Adult Ego", body: "Adults often let pride and ego ruin relationships, whereas children prioritize joy, play, and togetherness." },
-  { title: "Purity of Heart", body: "True spiritual purity and peace come from letting go of anger and living with innocent, loving hearts." },
-];
-
-/* ---------------- REVEAL HOOK ---------------- */
-
-function useReveal(ref){
-  useEffect(() => {
-    const el = ref.current;
-    if(!el) return;
-    const targets = el.querySelectorAll(".reveal");
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add("in"); });
-    }, { threshold: 0.22 });
-    targets.forEach(t => io.observe(t));
-    return () => io.disconnect();
-  }, [ref]);
-}
-
-/* ---------------- COMPONENTS ---------------- */
-
-function FlipCard({ w, d, index }){
-  const [flipped, setFlipped] = useState(false);
-  return (
-    <div className="flip-scene" style={{ height: "148px" }}>
-      <div
-        className={"flip-card" + (flipped ? " flipped" : "")}
-        onClick={() => setFlipped(f => !f)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e)=>{ if(e.key==="Enter"||e.key===" ") setFlipped(f=>!f); }}
-      >
-        <div className="flip-face flip-front">
-          <div style={{display:"flex", justifyContent:"space-between", alignItems:"flex-start"}}>
-            <span className="tag-num" style={{fontSize:"1.5rem", color:"var(--brick)"}}>
-              {String(index+1).padStart(2,"0")}
-            </span>
-            <span style={{fontSize:"1.1rem", opacity:.5}}>↻</span>
-          </div>
-          <div>
-            <div className="display" style={{fontSize:"1.25rem", fontWeight:600}}>{w}</div>
-            <div className="flip-hint">tap to reveal meaning</div>
-          </div>
+  <!-- ETHICS -->
+  <section class="slide paper" id="s-ethics" data-label="Ethics for Success">
+    <div style="max-width:1180px; margin:0 auto; width:100%;">
+      <div class="reveal folio" style="color:var(--pine);">Getting started</div>
+      <h2 class="reveal display" style="font-size:clamp(1.9rem, 3.6vw, 2.8rem); margin:6px 0 40px; font-weight:600;">
+        Six habits ethics for success rests on
+      </h2>
+      <div class="principle-grid">
+        <div class="reveal card-hover principle-card">
+          <div class="principle-icon">🤝</div>
+          <div class="principle-title">Honesty</div>
+          <div class="principle-body">Truthfulness in thoughts, words, and actions creates lifelong credibility.</div>
         </div>
-        <div className="flip-face flip-back">
-          <p style={{fontSize:"0.95rem", lineHeight:1.5, textAlign:"center", margin:0}}>{d}</p>
+        <div class="reveal reveal-d1 card-hover principle-card">
+          <div class="principle-icon">🛡</div>
+          <div class="principle-title">Integrity</div>
+          <div class="principle-body">Consistently adhering to strong moral principles, even when unobserved.</div>
+        </div>
+        <div class="reveal reveal-d2 card-hover principle-card">
+          <div class="principle-icon">⏱</div>
+          <div class="principle-title">Punctuality</div>
+          <div class="principle-body">Showing respect for time through discipline and organization.</div>
+        </div>
+        <div class="reveal card-hover principle-card">
+          <div class="principle-icon">🧭</div>
+          <div class="principle-title">Leadership</div>
+          <div class="principle-body">Guiding and inspiring others positively toward shared ethical goals.</div>
+        </div>
+        <div class="reveal reveal-d1 card-hover principle-card">
+          <div class="principle-icon">⚖</div>
+          <div class="principle-title">Responsibility</div>
+          <div class="principle-body">Taking ownership of obligations and accepting consequences.</div>
+        </div>
+        <div class="reveal reveal-d2 card-hover principle-card">
+          <div class="principle-icon">❤</div>
+          <div class="principle-title">Trust &amp; Respect</div>
+          <div class="principle-body">Fostering mutual dignity, care, and peaceful human relationships.</div>
         </div>
       </div>
     </div>
-  );
-}
+  </section>
 
-function VocabGrid({ words }){
-  return (
-    <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(150px, 1fr))", gap:"14px" }}>
-      {words.map((v,i) => <FlipCard key={v.w} w={v.w} d={v.d} index={i} />)}
-    </div>
-  );
-}
-
-function Frame({ src, caption, tall }){
-  return (
-    <div className="reveal reveal-d2" style={{ width:"100%" }}>
-      <div className="duotone" style={{ aspectRatio: tall ? "3/4" : "4/3" }}>
-        <img src={src} alt={caption || "story illustration"} loading="lazy" />
-      </div>
-      {caption && <p className="frame-caption" style={{marginTop:"10px", fontSize:"0.95rem", opacity:.75}}>{caption}</p>}
-    </div>
-  );
-}
-
-function StoryPart({ id, num, total, title, image, imageCaption, paragraphs, words, reverse }){
-  const ref = useRef(null);
-  useReveal(ref);
-  return (
-    <section id={id} className="slide paper" ref={ref}>
-      <div style={{ maxWidth:"1180px", margin:"0 auto", width:"100%" }}>
-        <div className="reveal" style={{display:"flex", alignItems:"baseline", gap:"14px", marginBottom:"6px"}}>
-          <span className="eyebrow">PART {num} OF {total}</span>
-          <div style={{flex:1, height:"1px", background:"var(--line)"}}></div>
+  <!-- READING -->
+  <section class="slide dusk-bg" id="s-reading" data-label="Picture Analysis">
+    <div style="max-width:1180px; margin:0 auto; width:100%;">
+      <div class="reveal folio">Reading I — picture analysis</div>
+      <h2 class="reveal display" style="font-size:clamp(1.9rem, 3.6vw, 2.8rem); margin:6px 0 40px; font-weight:600; color:var(--paper);">
+        Before the words — what does the scene tell us?
+      </h2>
+      <div class="qa-grid">
+        <div class="reveal reveal-d1 qa-card">
+          <div class="qa-icon">❓</div>
+          <div class="qa-title">What are the people doing?</div>
+          <div class="qa-body">The adult villagers are shouting, arguing, and pushing each other in the street over a minor conflict between two little girls. Meanwhile, the girls have already reconciled and are playing together peacefully.</div>
         </div>
-        <h2 className="reveal display" style={{fontSize:"clamp(1.8rem, 3.4vw, 2.7rem)", margin:"0 0 28px", fontWeight:600}}>{title}</h2>
+        <div class="reveal reveal-d2 qa-card">
+          <div class="qa-icon">⚖</div>
+          <div class="qa-title">Why is it good or bad?</div>
+          <div class="qa-body">It is <strong style="color:var(--paper);">bad</strong> — adults are letting pride and anger turn a harmless childhood incident into a foolish street fight. It highlights adult foolishness compared to childhood innocence and forgiveness.</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <div style={{
-          display:"grid",
-          gridTemplateColumns: "1.05fr 0.95fr",
-          gap:"48px",
-          alignItems:"start",
-        }} className={reverse ? "grid-reverse" : ""}>
+  <!-- PART 1 -->
+  <section class="slide paper" id="s-part1" data-label="Part 1">
+    <div style="max-width:1180px; margin:0 auto; width:100%;">
+      <div class="reveal" style="display:flex; align-items:baseline; gap:14px; margin-bottom:6px;">
+        <span class="folio">Part 1 of 5</span>
+        <div style="flex:1; height:1px; background:var(--line);"></div>
+      </div>
+      <h2 class="reveal display" style="font-size:clamp(1.8rem, 3.4vw, 2.7rem); margin:0 0 28px; font-weight:600;">Meeting at the Puddle</h2>
 
-          <div style={{ order: reverse ? 2 : 1 }}>
-            <div className="reveal reveal-d1">
-              {paragraphs.map((p,i) => (
-                <p key={i} style={{ fontSize:"1.06rem", lineHeight:1.75, marginBottom:"16px", color:"rgba(35,32,27,0.88)" }}>{p}</p>
-              ))}
-            </div>
-            <div className="reveal reveal-d3" style={{marginTop:"22px"}}>
-              <div style={{display:"flex", alignItems:"center", gap:"10px", marginBottom:"12px"}}>
-                <span style={{fontSize:"0.78rem", letterSpacing:".08em", fontWeight:600, color:"var(--pine)"}}>SECTION VOCABULARY</span>
-                <div style={{flex:1, height:"1px", background:"var(--line)"}}></div>
-              </div>
-              <VocabGrid words={words} />
+      <div class="story-grid">
+        <div class="story-text">
+          <div class="reveal reveal-d1">
+            <p>It was early Easter in the village; melting snow formed dirty water streams running down the street.</p>
+            <p>Two little girls, Akoulya (elder) and Malasha (younger), met near a large puddle between two farmyards.</p>
+            <p>Both girls were dressed in new festive frocks and red head-scarves after coming from church, and began showing off their fine clothes to each other.</p>
+          </div>
+          <div class="reveal reveal-d3" style="margin-top:22px;">
+            <div class="vocab-heading"><span>Section vocabulary</span><div class="rule"></div></div>
+            <div class="vocab-grid">
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">01</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Sledging</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">Riding or sliding over snow on a sled.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">02</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Homesteads</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">A house together with its surrounding land.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">03</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Finery</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">Elegant, expensive festive clothes.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">04</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Kerchiefs</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">Square pieces of cloth worn on the head.</p></div></div></div>
             </div>
           </div>
+        </div>
+        <div class="story-image reveal reveal-d2">
+          <div class="duotone"><img src="https://images.unsplash.com/photo-1703178132715-f9e5c0e26934?auto=format&fit=crop&w=1000&q=80" alt="Old village street between homesteads" loading="lazy"/></div>
+          <p class="frame-caption">Two friends, fresh from church, comparing their Easter finery.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-          <div style={{ order: reverse ? 1 : 2 }}>
-            <Frame src={image} caption={imageCaption} />
+  <!-- PART 2 -->
+  <section class="slide paper" id="s-part2" data-label="Part 2">
+    <div style="max-width:1180px; margin:0 auto; width:100%;">
+      <div class="reveal" style="display:flex; align-items:baseline; gap:14px; margin-bottom:6px;">
+        <span class="folio">Part 2 of 5</span>
+        <div style="flex:1; height:1px; background:var(--line);"></div>
+      </div>
+      <h2 class="reveal display" style="font-size:clamp(1.8rem, 3.4vw, 2.7rem); margin:0 0 28px; font-weight:600;">The Accidental Splash</h2>
+
+      <div class="story-grid reverse">
+        <div class="story-text">
+          <div class="reveal reveal-d1">
+            <p>Malasha wanted to wade into the puddle. Akoulya warned her to take off her shoes and stockings first to avoid a scolding.</p>
+            <p>As they stepped into the deep water, Akoulya cautioned Malasha to walk carefully without splashing.</p>
+            <p>However, Malasha accidentally plumped her foot down hard, splashing dirty mud directly onto Akoulya's new dress and face.</p>
+            <p>Enraged by her ruined dress, Akoulya chased a frightened Malasha to strike her.</p>
+          </div>
+          <div class="reveal reveal-d3" style="margin-top:22px;">
+            <div class="vocab-heading"><span>Section vocabulary</span><div class="rule"></div></div>
+            <div class="vocab-grid">
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">01</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Plumped</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">Set down or stamped heavily into water or mud.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">02</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Scrambled</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">Moved or climbed quickly and awkwardly out of trouble.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">03</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Frock</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">A dress or gown worn by a girl or woman.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">04</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Splash</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">To cause liquid to strike or scatter around.</p></div></div></div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function TitleSlide(){
-  const ref = useRef(null);
-  useReveal(ref);
-  const scrollNext = () => {
-    document.getElementById("s-ethics").scrollIntoView({ behavior:"smooth" });
-  };
-  return (
-    <section className="slide dusk-bg" ref={ref} style={{overflow:"hidden"}}>
-      <div className="duotone" style={{
-        position:"absolute", inset:0, borderRadius:0, opacity:0.5,
-      }}>
-        <img src={IMG.title} alt="" />
-      </div>
-      <div style={{ position:"absolute", inset:0, background:"linear-gradient(180deg, rgba(15,27,48,0.55), rgba(15,27,48,0.92))" }}></div>
-
-      <div style={{ position:"relative", zIndex:2, maxWidth:"920px" }}>
-        <div className="reveal in eyebrow" style={{color:"var(--gold)", marginBottom:"18px", fontSize:"0.85rem", letterSpacing:".12em"}}>
-          A CHAPTER STUDY · ETHICS &amp; MORALITY
+        <div class="story-image reveal reveal-d2">
+          <div class="duotone"><img src="https://images.unsplash.com/photo-1725950654029-ac3393f369c7?auto=format&fit=crop&w=1000&q=80" alt="Close reflection in a puddle of water" loading="lazy"/></div>
+          <p class="frame-caption">One heavy step, and a spotless dress is ruined.</p>
         </div>
-        <h1 className="reveal in display" style={{
-          fontSize:"clamp(2.6rem, 7vw, 5.4rem)",
-          fontWeight:700,
-          lineHeight:1.02,
-          margin:"0 0 20px",
-          color:"var(--paper)",
-        }}>
-          Ethics <span style={{color:"var(--gold)", fontStyle:"italic", fontWeight:500}}>&amp;</span> Morality
-        </h1>
-        <p className="reveal in reveal-d2" style={{
-          fontSize:"clamp(1.05rem, 1.7vw, 1.3rem)",
-          color:"rgba(243,236,220,0.82)",
-          maxWidth:"560px",
-          lineHeight:1.6,
-          marginBottom:"36px",
-        }}>
-          A close reading of <em>"Wisdom of Little Girls"</em> by Leo Tolstoy — an Easter-morning fable
-          about a puddle, a torn dress, and the grown-ups who forgot how to forgive.
+      </div>
+    </div>
+  </section>
+
+  <!-- PART 3 -->
+  <section class="slide paper" id="s-part3" data-label="Part 3">
+    <div style="max-width:1180px; margin:0 auto; width:100%;">
+      <div class="reveal" style="display:flex; align-items:baseline; gap:14px; margin-bottom:6px;">
+        <span class="folio">Part 3 of 5</span>
+        <div style="flex:1; height:1px; background:var(--line);"></div>
+      </div>
+      <h2 class="reveal display" style="font-size:clamp(1.8rem, 3.4vw, 2.7rem); margin:0 0 28px; font-weight:600;">Conflict Escalates Among Adults</h2>
+
+      <div class="story-grid">
+        <div class="story-text">
+          <div class="reveal reveal-d1">
+            <p>Akoulya's mother saw the stained dress, scolded her daughter, and struck Malasha on the neck when she blamed her.</p>
+            <p>Malasha cried loudly, bringing her mother out to angrily challenge Akoulya's mother.</p>
+            <p>The argument between the two women escalated into a loud, angry neighborhood quarrel.</p>
+            <p>Men joined in, shouting and shoving without listening, bringing the minor incident near physical blows.</p>
+          </div>
+          <div class="reveal reveal-d3" style="margin-top:22px;">
+            <div class="vocab-heading"><span>Section vocabulary</span><div class="rule"></div></div>
+            <div class="vocab-grid">
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">01</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Seized</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">Took hold of suddenly or forcibly.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">02</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Quarrel</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">An angry argument or disagreement.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">03</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Affair</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">An event, situation, or matter of concern.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">04</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Blows</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">Hard physical strikes or fighting.</p></div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="story-image reveal reveal-d2">
+          <div class="duotone"><img src="https://images.unsplash.com/photo-1756860983646-23afe9af5680?auto=format&fit=crop&w=1000&q=80" alt="Dark clouds gathering, echoing rising tempers" loading="lazy"/></div>
+          <p class="frame-caption">What began between two children spreads to an entire street.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PART 4 -->
+  <section class="slide paper" id="s-part4" data-label="Part 4">
+    <div style="max-width:1180px; margin:0 auto; width:100%;">
+      <div class="reveal" style="display:flex; align-items:baseline; gap:14px; margin-bottom:6px;">
+        <span class="folio">Part 4 of 5</span>
+        <div style="flex:1; height:1px; background:var(--line);"></div>
+      </div>
+      <h2 class="reveal display" style="font-size:clamp(1.8rem, 3.4vw, 2.7rem); margin:0 0 28px; font-weight:600;">Peacemaking &amp; Reconciliation</h2>
+
+      <div class="story-grid reverse">
+        <div class="story-text">
+          <div class="reveal reveal-d1">
+            <p>Akoulya's grandmother stepped into the crowd, pleading for peace on a joyful Easter day, but the angry crowd ignored her.</p>
+            <p>While the adults continued shouting, Akoulya wiped the mud off her dress and began digging a channel with a stone to drain the puddle.</p>
+            <p>Malasha joined her with a wooden chip to help dig the channel.</p>
+            <p>Forgetting their conflict completely, both girls joyfully watched the water stream down the street together.</p>
+          </div>
+          <div class="reveal reveal-d3" style="margin-top:22px;">
+            <div class="vocab-heading"><span>Section vocabulary</span><div class="rule"></div></div>
+            <div class="vocab-grid">
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">01</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Pacify</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">To calm anger or bring peace to a dispute.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">02</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Rejoicing</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">Expressing great joy and celebration.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">03</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Folly</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">Lack of good sense; foolish behavior.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">04</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Chip</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">A small piece of cut wood.</p></div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="story-image reveal reveal-d2">
+          <div class="duotone"><img src="https://images.unsplash.com/photo-1755384866720-e12f4b9e7c92?auto=format&fit=crop&w=1000&q=80" alt="Sunlight streaming onto a small flowing stream" loading="lazy"/></div>
+          <p class="frame-caption">While the crowd shouts, two children quietly dig a channel to the sea.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PART 5 -->
+  <section class="slide paper" id="s-part5" data-label="Part 5">
+    <div style="max-width:1180px; margin:0 auto; width:100%;">
+      <div class="reveal" style="display:flex; align-items:baseline; gap:14px; margin-bottom:6px;">
+        <span class="folio">Part 5 of 5</span>
+        <div style="flex:1; height:1px; background:var(--line);"></div>
+      </div>
+      <h2 class="reveal display" style="font-size:clamp(1.8rem, 3.4vw, 2.7rem); margin:0 0 28px; font-weight:600;">Adult Shame &amp; Resolution</h2>
+
+      <div class="story-grid">
+        <div class="story-text">
+          <div class="reveal reveal-d1">
+            <p>The water stream carried the wooden chip right toward the group of fighting men.</p>
+            <p>The two little girls ran alongside the stream, laughing happily and chasing their toy together.</p>
+            <p>Grandmother pointed out to the men that the children had already forgiven each other while the adults were still fighting.</p>
+            <p>Ashamed of their foolishness, the men laughed at themselves and peacefully returned to their homes.</p>
+          </div>
+          <div class="reveal reveal-d3" style="margin-top:22px;">
+            <div class="vocab-heading"><span>Section vocabulary</span><div class="rule"></div></div>
+            <div class="vocab-grid">
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">01</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Lassies</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">An affectionate term for young girls.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">02</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Ashamed</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">Feeling embarrassed or guilty about one's actions.</p></div></div></div>
+              <div class="flip-scene"><div class="flip-card"><div class="flip-face flip-front"><div style="display:flex;justify-content:space-between;"><span class="display" style="font-size:1.4rem;color:var(--brick);">03</span><span style="opacity:.5;">↻</span></div><div><div class="flip-word display">Wisdom</div><div class="flip-hint">tap to reveal meaning</div></div></div><div class="flip-face flip-back"><p class="flip-def">The quality of having experience, knowledge, and good judgment.</p></div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="story-image reveal reveal-d2">
+          <div class="duotone"><img src="https://images.unsplash.com/photo-1527821468487-b724210d296a?auto=format&fit=crop&w=1000&q=80" alt="Children laughing together outdoors" loading="lazy"/></div>
+          <p class="frame-caption">The joy that shamed a whole street of grown-ups.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MORAL -->
+  <section class="slide dusk-bg" id="s-moral" data-label="Moral">
+    <div style="max-width:980px; margin:0 auto; width:100%; text-align:center;">
+      <div class="reveal folio">The moral of the story</div>
+      <div class="reveal reveal-d1" style="margin:26px 0 44px;">
+        <span class="quote-mark display">&ldquo;</span>
+        <p class="display" style="font-size:clamp(1.3rem, 3vw, 2rem); font-style:italic; font-weight:500; line-height:1.5; color:var(--paper); margin:14px auto 0; max-width:820px;">
+          Except you turn, and become as little children, you shall in no wise enter into the kingdom of heaven.
         </p>
-        <button className="btn btn-light reveal in reveal-d3" onClick={scrollNext}>
-          Begin the story <span>→</span>
-        </button>
+        <p style="margin-top:18px; color:var(--gold); font-size:0.9rem;">— Closing reflection by Leo Tolstoy</p>
       </div>
 
-      <div className="scrolldown reveal in reveal-d4" style={{color:"var(--paper)"}}>
-        SCROLL
-        <span className="chevron"></span>
-      </div>
-    </section>
-  );
-}
-
-function EthicsSlide(){
-  const ref = useRef(null);
-  useReveal(ref);
-  return (
-    <section id="s-ethics" className="slide paper" ref={ref}>
-      <div style={{ maxWidth:"1180px", margin:"0 auto", width:"100%" }}>
-        <div className="reveal eyebrow">GETTING STARTED</div>
-        <h2 className="reveal display" style={{fontSize:"clamp(1.9rem, 3.6vw, 2.8rem)", margin:"6px 0 40px", fontWeight:600}}>
-          Six habits ethics for success rests on
-        </h2>
-        <div style={{
-          display:"grid",
-          gridTemplateColumns:"repeat(auto-fit, minmax(250px, 1fr))",
-          gap:"18px",
-        }}>
-          {principles.map((p,i) => (
-            <div key={p.title}
-              className={"reveal card-hover" + (i%3===1 ? " reveal-d1" : i%3===2 ? " reveal-d2" : "")}
-              style={{
-                background:"linear-gradient(160deg,#fffdf6,var(--paper-2))",
-                border:"1px solid var(--line)",
-                borderRadius:"16px",
-                padding:"26px 22px",
-              }}>
-              <div style={{fontSize:"1.8rem", marginBottom:"14px"}}>{p.icon}</div>
-              <div className="display" style={{fontSize:"1.18rem", fontWeight:600, marginBottom:"8px", color:"var(--brick)"}}>{p.title}</div>
-              <div style={{fontSize:"0.95rem", lineHeight:1.55, opacity:.82}}>{p.body}</div>
-            </div>
-          ))}
+      <div class="moral-grid" style="text-align:left;">
+        <div class="reveal moral-card">
+          <div class="moral-title">1. Quick Forgiveness</div>
+          <div class="moral-body">Children do not hold grudges. Forgiving minor mistakes quickly prevents unnecessary conflict and restores peace.</div>
+        </div>
+        <div class="reveal reveal-d1 moral-card">
+          <div class="moral-title">2. Child Wisdom vs. Adult Ego</div>
+          <div class="moral-body">Adults often let pride and ego ruin relationships, whereas children prioritize joy, play, and togetherness.</div>
+        </div>
+        <div class="reveal reveal-d2 moral-card">
+          <div class="moral-title">3. Purity of Heart</div>
+          <div class="moral-body">True spiritual purity and peace come from letting go of anger and living with innocent, loving hearts.</div>
         </div>
       </div>
-    </section>
-  );
-}
 
-function ReadingSlide(){
-  const ref = useRef(null);
-  useReveal(ref);
-  return (
-    <section className="slide dusk-bg" ref={ref}>
-      <div style={{ maxWidth:"1180px", margin:"0 auto", width:"100%" }}>
-        <div className="reveal eyebrow" style={{color:"var(--gold)"}}>READING I · PICTURE ANALYSIS</div>
-        <h2 className="reveal display" style={{fontSize:"clamp(1.9rem, 3.6vw, 2.8rem)", margin:"6px 0 40px", fontWeight:600, color:"var(--paper)"}}>
-          Before the words — what does the scene tell us?
-        </h2>
-
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"28px" }}>
-          <div className="reveal reveal-d1" style={{
-            background:"rgba(243,236,220,0.06)",
-            border:"1px solid rgba(227,165,66,0.25)",
-            borderRadius:"16px",
-            padding:"28px 26px",
-          }}>
-            <div style={{fontSize:"1.6rem", marginBottom:"10px"}}>❓</div>
-            <div className="display" style={{fontSize:"1.2rem", fontWeight:600, marginBottom:"10px", color:"var(--gold)"}}>
-              What are the people doing?
-            </div>
-            <p style={{color:"rgba(243,236,220,0.82)", lineHeight:1.65, fontSize:"0.98rem"}}>
-              The adult villagers are shouting, arguing, and physically pushing each other in the street
-              over a minor conflict between two little girls. Meanwhile, the girls have already reconciled
-              and are playing together peacefully.
-            </p>
-          </div>
-          <div className="reveal reveal-d2" style={{
-            background:"rgba(243,236,220,0.06)",
-            border:"1px solid rgba(227,165,66,0.25)",
-            borderRadius:"16px",
-            padding:"28px 26px",
-          }}>
-            <div style={{fontSize:"1.6rem", marginBottom:"10px"}}>⚖</div>
-            <div className="display" style={{fontSize:"1.2rem", fontWeight:600, marginBottom:"10px", color:"var(--gold)"}}>
-              Why is it good or bad?
-            </div>
-            <p style={{color:"rgba(243,236,220,0.82)", lineHeight:1.65, fontSize:"0.98rem"}}>
-              It is <strong style={{color:"var(--paper)"}}>bad</strong> — adults are letting pride and anger
-              turn a harmless childhood incident into a foolish street fight. It highlights adult foolishness
-              compared to childhood innocence and forgiveness.
-            </p>
-          </div>
-        </div>
+      <div class="reveal reveal-d3" style="margin-top:52px; opacity:.55; font-size:0.85rem;">
+        End of chapter study
       </div>
-    </section>
-  );
-}
+    </div>
+  </section>
 
-function MoralSlide(){
-  const ref = useRef(null);
-  useReveal(ref);
-  return (
-    <section className="slide dusk-bg" ref={ref}>
-      <div style={{ maxWidth:"980px", margin:"0 auto", width:"100%", textAlign:"center" }}>
-        <div className="reveal eyebrow" style={{color:"var(--gold)"}}>THE MORAL OF THE STORY</div>
-        <div className="reveal reveal-d1" style={{ margin:"26px 0 44px" }}>
-          <span className="quote-mark display" style={{fontSize:"3.4rem", lineHeight:0}}>“</span>
-          <p className="display" style={{
-            fontSize:"clamp(1.3rem, 3vw, 2rem)",
-            fontStyle:"italic",
-            fontWeight:500,
-            lineHeight:1.5,
-            color:"var(--paper)",
-            margin:"14px auto 0",
-            maxWidth:"820px",
-          }}>
-            Except you turn, and become as little children, you shall in no wise enter into the kingdom of heaven.
-          </p>
-          <p style={{marginTop:"18px", color:"var(--gold)", fontSize:"0.9rem", letterSpacing:".05em"}}>— Closing reflection by Leo Tolstoy</p>
-        </div>
+</div>
 
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(230px, 1fr))", gap:"18px", textAlign:"left" }}>
-          {morals.map((m,i) => (
-            <div key={m.title}
-              className={"reveal card-hover" + (i===1 ? " reveal-d2" : i===2 ? " reveal-d3" : " reveal-d1")}
-              style={{
-                background:"rgba(243,236,220,0.07)",
-                border:"1px solid rgba(227,165,66,0.28)",
-                borderTop:"3px solid var(--gold)",
-                borderRadius:"12px",
-                padding:"22px 20px",
-              }}>
-              <div className="display" style={{fontWeight:600, fontSize:"1.05rem", marginBottom:"10px", color:"var(--paper)"}}>
-                {i+1}. {m.title}
-              </div>
-              <div style={{fontSize:"0.9rem", lineHeight:1.55, color:"rgba(243,236,220,0.78)"}}>{m.body}</div>
-            </div>
-          ))}
-        </div>
+<script>
+(function(){
+  "use strict";
 
-        <div className="reveal reveal-d4" style={{ marginTop:"52px", opacity:.6, fontSize:"0.82rem", letterSpacing:".1em" }}>
-          END OF CHAPTER STUDY
-        </div>
-      </div>
-    </section>
-  );
-}
+  var SLIDES = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var deck = document.getElementById('deck');
+  var navdots = document.getElementById('navdots');
+  var progressbar = document.getElementById('progressbar');
 
-/* ---------------- APP SHELL ---------------- */
+  /* build nav dots */
+  SLIDES.forEach(function(sec, i){
+    var dot = document.createElement('button');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.title = sec.getAttribute('data-label') || ('Slide ' + (i+1));
+    dot.setAttribute('aria-label', 'Go to ' + dot.title);
+    dot.addEventListener('click', function(){
+      sec.scrollIntoView({ behavior:'smooth' });
+    });
+    navdots.appendChild(dot);
+  });
+  var dots = Array.prototype.slice.call(navdots.querySelectorAll('.dot'));
 
-const SLIDES = [
-  { id: "s-title", label: "Title" },
-  { id: "s-ethics", label: "Ethics for Success" },
-  { id: "s-reading", label: "Picture Analysis" },
-  { id: "s-part1", label: "Part 1" },
-  { id: "s-part2", label: "Part 2" },
-  { id: "s-part3", label: "Part 3" },
-  { id: "s-part4", label: "Part 4" },
-  { id: "s-part5", label: "Part 5" },
-  { id: "s-moral", label: "Moral" },
-];
+  /* scroll progress + active dot tracking */
+  function onScroll(){
+    var scrollTop = deck.scrollTop;
+    var max = deck.scrollHeight - deck.clientHeight;
+    progressbar.style.width = (max > 0 ? (scrollTop / max) * 100 : 0) + '%';
 
-function App(){
-  const [active, setActive] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const deckRef = useRef(null);
+    var closest = 0, closestDist = Infinity;
+    SLIDES.forEach(function(sec, i){
+      var dist = Math.abs(sec.offsetTop - scrollTop);
+      if (dist < closestDist){ closestDist = dist; closest = i; }
+    });
+    dots.forEach(function(d, i){ d.classList.toggle('active', i === closest); });
+  }
+  deck.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
 
-  useEffect(() => {
-    const deck = deckRef.current;
-    const sections = SLIDES.map(s => document.getElementById(s.id)).filter(Boolean);
+  /* buttons with data-goto */
+  Array.prototype.slice.call(document.querySelectorAll('[data-goto]')).forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = document.getElementById(btn.getAttribute('data-goto'));
+      if (target) target.scrollIntoView({ behavior:'smooth' });
+    });
+  });
 
-    const onScroll = () => {
-      const scrollTop = deck.scrollTop;
-      const max = deck.scrollHeight - deck.clientHeight;
-      setProgress(max > 0 ? (scrollTop / max) * 100 : 0);
+  /* reveal on view */
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.2 });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
 
-      let closest = 0;
-      let closestDist = Infinity;
-      sections.forEach((sec, i) => {
-        const dist = Math.abs(sec.offsetTop - scrollTop);
-        if (dist < closestDist) { closestDist = dist; closest = i; }
-      });
-      setActive(closest);
-    };
-    deck.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => deck.removeEventListener("scroll", onScroll);
-  }, []);
+  /* flip cards */
+  Array.prototype.slice.call(document.querySelectorAll('.flip-card')).forEach(function(card){
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    function toggle(){ card.classList.toggle('flipped'); }
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+    });
+  });
 
-  const goTo = useCallback((i) => {
-    document.getElementById(SLIDES[i].id).scrollIntoView({ behavior: "smooth" });
-  }, []);
-
-  return (
-    <React.Fragment>
-      <div id="progressbar" style={{ width: progress + "%" }}></div>
-      <div id="navdots">
-        {SLIDES.map((s,i) => (
-          <button
-            key={s.id}
-            className={"dot" + (active === i ? " active" : "")}
-            onClick={() => goTo(i)}
-            title={s.label}
-            aria-label={"Go to " + s.label}
-          />
-        ))}
-      </div>
-
-      <div id="deck" ref={deckRef}>
-        <div id="s-title"><TitleSlide /></div>
-        <div id="s-ethics-wrap"><EthicsSlide /></div>
-        <div id="s-reading"><ReadingSlide /></div>
-
-        <StoryPart
-          id="s-part1" num={1} total={5}
-          title="Meeting at the Puddle"
-          image={IMG.girlsMeet}
-          imageCaption="Two friends, fresh from church, comparing their Easter finery."
-          paragraphs={[
-            "It was early Easter in the village; melting snow formed dirty water streams running down the street.",
-            "Two little girls, Akoulya (elder) and Malasha (younger), met near a large puddle between two farmyards.",
-            "Both girls were dressed in new festive frocks and red head-scarves after coming from church, and began showing off their fine clothes to each other.",
-          ]}
-          words={vocab.part1}
-        />
-
-        <StoryPart
-          id="s-part2" num={2} total={5}
-          title="The Accidental Splash"
-          image={IMG.splash}
-          imageCaption="One heavy step, and a spotless dress is ruined."
-          reverse
-          paragraphs={[
-            "Malasha wanted to wade into the puddle. Akoulya warned her to take off her shoes and stockings first to avoid a scolding.",
-            "As they stepped into the deep water, Akoulya cautioned Malasha to walk carefully without splashing.",
-            "However, Malasha accidentally plumped her foot down hard, splashing dirty mud directly onto Akoulya's new dress and face.",
-            "Enraged by her ruined dress, Akoulya chased a frightened Malasha to strike her.",
-          ]}
-          words={vocab.part2}
-        />
-
-        <StoryPart
-          id="s-part3" num={3} total={5}
-          title="Conflict Escalates Among Adults"
-          image={IMG.quarrel}
-          imageCaption="What began between two children spreads to an entire street."
-          paragraphs={[
-            "Akoulya's mother saw the stained dress, scolded her daughter, and struck Malasha on the neck when she blamed her.",
-            "Malasha cried loudly, bringing her mother out to angrily challenge Akoulya's mother.",
-            "The argument between the two women escalated into a loud, angry neighborhood quarrel.",
-            "Men joined in, shouting and shoving without listening, bringing the minor incident near physical blows.",
-          ]}
-          words={vocab.part3}
-        />
-
-        <StoryPart
-          id="s-part4" num={4} total={5}
-          title="Peacemaking &amp; Reconciliation"
-          image={IMG.digging}
-          imageCaption="While the crowd shouts, two children quietly dig a channel to the sea."
-          reverse
-          paragraphs={[
-            "Akoulya's grandmother stepped into the crowd, pleading for peace on a joyful Easter day, but the angry crowd ignored her.",
-            "While the adults continued shouting, Akoulya wiped the mud off her dress and began digging a channel with a stone to drain the puddle.",
-            "Malasha joined her with a wooden chip to help dig the channel.",
-            "Forgetting their conflict completely, both girls joyfully watched the water stream down the street together.",
-          ]}
-          words={vocab.part4}
-        />
-
-        <StoryPart
-          id="s-part5" num={5} total={5}
-          title="Adult Shame &amp; Resolution"
-          image={IMG.stream}
-          imageCaption="The little wooden chip that shamed a whole street of grown-ups."
-          paragraphs={[
-            "The water stream carried the wooden chip right toward the group of fighting men.",
-            "The two little girls ran alongside the stream, laughing happily and chasing their toy together.",
-            "Grandmother pointed out to the men that the children had already forgiven each other while the adults were still fighting.",
-            "Ashamed of their foolishness, the men laughed at themselves and peacefully returned to their homes.",
-          ]}
-          words={vocab.part5}
-        />
-
-        <div id="s-moral"><MoralSlide /></div>
-      </div>
-    </React.Fragment>
-  );
-}
-
-/* fix wrapper ids for ethics slide since it renders its own id internally */
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+})();
 </script>
 </body>
 </html>
