@@ -1,502 +1,484 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nepal's Household Pharmacy — Seven Medicinal Plants</title>
+<meta name="description" content="Seven plants that grow in courtyards, forests and kitchen pots across Nepal — each one a remedy passed down long before the pharmacy existed." />
+<style>
+  :root{
+    --bg:#1c2717;
+    --bg-deep:#0e150a;
+    --card:#f4efdf;
+    --card-hi:#faf6ea;
+    --ink:#2b2318;
+    --ink-soft:#5c5341;
+    --cream:#f4efe0;
+    --cream-dim:rgba(244,239,224,.64);
+    --gold:#c28a3c;
+    --sage:#8a9a6e;
+    --sage-deep:#5d6b46;
+    --rust:#a8471f;
+    --teal:#4f7a6e;
+    --line:rgba(43,35,24,.14);
+    --line-light:rgba(244,239,224,.14);
+  }
 
-// ---------------------------------------------------------------
-// Design tokens — herbarium field-journal palette
-// ---------------------------------------------------------------
-const T = {
-  bg: "#1c2717",
-  bgDeep: "#0e150a",
-  card: "#f4efdf",
-  cardHi: "#faf6ea",
-  ink: "#2b2318",
-  inkSoft: "#5c5341",
-  cream: "#f4efe0",
-  creamDim: "rgba(244,239,224,.64)",
-  gold: "#c28a3c",
-  sage: "#8a9a6e",
-  sageDeep: "#5d6b46",
-  rust: "#a8471f",
-  teal: "#4f7a6e",
-  line: "rgba(43,35,24,.14)",
-  lineLight: "rgba(244,239,224,.14)",
-};
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Karla',sans-serif;
+    background:var(--bg);
+    color:var(--cream);
+    -webkit-font-smoothing:antialiased;
+  }
 
-const ACCENTS = [T.sageDeep, T.gold, T.teal, T.rust, T.sageDeep, T.gold, T.teal];
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Karla:wght@400;500;600;700&display=swap');
 
-// Wikimedia Commons — real photographs, one per plant
-const wiki = (file, w) =>
-  `https://commons.wikimedia.org/wiki/Special:FilePath/${file}?width=${w}`;
+  .serif{ font-family:'Fraunces',serif; font-optical-sizing:auto; }
 
-const SLIDES = [
-  {
-    tag: "No. 01",
-    title: "Holy Basil (Tulsi)",
-    sci: "Ocimum sanctum",
-    desc: "A sacred, highly aromatic plant commonly found in almost every Hindu household.",
-    img: wiki("Ocimum_tenuiflorum.jpg", 1400),
-    imgAlt: "Holy basil (tulsi) plant with green leaves",
-    props: [
-      { label: "Respiratory Health", text: "Leaves boiled in water serve as an effective treatment for common colds, coughs, and sore throats." },
-      { label: "Antimicrobial Properties", text: "Rich in agents that actively fight harmful bacteria and viruses." },
-      { label: "Digestive Aid", text: "Helps stimulate appetite and ensures smooth overall digestion." },
-      { label: "Adaptogen", text: "Functions as a natural adaptogen to help the body adapt to and cope with stress." },
-      { label: "Other Uses", text: "Used as a natural disinfectant to purify water, and as an aromatic spice in tea and food." },
-    ],
-  },
-  {
-    tag: "No. 02",
-    title: "Neem",
-    sci: "Azadirachta indica",
-    desc: "A tall, hardy tree known for its extremely bitter leaves, bark, and seeds.",
-    img: wiki("Azadirachta_indica-Neem_tree.jpg", 1400),
-    imgAlt: "Neem tree with dense green foliage",
-    props: [
-      { label: "Skin Diseases", text: "Highly effective in treating conditions like acne, eczema, and various other skin infections." },
-      { label: "Blood Purifier", text: "Considered a natural blood purifier that also aids in reducing cholesterol levels." },
-      { label: "Antimicrobial", text: "Widely formulated into soaps and creams due to its strong antiseptic properties." },
-      { label: "Dental Health", text: "Neem twigs are traditionally used as natural toothbrushes to prevent gum disease and preserve oral hygiene." },
-    ],
-  },
-  {
-    tag: "No. 03",
-    title: "Heart-leaved Moonseed (Gurjo)",
-    sci: "Tinospora cordifolia",
-    desc: "A climbing shrub frequently found in wild forests as well as plant nurseries.",
-    img: wiki("Tinospora_cordifolia.jpg", 1400),
-    imgAlt: "Tinospora cordifolia climbing vine with heart-shaped leaves",
-    props: [
-      { label: "Immunity Booster", text: "Its primary medicinal application is to significantly enhance the body's immune system." },
-      { label: "Antioxidant", text: "Contains active compounds that fight off oxidative stress throughout the body." },
-      { label: "Antipyretic", text: "Acts as a natural fever reducer." },
-      { label: "Caution", text: "Excessive consumption must be avoided, as it can dangerously lower blood sugar levels.", caution: true },
-    ],
-  },
-  {
-    tag: "No. 04",
-    title: "Asiatic Pennywort (Ghod Tapre)",
-    sci: "Centella asiatica",
-    desc: "A low-growing, creeping herb that forms a dense green carpet in shady, moist areas.",
-    img: wiki("Centella_asiatica.jpg", 1400),
-    imgAlt: "Centella asiatica creeping herb with round scalloped leaves",
-    props: [
-      { label: "Brain Tonic", text: "Enhances memory recall and overall mental capacity; commonly used as a restorative nerve tonic." },
-      { label: "Wound Healing", text: "Fresh paste made directly from its leaves is applied externally to treat open wounds and burns." },
-      { label: "Anti-stress", text: "Helps relieve symptoms associated with mild anxiety and depression." },
-      { label: "Cosmetics", text: "Integrated into skin creams for its powerful healing and rejuvenating properties." },
-    ],
-  },
-  {
-    tag: "No. 05",
-    title: "Turmeric (Besar)",
-    sci: "Curcuma longa",
-    desc: "A perennial herb recognized for its underground rhizomes that exhibit a vibrant bright yellow color.",
-    img: wiki("Curcuma_longa_roots.jpg", 1400),
-    imgAlt: "Fresh turmeric rhizomes, bright yellow-orange inside",
-    props: [
-      { label: "Antiseptic", text: "Applied topically to disinfect minor cuts, abrasions, and open wounds." },
-      { label: "Anti-inflammatory", text: "Contains curcumin, its key active compound, which significantly reduces internal and external inflammation." },
-      { label: "Immunity", text: "Acts as a daily dietary booster for the immune system." },
-      { label: "Versatile Use", text: "Serves as a fundamental culinary spice, a natural fabric/food dye, and an ingredient in cosmetic products." },
-    ],
-  },
-  {
-    tag: "No. 06",
-    title: "Malabar Nut (Asuro)",
-    sci: "Adhatoda vasica",
-    desc: "A medium-sized shrub common throughout the Chure and Mahabharat mountain ranges.",
-    img: wiki("Justicia_adhatoda_001.JPG", 1400),
-    imgAlt: "Adhatoda vasica shrub with long lance-shaped leaves",
-    props: [
-      { label: "Respiratory Ailments", text: "Highly effective in managing severe respiratory conditions such as asthma, bronchitis, and common colds by clearing mucus from the lungs." },
-      { label: "Antimicrobial", text: "Used as a throat gargle to target tooth and gum problems." },
-      { label: "Agricultural Use", text: "Leaves are frequently utilized as a nutrient-rich green manure in agricultural fields." },
-    ],
-  },
-  {
-    tag: "No. 07",
-    title: "Calamus (Bojo)",
-    sci: "Acorus calamus",
-    desc: "An erect, aromatic herb typically found growing naturally in swampy, marshy lands.",
-    img: wiki("Acorus_calamus_002.JPG", 1400),
-    imgAlt: "Acorus calamus reed-like leaves growing in marshland",
-    props: [
-      { label: "Digestive Aid", text: "Offers fast relief for an upset stomach, intestinal gas, and loss of appetite." },
-      { label: "Throat Disorders", text: "Highly beneficial for soothing sore throats and alleviating hoarseness in the voice." },
-      { label: "Caution", text: "Should be used carefully, as excessive use can cause nausea, vomiting, and other adverse side effects.", caution: true },
-    ],
-  },
-];
+  ::selection{ background:var(--gold); color:var(--bg-deep); }
 
-const TOTAL = SLIDES.length + 2; // hero + plants + closing
+  /* scrollbar */
+  html{ scrollbar-width:thin; scrollbar-color:rgba(194,138,60,.5) transparent; }
+  ::-webkit-scrollbar{ width:6px; }
+  ::-webkit-scrollbar-thumb{ background:rgba(194,138,60,.4); border-radius:4px; }
+  ::-webkit-scrollbar-track{ background:transparent; }
 
-export default function Presentation() {
-  const [expanded, setExpanded] = useState(() => new Set());
-  const [revealed, setRevealed] = useState(() => new Set([0]));
-  const [active, setActive] = useState(0);
-  const [progress, setProgress] = useState(0);
+  img{ max-width:100%; display:block; }
 
-  const sectionRefs = useRef([]);
-  sectionRefs.current = [];
-  const addRef = useCallback((el) => {
-    if (el && !sectionRefs.current.includes(el)) sectionRefs.current.push(el);
-  }, []);
+  /* reveal on scroll */
+  .reveal{
+    opacity:0;
+    transform:translateY(26px);
+    transition:opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1);
+  }
+  .reveal.in{ opacity:1; transform:translateY(0); }
 
-  const toggle = useCallback((idx) => {
-    setExpanded((prev) => {
-      const next = new Set(prev);
-      if (next.has(idx)) next.delete(idx);
-      else next.add(idx);
-      return next;
-    });
-  }, []);
+  .img-wrap{ overflow:hidden; }
+  .img-wrap img{ transition:transform 1.1s cubic-bezier(.22,.61,.36,1); transform:scale(1.08); }
+  .reveal.in .img-wrap img{ transform:scale(1); }
 
-  // scroll-into-view reveal + active-section tracking
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const idx = Number(entry.target.dataset.idx);
-          if (entry.isIntersecting) {
-            setRevealed((prev) => (prev.has(idx) ? prev : new Set(prev).add(idx)));
-            if (entry.intersectionRatio > 0.5) setActive(idx);
-          }
-        });
-      },
-      { threshold: [0, 0.15, 0.5, 0.85] }
-    );
-    sectionRefs.current.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
+  /* top progress bar */
+  #progress-track{
+    position:fixed; top:0; left:0; right:0; height:3px;
+    background:rgba(244,239,224,.1); z-index:60;
+  }
+  #progress-bar{
+    height:100%; width:0%; background:var(--gold);
+    transition:width .08s linear;
+  }
 
-  // overall scroll progress
-  useEffect(() => {
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const scroller = document.getElementById("np-scroll-root");
-        if (scroller) {
-          const max = scroller.scrollHeight - scroller.clientHeight;
-          setProgress(max > 0 ? scroller.scrollTop / max : 0);
-        }
-        ticking = false;
-      });
-    };
-    const scroller = document.getElementById("np-scroll-root");
-    scroller?.addEventListener("scroll", onScroll, { passive: true });
-    return () => scroller?.removeEventListener("scroll", onScroll);
-  }, []);
+  /* side rail */
+  #rail{
+    position:fixed; right:20px; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:9px; z-index:60;
+  }
+  .dot{
+    width:6px; height:6px; border-radius:99px;
+    background:rgba(244,239,224,.35);
+    cursor:pointer;
+    transition:background .25s ease, transform .25s ease, width .25s ease, height .25s ease;
+    border:none; padding:0;
+  }
+  .dot:hover{ transform:scale(1.3); }
+  .dot.active{ width:9px; height:9px; background:var(--gold); }
 
-  const jump = useCallback((idx) => {
-    sectionRefs.current[idx]?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
+  @media (max-width:760px){ #rail{ display:none; } }
 
-  return (
-    <div
-      id="np-scroll-root"
-      style={{
-        fontFamily: "'Karla', sans-serif",
-        width: "100%",
-        height: "100vh",
-        minHeight: 480,
-        overflowY: "auto",
-        overflowX: "hidden",
-        background: T.bg,
-        color: T.cream,
-        position: "relative",
-        scrollBehavior: "smooth",
-      }}
-      className="np-scroll"
-    >
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Karla:wght@400;500;600;700&display=swap');
+  section{ min-height:100vh; padding:8vh 6vw; position:relative; }
 
-        .np-serif { font-family: 'Fraunces', serif; font-optical-sizing: auto; }
+  /* ---------- hero / closing ---------- */
+  .cover{
+    display:flex; align-items:center; justify-content:center;
+  }
+  .cover-media{ position:absolute; inset:0; z-index:0; }
+  .cover-media img{ width:100%; height:100%; object-fit:cover; }
+  .cover-media.hero img{ filter:saturate(0.85) brightness(0.55); }
+  .cover-media.closing img{ filter:saturate(0.8) brightness(0.42); }
+  .cover-media::after{
+    content:""; position:absolute; inset:0;
+  }
+  .cover-media.hero::after{ background:linear-gradient(180deg, var(--bg-deep)cc 0%, var(--bg)99 45%, var(--bg-deep)ee 100%); }
+  .cover-media.closing::after{ background:linear-gradient(180deg, var(--bg-deep)ee 0%, var(--bg)99 40%, var(--bg-deep)ee 100%); }
 
-        .np-scroll { scrollbar-width: thin; scrollbar-color: rgba(194,138,60,.5) transparent; }
-        .np-scroll::-webkit-scrollbar { width: 6px; }
-        .np-scroll::-webkit-scrollbar-thumb { background: rgba(194,138,60,.4); border-radius: 4px; }
-        .np-scroll::-webkit-scrollbar-track { background: transparent; }
+  .cover-content{ position:relative; text-align:center; max-width:680px; width:100%; z-index:1; margin:0 auto; }
+  .rule{ width:56px; height:2px; background:var(--gold); margin:0 auto 28px; }
 
-        .np-reveal {
-          opacity: 0;
-          transform: translateY(26px);
-          transition: opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1);
-        }
-        .np-reveal.in { opacity: 1; transform: translateY(0); }
+  h1.serif{
+    font-size:clamp(2rem,5vw,3.6rem); font-weight:500; line-height:1.1;
+    margin:0 0 20px; color:var(--cream);
+  }
+  .cover p.lede{ color:var(--cream-dim); font-size:1.02rem; max-width:46ch; margin:0 auto 36px; line-height:1.6; }
 
-        .np-img-wrap { overflow: hidden; }
-        .np-img { transition: transform 1.1s cubic-bezier(.22,.61,.36,1); }
-        .np-reveal.in .np-img { transform: scale(1); }
-        .np-img-wrap .np-img { transform: scale(1.08); }
+  .stat-row{ display:flex; gap:32px; justify-content:center; flex-wrap:wrap; }
+  .stat-num{ font-size:1.7rem; color:var(--gold); }
+  .stat-label{ font-size:.72rem; color:var(--cream-dim); margin-top:2px; }
 
-        .np-toggle { transition: background .2s ease, border-color .2s ease, transform .15s ease; cursor: pointer; }
-        .np-toggle:hover { border-color: var(--accent); background: rgba(194,138,60,.08); }
-        .np-toggle:active { transform: scale(.98); }
-        .np-plus { transition: transform .4s cubic-bezier(.22,.61,.36,1); display: inline-block; }
-        .np-toggle.open .np-plus { transform: rotate(135deg); }
+  .bounce{
+    position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+    color:var(--cream-dim); z-index:1; animation:npBounce 2.2s ease-in-out infinite;
+  }
+  @keyframes npBounce{ 0%,100%{ transform:translateX(-50%) translateY(0); opacity:.6; } 50%{ transform:translateX(-50%) translateY(8px); opacity:1; } }
 
-        .np-expand-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s cubic-bezier(.22,.61,.36,1); }
-        .np-expand-wrap.open { grid-template-rows: 1fr; }
-        .np-expand-inner { overflow: hidden; min-height: 0; }
+  /* ---------- plant sections ---------- */
+  .plant-section{ background:var(--card); color:var(--ink); display:flex; align-items:center; }
+  .plant-row{
+    display:flex; align-items:center; gap:6vw;
+    max-width:1180px; width:100%; margin:0 auto;
+  }
+  .plant-row.rev{ flex-direction:row-reverse; }
 
-        .np-prop-row {
-          opacity: 0;
-          transform: translateY(8px);
-          transition: opacity .4s ease, transform .4s ease;
-        }
-        .np-expand-wrap.open .np-prop-row { opacity: 1; transform: translateY(0); }
+  .plant-media{ flex:1 1 44%; min-width:0; }
+  .plant-media .img-wrap{
+    border-radius:14px; aspect-ratio:4/5;
+    box-shadow:0 20px 50px rgba(14,21,10,.35);
+  }
+  .plant-media img{ width:100%; height:100%; object-fit:cover; }
 
-        .np-dot { transition: background .25s ease, transform .25s ease; cursor: pointer; }
-        .np-dot:hover { transform: scale(1.3); }
+  .plant-text{ flex:1 1 56%; min-width:0; transition-delay:80ms; }
 
-        .np-bounce { animation: npBounce 2.2s ease-in-out infinite; }
-        @keyframes npBounce { 0%,100% { transform: translateY(0); opacity:.6; } 50% { transform: translateY(8px); opacity:1; } }
+  .meta-row{ display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+  .tag{
+    font-size:.72rem; letter-spacing:.06em; border-radius:999px; padding:3px 10px;
+    border:1px solid var(--accent); color:var(--accent);
+  }
+  .sci{ font-size:.9rem; font-style:italic; color:var(--ink-soft); }
 
-        @media (prefers-reduced-motion: reduce) {
-          .np-reveal, .np-img, .np-plus, .np-expand-wrap, .np-prop-row, .np-bounce { transition: none !important; animation: none !important; opacity: 1 !important; transform: none !important; }
-          .np-expand-wrap.open { grid-template-rows: 1fr; }
-        }
+  h2.serif{ font-size:clamp(1.6rem,3.4vw,2.5rem); font-weight:500; margin:0 0 14px; color:var(--ink); }
+  .plant-desc{ font-size:1.03rem; line-height:1.6; color:var(--ink); margin:0 0 22px; max-width:56ch; }
 
-        @media (max-width: 760px) {
-          .np-plant-row { flex-direction: column !important; }
-          .np-plant-row.rev { flex-direction: column !important; }
-          .np-rail { display: none !important; }
-        }
-      `}</style>
+  .toggle-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--line); background:transparent; color:var(--ink);
+    border-radius:999px; padding:9px 16px 9px 18px; font-size:.85rem;
+    font-family:'Karla',sans-serif; font-weight:600; cursor:pointer;
+    transition:background .2s ease, border-color .2s ease, transform .15s ease;
+  }
+  .toggle-btn:hover{ border-color:var(--accent); background:rgba(194,138,60,.08); }
+  .toggle-btn:active{ transform:scale(.98); }
+  .toggle-btn.open{ border-color:var(--accent); }
+  .plus{ font-size:1.05rem; line-height:1; color:var(--accent); display:inline-block; transition:transform .4s cubic-bezier(.22,.61,.36,1); }
+  .toggle-btn.open .plus{ transform:rotate(135deg); }
 
-      {/* top progress line */}
-      <div style={{ position: "fixed", top: 0, left: 0, right: 0, height: 3, background: "rgba(244,239,224,.1)", zIndex: 40 }}>
-        <div style={{ height: "100%", width: `${progress * 100}%`, background: T.gold, transition: "width .1s linear" }} />
-      </div>
+  .expand-wrap{
+    display:grid; grid-template-rows:0fr;
+    transition:grid-template-rows .55s cubic-bezier(.22,.61,.36,1);
+  }
+  .expand-wrap.open{ grid-template-rows:1fr; }
+  .expand-inner{ overflow:hidden; min-height:0; }
 
-      {/* side progress rail */}
-      <div className="np-rail" style={{ position: "fixed", right: 20, top: "50%", transform: "translateY(-50%)", display: "flex", flexDirection: "column", gap: 9, zIndex: 40 }}>
-        {Array.from({ length: TOTAL }).map((_, idx) => (
-          <span
-            key={idx}
-            className="np-dot"
-            onClick={() => jump(idx)}
-            title={idx === 0 ? "Introduction" : idx === TOTAL - 1 ? "Closing" : SLIDES[idx - 1].title}
-            style={{
-              width: idx === active ? 9 : 6,
-              height: idx === active ? 9 : 6,
-              borderRadius: 99,
-              background: idx === active ? T.gold : "rgba(244,239,224,.35)",
-            }}
-          />
-        ))}
-      </div>
+  .prop-list{ display:flex; flex-direction:column; gap:10px; margin-top:18px; }
+  .prop-row{
+    opacity:0; transform:translateY(8px);
+    transition:opacity .4s ease, transform .4s ease;
+    display:flex; gap:12px; padding:13px 16px; border-radius:10px;
+    background:var(--card-hi); border:1px solid var(--line);
+  }
+  .prop-row.caution{ background:rgba(168,71,31,.07); border-color:var(--rust); }
+  .expand-wrap.open .prop-row{ opacity:1; transform:translateY(0); }
 
-      {/* ---------------- HERO ---------------- */}
-      <section
-        ref={addRef}
-        data-idx={0}
-        style={{
-          position: "relative",
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "8vh 6vw",
-        }}
-      >
-        <div className="np-img-wrap" style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-          <img
-            src={wiki("Ocimum_tenuiflorum.jpg", 1800)}
-            alt=""
-            aria-hidden="true"
-            className="np-img"
-            style={{ width: "100%", height: "100%", objectFit: "cover", filter: "saturate(0.85) brightness(0.55)" }}
-          />
-          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${T.bgDeep}cc 0%, ${T.bg}99 45%, ${T.bgDeep}ee 100%)` }} />
-        </div>
+  .prop-dot{ flex-shrink:0; margin-top:6px; width:8px; height:8px; border-radius:99px; background:var(--accent); }
+  .prop-row.caution .prop-dot{ background:var(--rust); }
+  .prop-label{ font-weight:700; color:var(--ink); font-size:.92rem; }
+  .prop-row.caution .prop-label{ color:var(--rust); }
+  .prop-text{ font-size:.92rem; line-height:1.55; color:var(--ink); }
 
-        <div className={`np-reveal${revealed.has(0) ? " in" : ""}`} style={{ position: "relative", textAlign: "center", maxWidth: 680, width: "100%", zIndex: 1 }}>
-          <div style={{ width: 56, height: 2, background: T.gold, margin: "0 auto 28px" }} />
-          <h1 className="np-serif" style={{ fontSize: "clamp(2rem, 5vw, 3.6rem)", fontWeight: 500, lineHeight: 1.1, margin: "0 0 20px", color: T.cream }}>
-            Nepal's Household Pharmacy
-          </h1>
-          <p style={{ color: T.creamDim, fontSize: "1.02rem", maxWidth: "46ch", margin: "0 auto 36px" }}>
-            Seven plants that grow in courtyards, forests and kitchen pots across Nepal — each one a remedy passed down long before the pharmacy existed.
-          </p>
-          <div style={{ display: "flex", gap: 32, justifyContent: "center", flexWrap: "wrap" }}>
-            {[["7", "Plants"], ["2000+", "Years in use"], ["0", "Synthetic origin"]].map(([n, l]) => (
-              <div key={l}>
-                <div className="np-serif" style={{ fontSize: "1.7rem", color: T.gold }}>{n}</div>
-                <div style={{ fontSize: ".72rem", color: T.creamDim, marginTop: 2 }}>{l}</div>
-              </div>
-            ))}
-          </div>
-        </div>
+  /* closing */
+  .dot-strip{ display:flex; justify-content:center; gap:8px; margin-bottom:26px; }
+  .dot-strip span{ width:8px; height:8px; border-radius:99px; }
 
-        <div className="np-bounce" style={{ position: "absolute", bottom: 28, left: "50%", transform: "translateX(-50%)", color: T.creamDim, zIndex: 1 }}>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8L10 13L15 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </div>
-      </section>
+  .back-btn{
+    border:1px solid var(--gold); background:transparent; color:var(--gold);
+    border-radius:999px; padding:10px 22px; font-size:.85rem; letter-spacing:.02em;
+    cursor:pointer; font-family:'Karla',sans-serif; transition:background .2s ease;
+  }
+  .back-btn:hover{ background:rgba(194,138,60,.1); }
 
-      {/* ---------------- PLANT SECTIONS ---------------- */}
-      {SLIDES.map((slide, i) => {
-        const idx = i + 1;
-        const accent = ACCENTS[i % ACCENTS.length];
-        const isOpen = expanded.has(i);
-        const reversed = i % 2 === 1;
-        return (
-          <section
-            key={slide.title}
-            ref={addRef}
-            data-idx={idx}
-            style={{ minHeight: "100vh", display: "flex", alignItems: "center", padding: "8vh 6vw", background: T.card, color: T.ink }}
-          >
-            <div
-              className={`np-plant-row${reversed ? " rev" : ""}`}
-              style={{ display: "flex", flexDirection: reversed ? "row-reverse" : "row", alignItems: "center", gap: "6vw", maxWidth: 1180, width: "100%", margin: "0 auto" }}
-            >
-              {/* image */}
-              <div className={`np-reveal${revealed.has(idx) ? " in" : ""}`} style={{ flex: "1 1 44%", minWidth: 0 }}>
-                <div className="np-img-wrap" style={{ borderRadius: 14, aspectRatio: "4/5", boxShadow: "0 20px 50px rgba(14,21,10,.35)" }}>
-                  <img
-                    src={slide.img}
-                    alt={slide.imgAlt}
-                    loading="lazy"
-                    className="np-img"
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                  />
-                </div>
-              </div>
+  @media (max-width:760px){
+    .plant-row, .plant-row.rev{ flex-direction:column !important; }
+  }
 
-              {/* text */}
-              <div className={`np-reveal${revealed.has(idx) ? " in" : ""}`} style={{ flex: "1 1 56%", minWidth: 0, transitionDelay: "80ms" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                  <span style={{ fontSize: ".72rem", letterSpacing: ".06em", color: accent, border: `1px solid ${accent}`, borderRadius: 999, padding: "3px 10px" }}>
-                    {slide.tag}
-                  </span>
-                  <span style={{ fontSize: ".9rem", fontStyle: "italic", color: T.inkSoft }}>{slide.sci}</span>
-                </div>
+  @media (prefers-reduced-motion:reduce){
+    .reveal, .img-wrap img, .plus, .expand-wrap, .prop-row, .bounce{
+      transition:none !important; animation:none !important;
+      opacity:1 !important; transform:none !important;
+    }
+    .expand-wrap.open{ grid-template-rows:1fr; }
+  }
+</style>
+</head>
+<body>
 
-                <h2 className="np-serif" style={{ fontSize: "clamp(1.6rem, 3.4vw, 2.5rem)", fontWeight: 500, margin: "0 0 14px", color: T.ink }}>
-                  {slide.title}
-                </h2>
-                <p style={{ fontSize: "1.03rem", lineHeight: 1.6, color: T.ink, margin: "0 0 22px", maxWidth: "56ch" }}>{slide.desc}</p>
+  <div id="progress-track"><div id="progress-bar"></div></div>
+  <div id="rail"></div>
 
-                <button
-                  className={`np-toggle${isOpen ? " open" : ""}`}
-                  onClick={() => toggle(i)}
-                  style={{
-                    "--accent": accent,
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
-                    border: `1px solid ${isOpen ? accent : T.line}`,
-                    background: "transparent",
-                    color: T.ink,
-                    borderRadius: 999,
-                    padding: "9px 16px 9px 18px",
-                    fontSize: ".85rem",
-                    fontFamily: "'Karla', sans-serif",
-                    fontWeight: 600,
-                  }}
-                  aria-expanded={isOpen}
-                >
-                  {isOpen ? "Hide medicinal uses" : "See medicinal uses"}
-                  <span className="np-plus" style={{ fontSize: "1.05rem", lineHeight: 1, color: accent }}>+</span>
-                </button>
-
-                <div className={`np-expand-wrap${isOpen ? " open" : ""}`}>
-                  <div className="np-expand-inner">
-                    <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 18 }}>
-                      {slide.props.map((p, pIdx) => (
-                        <div
-                          key={p.label}
-                          className="np-prop-row"
-                          style={{
-                            transitionDelay: isOpen ? `${120 + pIdx * 70}ms` : "0ms",
-                            display: "flex",
-                            gap: 12,
-                            padding: "13px 16px",
-                            borderRadius: 10,
-                            background: p.caution ? "rgba(168,71,31,.07)" : T.cardHi,
-                            border: p.caution ? `1px solid ${T.rust}` : `1px solid ${T.line}`,
-                          }}
-                        >
-                          <span
-                            aria-hidden="true"
-                            style={{
-                              flexShrink: 0,
-                              marginTop: 6,
-                              width: 8,
-                              height: 8,
-                              borderRadius: 99,
-                              background: p.caution ? T.rust : accent,
-                            }}
-                          />
-                          <div>
-                            <span style={{ fontWeight: 700, color: p.caution ? T.rust : T.ink, fontSize: ".92rem" }}>
-                              {p.label}:{" "}
-                            </span>
-                            <span style={{ fontSize: ".92rem", lineHeight: 1.55, color: T.ink }}>{p.text}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        );
-      })}
-
-      {/* ---------------- CLOSING ---------------- */}
-      <section
-        ref={addRef}
-        data-idx={TOTAL - 1}
-        style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "8vh 6vw" }}
-      >
-        <div className="np-img-wrap" style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-          <img
-            src={wiki("Curcuma_longa_roots.jpg", 1800)}
-            alt=""
-            aria-hidden="true"
-            className="np-img"
-            style={{ width: "100%", height: "100%", objectFit: "cover", filter: "saturate(0.8) brightness(0.42)" }}
-          />
-          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${T.bgDeep}ee 0%, ${T.bg}99 40%, ${T.bgDeep}ee 100%)` }} />
-        </div>
-
-        <div className={`np-reveal${revealed.has(TOTAL - 1) ? " in" : ""}`} style={{ position: "relative", textAlign: "center", maxWidth: 620, width: "100%", zIndex: 1 }}>
-          <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 26 }}>
-            {SLIDES.map((s, idx) => (
-              <span key={s.title} style={{ width: 8, height: 8, borderRadius: 99, background: ACCENTS[idx % ACCENTS.length] }} />
-            ))}
-          </div>
-          <div style={{ width: 56, height: 2, background: T.gold, margin: "0 auto 26px" }} />
-          <h2 className="np-serif" style={{ fontSize: "clamp(1.7rem, 4vw, 2.6rem)", fontWeight: 500, margin: "0 0 18px", color: T.cream }}>
-            Grown at home, trusted for generations
-          </h2>
-          <p style={{ color: T.creamDim, fontSize: "1rem", maxWidth: "50ch", margin: "0 auto 34px", lineHeight: 1.65 }}>
-            From a courtyard tulsi plant to a roadside neem tree, these seven remedies show how much medicine has quietly grown around Nepali homes all along.
-          </p>
-          <button
-            onClick={() => jump(0)}
-            style={{
-              border: `1px solid ${T.gold}`,
-              background: "transparent",
-              color: T.gold,
-              borderRadius: 999,
-              padding: "10px 22px",
-              fontSize: ".85rem",
-              letterSpacing: ".02em",
-              cursor: "pointer",
-              fontFamily: "'Karla', sans-serif",
-              transition: "background .2s ease",
-            }}
-          >
-            ↺ Back to the beginning
-          </button>
-        </div>
-      </section>
+  <!-- ================= HERO ================= -->
+  <section class="cover" data-idx="0">
+    <div class="cover-media hero">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Ocimum_tenuiflorum.jpg?width=1800" alt="" aria-hidden="true" />
     </div>
-  );
-}
+    <div class="reveal cover-content">
+      <div class="rule"></div>
+      <h1 class="serif">Nepal's Household Pharmacy</h1>
+      <p class="lede">Seven plants that grow in courtyards, forests and kitchen pots across Nepal — each one a remedy passed down long before the pharmacy existed.</p>
+      <div class="stat-row">
+        <div><div class="stat-num serif">7</div><div class="stat-label">Plants</div></div>
+        <div><div class="stat-num serif">2000+</div><div class="stat-label">Years in use</div></div>
+        <div><div class="stat-num serif">0</div><div class="stat-label">Synthetic origin</div></div>
+      </div>
+    </div>
+    <div class="bounce">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8L10 13L15 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </section>
+
+  <!-- ================= PLANTS (populated by JS from DATA) ================= -->
+  <div id="plants-root"></div>
+
+  <!-- ================= CLOSING ================= -->
+  <section class="cover" id="closing-section" data-idx="8">
+    <div class="cover-media closing">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Curcuma_longa_roots.jpg?width=1800" alt="" aria-hidden="true" />
+    </div>
+    <div class="reveal cover-content">
+      <div class="dot-strip" id="closing-dots"></div>
+      <div class="rule"></div>
+      <h2 class="serif">Grown at home, trusted for generations</h2>
+      <p class="lede">From a courtyard tulsi plant to a roadside neem tree, these seven remedies show how much medicine has quietly grown around Nepali homes all along.</p>
+      <button class="back-btn" onclick="jumpTo(0)">↺ Back to the beginning</button>
+    </div>
+  </section>
+
+<script>
+  const ACCENTS = ['#5d6b46', '#c28a3c', '#4f7a6e', '#a8471f', '#5d6b46', '#c28a3c', '#4f7a6e'];
+  const wiki = (file, w) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=${w}`;
+
+  const SLIDES = [
+    {
+      tag: "No. 01", title: "Holy Basil (Tulsi)", sci: "Ocimum sanctum",
+      desc: "A sacred, highly aromatic plant commonly found in almost every Hindu household.",
+      img: wiki("Ocimum_tenuiflorum.jpg", 1400), alt: "Holy basil (tulsi) plant with green leaves",
+      props: [
+        { label: "Respiratory Health", text: "Leaves boiled in water serve as an effective treatment for common colds, coughs, and sore throats." },
+        { label: "Antimicrobial Properties", text: "Rich in agents that actively fight harmful bacteria and viruses." },
+        { label: "Digestive Aid", text: "Helps stimulate appetite and ensures smooth overall digestion." },
+        { label: "Adaptogen", text: "Functions as a natural adaptogen to help the body adapt to and cope with stress." },
+        { label: "Other Uses", text: "Used as a natural disinfectant to purify water, and as an aromatic spice in tea and food." },
+      ],
+    },
+    {
+      tag: "No. 02", title: "Neem", sci: "Azadirachta indica",
+      desc: "A tall, hardy tree known for its extremely bitter leaves, bark, and seeds.",
+      img: wiki("Azadirachta_indica-Neem_tree.jpg", 1400), alt: "Neem tree with dense green foliage",
+      props: [
+        { label: "Skin Diseases", text: "Highly effective in treating conditions like acne, eczema, and various other skin infections." },
+        { label: "Blood Purifier", text: "Considered a natural blood purifier that also aids in reducing cholesterol levels." },
+        { label: "Antimicrobial", text: "Widely formulated into soaps and creams due to its strong antiseptic properties." },
+        { label: "Dental Health", text: "Neem twigs are traditionally used as natural toothbrushes to prevent gum disease and preserve oral hygiene." },
+      ],
+    },
+    {
+      tag: "No. 03", title: "Heart-leaved Moonseed (Gurjo)", sci: "Tinospora cordifolia",
+      desc: "A climbing shrub frequently found in wild forests as well as plant nurseries.",
+      img: wiki("Tinospora_cordifolia.jpg", 1400), alt: "Tinospora cordifolia climbing vine with heart-shaped leaves",
+      props: [
+        { label: "Immunity Booster", text: "Its primary medicinal application is to significantly enhance the body's immune system." },
+        { label: "Antioxidant", text: "Contains active compounds that fight off oxidative stress throughout the body." },
+        { label: "Antipyretic", text: "Acts as a natural fever reducer." },
+        { label: "Caution", text: "Excessive consumption must be avoided, as it can dangerously lower blood sugar levels.", caution: true },
+      ],
+    },
+    {
+      tag: "No. 04", title: "Asiatic Pennywort (Ghod Tapre)", sci: "Centella asiatica",
+      desc: "A low-growing, creeping herb that forms a dense green carpet in shady, moist areas.",
+      img: wiki("Centella_asiatica.jpg", 1400), alt: "Centella asiatica creeping herb with round scalloped leaves",
+      props: [
+        { label: "Brain Tonic", text: "Enhances memory recall and overall mental capacity; commonly used as a restorative nerve tonic." },
+        { label: "Wound Healing", text: "Fresh paste made directly from its leaves is applied externally to treat open wounds and burns." },
+        { label: "Anti-stress", text: "Helps relieve symptoms associated with mild anxiety and depression." },
+        { label: "Cosmetics", text: "Integrated into skin creams for its powerful healing and rejuvenating properties." },
+      ],
+    },
+    {
+      tag: "No. 05", title: "Turmeric (Besar)", sci: "Curcuma longa",
+      desc: "A perennial herb recognized for its underground rhizomes that exhibit a vibrant bright yellow color.",
+      img: wiki("Curcuma_longa_roots.jpg", 1400), alt: "Fresh turmeric rhizomes, bright yellow-orange inside",
+      props: [
+        { label: "Antiseptic", text: "Applied topically to disinfect minor cuts, abrasions, and open wounds." },
+        { label: "Anti-inflammatory", text: "Contains curcumin, its key active compound, which significantly reduces internal and external inflammation." },
+        { label: "Immunity", text: "Acts as a daily dietary booster for the immune system." },
+        { label: "Versatile Use", text: "Serves as a fundamental culinary spice, a natural fabric/food dye, and an ingredient in cosmetic products." },
+      ],
+    },
+    {
+      tag: "No. 06", title: "Malabar Nut (Asuro)", sci: "Adhatoda vasica",
+      desc: "A medium-sized shrub common throughout the Chure and Mahabharat mountain ranges.",
+      img: wiki("Justicia_adhatoda_001.JPG", 1400), alt: "Adhatoda vasica shrub with long lance-shaped leaves",
+      props: [
+        { label: "Respiratory Ailments", text: "Highly effective in managing severe respiratory conditions such as asthma, bronchitis, and common colds by clearing mucus from the lungs." },
+        { label: "Antimicrobial", text: "Used as a throat gargle to target tooth and gum problems." },
+        { label: "Agricultural Use", text: "Leaves are frequently utilized as a nutrient-rich green manure in agricultural fields." },
+      ],
+    },
+    {
+      tag: "No. 07", title: "Calamus (Bojo)", sci: "Acorus calamus",
+      desc: "An erect, aromatic herb typically found growing naturally in swampy, marshy lands.",
+      img: wiki("Acorus_calamus_002.JPG", 1400), alt: "Acorus calamus reed-like leaves growing in marshland",
+      props: [
+        { label: "Digestive Aid", text: "Offers fast relief for an upset stomach, intestinal gas, and loss of appetite." },
+        { label: "Throat Disorders", text: "Highly beneficial for soothing sore throats and alleviating hoarseness in the voice." },
+        { label: "Caution", text: "Should be used carefully, as excessive use can cause nausea, vomiting, and other adverse side effects.", caution: true },
+      ],
+    },
+  ];
+
+  const TOTAL = SLIDES.length + 2; // hero + plants + closing
+
+  // ---------- build plant sections ----------
+  const root = document.getElementById('plants-root');
+  SLIDES.forEach((s, i) => {
+    const idx = i + 1;
+    const accent = ACCENTS[i % ACCENTS.length];
+    const reversed = i % 2 === 1;
+
+    const section = document.createElement('section');
+    section.className = 'plant-section';
+    section.dataset.idx = idx;
+
+    const propsHTML = s.props.map(p => `
+      <div class="prop-row${p.caution ? ' caution' : ''}" style="--accent:${accent}">
+        <span class="prop-dot" aria-hidden="true"></span>
+        <div><span class="prop-label">${p.label}: </span><span class="prop-text">${p.text}</span></div>
+      </div>
+    `).join('');
+
+    section.innerHTML = `
+      <div class="plant-row${reversed ? ' rev' : ''}">
+        <div class="reveal plant-media">
+          <div class="img-wrap">
+            <img src="${s.img}" alt="${s.alt}" loading="lazy" />
+          </div>
+        </div>
+        <div class="reveal plant-text">
+          <div class="meta-row">
+            <span class="tag" style="--accent:${accent}">${s.tag}</span>
+            <span class="sci">${s.sci}</span>
+          </div>
+          <h2 class="serif">${s.title}</h2>
+          <p class="plant-desc">${s.desc}</p>
+          <button class="toggle-btn" style="--accent:${accent}" data-target="expand-${i}">
+            <span class="btn-label">See medicinal uses</span>
+            <span class="plus">+</span>
+          </button>
+          <div class="expand-wrap" id="expand-${i}">
+            <div class="expand-inner">
+              <div class="prop-list">${propsHTML}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    root.appendChild(section);
+  });
+
+  // move closing section after plants (it was placed after the empty root in DOM order already)
+  // closing dots
+  const closingDots = document.getElementById('closing-dots');
+  SLIDES.forEach((s, i) => {
+    const dot = document.createElement('span');
+    dot.style.background = ACCENTS[i % ACCENTS.length];
+    closingDots.appendChild(dot);
+  });
+
+  // ---------- toggle buttons ----------
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.toggle-btn');
+    if (!btn) return;
+    const wrap = document.getElementById(btn.dataset.target);
+    const isOpen = wrap.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    const label = btn.querySelector('.btn-label');
+    label.textContent = isOpen ? 'Hide medicinal uses' : 'See medicinal uses';
+    btn.setAttribute('aria-expanded', String(isOpen));
+
+    if (isOpen) {
+      const rows = wrap.querySelectorAll('.prop-row');
+      rows.forEach((row, pIdx) => {
+        row.style.transitionDelay = `${120 + pIdx * 70}ms`;
+      });
+    }
+  });
+
+  // ---------- side rail ----------
+  const rail = document.getElementById('rail');
+  const allSections = Array.from(document.querySelectorAll('section[data-idx]'))
+    .sort((a, b) => Number(a.dataset.idx) - Number(b.dataset.idx));
+
+  allSections.forEach((sec) => {
+    const idx = Number(sec.dataset.idx);
+    const dot = document.createElement('button');
+    dot.className = 'dot';
+    dot.type = 'button';
+    dot.dataset.idx = idx;
+    dot.title = idx === 0 ? 'Introduction' : idx === TOTAL - 1 ? 'Closing' : SLIDES[idx - 1].title;
+    dot.addEventListener('click', () => jumpTo(idx));
+    rail.appendChild(dot);
+  });
+
+  function jumpTo(idx) {
+    const target = allSections.find(s => Number(s.dataset.idx) === idx);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  window.jumpTo = jumpTo;
+
+  function setActiveDot(idx) {
+    rail.querySelectorAll('.dot').forEach(d => {
+      d.classList.toggle('active', Number(d.dataset.idx) === idx);
+    });
+  }
+  setActiveDot(0);
+
+  // ---------- reveal + active tracking ----------
+  const revealTargets = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+      }
+    });
+  }, { threshold: 0.15 });
+  revealTargets.forEach(el => obs.observe(el));
+
+  const sectionObs = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+        setActiveDot(Number(entry.target.dataset.idx));
+      }
+    });
+  }, { threshold: [0, 0.5, 0.85] });
+  allSections.forEach(sec => sectionObs.observe(sec));
+
+  // ---------- scroll progress ----------
+  let ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? window.scrollY / max : 0;
+      document.getElementById('progress-bar').style.width = `${progress * 100}%`;
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // reveal hero immediately on load
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.cover .reveal').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in');
+    });
+  });
+</script>
+</body>
+</html>
