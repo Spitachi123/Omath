@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wisdom of Little Girls — Ethics &amp; Morality</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<style>
+  :root{
+    --ink:#23201b;
+    --paper:#f3ecdc;
+    --paper-2:#eae1cc;
+    --dusk:#1b2a44;
+    --dusk-2:#0f1b30;
+    --gold:#e3a542;
+    --gold-2:#c9852a;
+    --brick:#b23a2e;
+    --pine:#3f5d4a;
+    --line: rgba(35,32,27,0.14);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Work Sans', sans-serif;
+    color:var(--ink);
+    background:var(--dusk-2);
+    overflow-x:hidden;
+  }
+
+  ::selection{ background: var(--gold); color: var(--dusk-2); }
+
+  h1,h2,h3, .display{
+    font-family:'Fraunces', serif;
+    letter-spacing:-0.01em;
+  }
+
+  /* ---------- Scroll snap deck ---------- */
+  #deck{
+    height:100vh;
+    overflow-y:scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior:smooth;
+  }
+  .slide{
+    min-height:100vh;
+    width:100%;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding: 6rem 6vw;
+  }
+  @media (max-width:820px){
+    .slide{ padding: 6rem 6vw 4rem; }
+  }
+
+  .paper{
+    background: var(--paper);
+    background-image:
+      radial-gradient(ellipse at top left, rgba(255,255,255,0.5), transparent 55%),
+      repeating-linear-gradient(180deg, rgba(35,32,27,0.015) 0px, rgba(35,32,27,0.015) 1px, transparent 1px, transparent 3px);
+    color: var(--ink);
+  }
+  .dusk-bg{
+    background: radial-gradient(ellipse 90% 70% at 50% 0%, #24345a 0%, var(--dusk) 45%, var(--dusk-2) 100%);
+    color: var(--paper);
+  }
+
+  .eyebrow{
+    font-size: 0.78rem;
+    color: var(--gold-2);
+    font-weight:600;
+  }
+
+  .stitch-border{
+    border-top: 2px dashed rgba(35,32,27,0.22);
+  }
+  .stitch-border-light{
+    border-top: 2px dashed rgba(243,236,220,0.28);
+  }
+
+  /* -------- nav dots -------- */
+  #navdots{
+    position:fixed;
+    right: 22px;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:50;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .dot{
+    width:9px;height:9px;border-radius:50%;
+    background: rgba(255,255,255,0.28);
+    cursor:pointer;
+    transition: all .35s cubic-bezier(.2,.8,.2,1);
+    border:none;
+    padding:0;
+  }
+  .dot.active{
+    background: var(--gold);
+    transform: scale(1.5);
+    box-shadow: 0 0 0 3px rgba(227,165,66,0.22);
+  }
+  @media (max-width:640px){ #navdots{ display:none; } }
+
+  #progressbar{
+    position:fixed; top:0; left:0; height:3px;
+    background: linear-gradient(90deg, var(--brick), var(--gold));
+    z-index:60;
+    transition: width .25s ease-out;
+  }
+
+  .scrolldown{
+    position:absolute; bottom: 34px; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    font-size:0.72rem; letter-spacing:.14em; opacity:.65;
+  }
+  .chevron{
+    width:9px;height:9px;
+    border-right:2px solid currentColor; border-bottom:2px solid currentColor;
+    transform:rotate(45deg);
+    animation: bob 1.8s ease-in-out infinite;
+  }
+  @keyframes bob{
+    0%,100%{ transform: translateY(0) rotate(45deg); opacity:.4;}
+    50%{ transform: translateY(7px) rotate(45deg); opacity:1;}
+  }
+
+  /* reveal-on-view */
+  .reveal{
+    opacity:0;
+    transform: translateY(26px);
+    transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  .reveal-d1{ transition-delay:.08s; }
+  .reveal-d2{ transition-delay:.16s; }
+  .reveal-d3{ transition-delay:.24s; }
+  .reveal-d4{ transition-delay:.32s; }
+
+  /* -------- flip cards -------- */
+  .flip-scene{ perspective: 1400px; }
+  .flip-card{
+    position:relative;
+    width:100%;
+    height:100%;
+    transform-style: preserve-3d;
+    transition: transform .65s cubic-bezier(.3,.9,.25,1);
+    cursor:pointer;
+  }
+  .flip-card.flipped{ transform: rotateY(180deg); }
+  .flip-face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:14px;
+    display:flex; flex-direction:column;
+    padding: 1rem 1.1rem;
+  }
+  .flip-front{
+    background: linear-gradient(155deg, #fffdf6, var(--paper-2));
+    border: 1px solid var(--line);
+    justify-content:space-between;
+  }
+  .flip-back{
+    background: linear-gradient(155deg, var(--dusk), var(--dusk-2));
+    color: var(--paper);
+    transform: rotateY(180deg);
+    justify-content:center;
+    border: 1px solid rgba(227,165,66,0.4);
+  }
+  .flip-hint{
+    font-size:.68rem; letter-spacing:.08em; opacity:.55; text-transform:uppercase;
+  }
+
+  /* image duotone unify */
+  .duotone{
+    position:relative; overflow:hidden; border-radius: 18px;
+  }
+  .duotone img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    filter: sepia(28%) saturate(140%) contrast(96%) brightness(92%);
+    transform: scale(1.02);
+    transition: transform 8s ease;
+  }
+  .duotone:hover img{ transform: scale(1.12); }
+  .duotone::after{
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(160deg, rgba(27,42,68,0.32), rgba(178,58,46,0.16) 60%, rgba(0,0,0,0.08));
+    mix-blend-mode: multiply;
+  }
+  .duotone::before{
+    content:''; position:absolute; inset:0; z-index:2;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
+    border-radius:18px;
+    pointer-events:none;
+  }
+
+  .frame-caption{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+  }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:.5rem;
+    padding: .7rem 1.3rem;
+    border-radius: 999px;
+    font-weight:600; font-size:.85rem;
+    border:1.5px solid var(--ink);
+    background:transparent;
+    cursor:pointer;
+    transition: all .3s ease;
+  }
+  .btn:hover{ background: var(--ink); color: var(--paper); }
+  .btn-light{ border-color: rgba(243,236,220,0.55); color:var(--paper); }
+  .btn-light:hover{ background: var(--paper); color: var(--dusk-2); }
+
+  .tag-num{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+  }
+
+  .card-hover{
+    transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease;
+  }
+  .card-hover:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 18px 30px -12px rgba(35,32,27,0.28);
+  }
+
+  .quote-mark{
+    font-family:'Fraunces', serif;
+    color: var(--gold);
+    opacity:.5;
+  }
+
+  ::-webkit-scrollbar{ width:9px; }
+  ::-webkit-scrollbar-track{ background: var(--dusk-2); }
+  ::-webkit-scrollbar-thumb{ background: var(--gold-2); border-radius:8px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal, .flip-card, .duotone img, .chevron{ transition:none !important; animation:none !important; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef, useCallback } = React;
+
+/* ---------------- DATA ---------------- */
+
+const IMG = {
+  puddle: "https://picsum.photos/seed/tolstoy-puddle-lane/1200/900",
+  girlsMeet: "https://picsum.photos/seed/tolstoy-easter-village/1200/900",
+  splash: "https://picsum.photos/seed/tolstoy-mud-splash/1200/900",
+  quarrel: "https://picsum.photos/seed/tolstoy-village-quarrel/1200/900",
+  digging: "https://picsum.photos/seed/tolstoy-channel-dig/1200/900",
+  stream: "https://picsum.photos/seed/tolstoy-stream-chip/1200/900",
+  homes: "https://picsum.photos/seed/tolstoy-village-homes/1200/900",
+  title: "https://picsum.photos/seed/tolstoy-easter-dawn/1600/1000",
+};
+
+const vocab = {
+  part1: [
+    { w: "Sledging", d: "Riding or sliding over snow on a sled." },
+    { w: "Homesteads", d: "A house together with its surrounding land." },
+    { w: "Finery", d: "Elegant, expensive festive clothes." },
+    { w: "Kerchiefs", d: "Square pieces of cloth worn on the head." },
+  ],
+  part2: [
+    { w: "Plumped", d: "Set down or stamped heavily into water or mud." },
+    { w: "Scrambled", d: "Moved or climbed quickly and awkwardly out of trouble." },
+    { w: "Frock", d: "A dress or gown worn by a girl or woman." },
+    { w: "Splash", d: "To cause liquid to strike or scatter around." },
+  ],
+  part3: [
+    { w: "Seized", d: "Took hold of suddenly or forcibly." },
+    { w: "Quarrel", d: "An angry argument or disagreement." },
+    { w: "Affair", d: "An event, situation, or matter of concern." },
+    { w: "Blows", d: "Hard physical strikes or fighting." },
+  ],
+  part4: [
+    { w: "Pacify", d: "To calm anger or bring peace to a dispute." },
+    { w: "Rejoicing", d: "Expressing great joy and celebration." },
+    { w: "Folly", d: "Lack of good sense; foolish behavior." },
+    { w: "Chip", d: "A small piece of cut wood." },
+  ],
+  part5: [
+    { w: "Lassies", d: "An affectionate term for young girls." },
+    { w: "Ashamed", d: "Feeling embarrassed or guilty about one's actions." },
+    { w: "Wisdom", d: "The quality of having experience, knowledge, and good judgment." },
+  ],
+};
+
+const principles = [
+  { icon: "🤝", title: "Honesty", body: "Truthfulness in thoughts, words, and actions creates lifelong credibility." },
+  { icon: "🛡", title: "Integrity", body: "Consistently adhering to strong moral principles, even when unobserved." },
+  { icon: "⏱", title: "Punctuality", body: "Showing respect for time through discipline and organization." },
+  { icon: "🧭", title: "Leadership", body: "Guiding and inspiring others positively toward shared ethical goals." },
+  { icon: "⚖", title: "Responsibility", body: "Taking ownership of obligations and accepting consequences." },
+  { icon: "❤", title: "Trust & Respect", body: "Fostering mutual dignity, care, and peaceful human relationships." },
+];
+
+const morals = [
+  { title: "Quick Forgiveness", body: "Children do not hold grudges. Forgiving minor mistakes quickly prevents unnecessary conflict and restores peace." },
+  { title: "Child Wisdom vs. Adult Ego", body: "Adults often let pride and ego ruin relationships, whereas children prioritize joy, play, and togetherness." },
+  { title: "Purity of Heart", body: "True spiritual purity and peace come from letting go of anger and living with innocent, loving hearts." },
+];
+
+/* ---------------- REVEAL HOOK ---------------- */
+
+function useReveal(ref){
+  useEffect(() => {
+    const el = ref.current;
+    if(!el) return;
+    const targets = el.querySelectorAll(".reveal");
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add("in"); });
+    }, { threshold: 0.22 });
+    targets.forEach(t => io.observe(t));
+    return () => io.disconnect();
+  }, [ref]);
+}
+
+/* ---------------- COMPONENTS ---------------- */
+
+function FlipCard({ w, d, index }){
+  const [flipped, setFlipped] = useState(false);
+  return (
+    <div className="flip-scene" style={{ height: "148px" }}>
+      <div
+        className={"flip-card" + (flipped ? " flipped" : "")}
+        onClick={() => setFlipped(f => !f)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e)=>{ if(e.key==="Enter"||e.key===" ") setFlipped(f=>!f); }}
+      >
+        <div className="flip-face flip-front">
+          <div style={{display:"flex", justifyContent:"space-between", alignItems:"flex-start"}}>
+            <span className="tag-num" style={{fontSize:"1.5rem", color:"var(--brick)"}}>
+              {String(index+1).padStart(2,"0")}
+            </span>
+            <span style={{fontSize:"1.1rem", opacity:.5}}>↻</span>
+          </div>
+          <div>
+            <div className="display" style={{fontSize:"1.25rem", fontWeight:600}}>{w}</div>
+            <div className="flip-hint">tap to reveal meaning</div>
+          </div>
+        </div>
+        <div className="flip-face flip-back">
+          <p style={{fontSize:"0.95rem", lineHeight:1.5, textAlign:"center", margin:0}}>{d}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function VocabGrid({ words }){
+  return (
+    <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(150px, 1fr))", gap:"14px" }}>
+      {words.map((v,i) => <FlipCard key={v.w} w={v.w} d={v.d} index={i} />)}
+    </div>
+  );
+}
+
+function Frame({ src, caption, tall }){
+  return (
+    <div className="reveal reveal-d2" style={{ width:"100%" }}>
+      <div className="duotone" style={{ aspectRatio: tall ? "3/4" : "4/3" }}>
+        <img src={src} alt={caption || "story illustration"} loading="lazy" />
+      </div>
+      {caption && <p className="frame-caption" style={{marginTop:"10px", fontSize:"0.95rem", opacity:.75}}>{caption}</p>}
+    </div>
+  );
+}
+
+function StoryPart({ id, num, total, title, image, imageCaption, paragraphs, words, reverse }){
+  const ref = useRef(null);
+  useReveal(ref);
+  return (
+    <section id={id} className="slide paper" ref={ref}>
+      <div style={{ maxWidth:"1180px", margin:"0 auto", width:"100%" }}>
+        <div className="reveal" style={{display:"flex", alignItems:"baseline", gap:"14px", marginBottom:"6px"}}>
+          <span className="eyebrow">PART {num} OF {total}</span>
+          <div style={{flex:1, height:"1px", background:"var(--line)"}}></div>
+        </div>
+        <h2 className="reveal display" style={{fontSize:"clamp(1.8rem, 3.4vw, 2.7rem)", margin:"0 0 28px", fontWeight:600}}>{title}</h2>
+
+        <div style={{
+          display:"grid",
+          gridTemplateColumns: "1.05fr 0.95fr",
+          gap:"48px",
+          alignItems:"start",
+        }} className={reverse ? "grid-reverse" : ""}>
+
+          <div style={{ order: reverse ? 2 : 1 }}>
+            <div className="reveal reveal-d1">
+              {paragraphs.map((p,i) => (
+                <p key={i} style={{ fontSize:"1.06rem", lineHeight:1.75, marginBottom:"16px", color:"rgba(35,32,27,0.88)" }}>{p}</p>
+              ))}
+            </div>
+            <div className="reveal reveal-d3" style={{marginTop:"22px"}}>
+              <div style={{display:"flex", alignItems:"center", gap:"10px", marginBottom:"12px"}}>
+                <span style={{fontSize:"0.78rem", letterSpacing:".08em", fontWeight:600, color:"var(--pine)"}}>SECTION VOCABULARY</span>
+                <div style={{flex:1, height:"1px", background:"var(--line)"}}></div>
+              </div>
+              <VocabGrid words={words} />
+            </div>
+          </div>
+
+          <div style={{ order: reverse ? 1 : 2 }}>
+            <Frame src={image} caption={imageCaption} />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TitleSlide(){
+  const ref = useRef(null);
+  useReveal(ref);
+  const scrollNext = () => {
+    document.getElementById("s-ethics").scrollIntoView({ behavior:"smooth" });
+  };
+  return (
+    <section className="slide dusk-bg" ref={ref} style={{overflow:"hidden"}}>
+      <div className="duotone" style={{
+        position:"absolute", inset:0, borderRadius:0, opacity:0.5,
+      }}>
+        <img src={IMG.title} alt="" />
+      </div>
+      <div style={{ position:"absolute", inset:0, background:"linear-gradient(180deg, rgba(15,27,48,0.55), rgba(15,27,48,0.92))" }}></div>
+
+      <div style={{ position:"relative", zIndex:2, maxWidth:"920px" }}>
+        <div className="reveal in eyebrow" style={{color:"var(--gold)", marginBottom:"18px", fontSize:"0.85rem", letterSpacing:".12em"}}>
+          A CHAPTER STUDY · ETHICS &amp; MORALITY
+        </div>
+        <h1 className="reveal in display" style={{
+          fontSize:"clamp(2.6rem, 7vw, 5.4rem)",
+          fontWeight:700,
+          lineHeight:1.02,
+          margin:"0 0 20px",
+          color:"var(--paper)",
+        }}>
+          Ethics <span style={{color:"var(--gold)", fontStyle:"italic", fontWeight:500}}>&amp;</span> Morality
+        </h1>
+        <p className="reveal in reveal-d2" style={{
+          fontSize:"clamp(1.05rem, 1.7vw, 1.3rem)",
+          color:"rgba(243,236,220,0.82)",
+          maxWidth:"560px",
+          lineHeight:1.6,
+          marginBottom:"36px",
+        }}>
+          A close reading of <em>"Wisdom of Little Girls"</em> by Leo Tolstoy — an Easter-morning fable
+          about a puddle, a torn dress, and the grown-ups who forgot how to forgive.
+        </p>
+        <button className="btn btn-light reveal in reveal-d3" onClick={scrollNext}>
+          Begin the story <span>→</span>
+        </button>
+      </div>
+
+      <div className="scrolldown reveal in reveal-d4" style={{color:"var(--paper)"}}>
+        SCROLL
+        <span className="chevron"></span>
+      </div>
+    </section>
+  );
+}
+
+function EthicsSlide(){
+  const ref = useRef(null);
+  useReveal(ref);
+  return (
+    <section id="s-ethics" className="slide paper" ref={ref}>
+      <div style={{ maxWidth:"1180px", margin:"0 auto", width:"100%" }}>
+        <div className="reveal eyebrow">GETTING STARTED</div>
+        <h2 className="reveal display" style={{fontSize:"clamp(1.9rem, 3.6vw, 2.8rem)", margin:"6px 0 40px", fontWeight:600}}>
+          Six habits ethics for success rests on
+        </h2>
+        <div style={{
+          display:"grid",
+          gridTemplateColumns:"repeat(auto-fit, minmax(250px, 1fr))",
+          gap:"18px",
+        }}>
+          {principles.map((p,i) => (
+            <div key={p.title}
+              className={"reveal card-hover" + (i%3===1 ? " reveal-d1" : i%3===2 ? " reveal-d2" : "")}
+              style={{
+                background:"linear-gradient(160deg,#fffdf6,var(--paper-2))",
+                border:"1px solid var(--line)",
+                borderRadius:"16px",
+                padding:"26px 22px",
+              }}>
+              <div style={{fontSize:"1.8rem", marginBottom:"14px"}}>{p.icon}</div>
+              <div className="display" style={{fontSize:"1.18rem", fontWeight:600, marginBottom:"8px", color:"var(--brick)"}}>{p.title}</div>
+              <div style={{fontSize:"0.95rem", lineHeight:1.55, opacity:.82}}>{p.body}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ReadingSlide(){
+  const ref = useRef(null);
+  useReveal(ref);
+  return (
+    <section className="slide dusk-bg" ref={ref}>
+      <div style={{ maxWidth:"1180px", margin:"0 auto", width:"100%" }}>
+        <div className="reveal eyebrow" style={{color:"var(--gold)"}}>READING I · PICTURE ANALYSIS</div>
+        <h2 className="reveal display" style={{fontSize:"clamp(1.9rem, 3.6vw, 2.8rem)", margin:"6px 0 40px", fontWeight:600, color:"var(--paper)"}}>
+          Before the words — what does the scene tell us?
+        </h2>
+
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"28px" }}>
+          <div className="reveal reveal-d1" style={{
+            background:"rgba(243,236,220,0.06)",
+            border:"1px solid rgba(227,165,66,0.25)",
+            borderRadius:"16px",
+            padding:"28px 26px",
+          }}>
+            <div style={{fontSize:"1.6rem", marginBottom:"10px"}}>❓</div>
+            <div className="display" style={{fontSize:"1.2rem", fontWeight:600, marginBottom:"10px", color:"var(--gold)"}}>
+              What are the people doing?
+            </div>
+            <p style={{color:"rgba(243,236,220,0.82)", lineHeight:1.65, fontSize:"0.98rem"}}>
+              The adult villagers are shouting, arguing, and physically pushing each other in the street
+              over a minor conflict between two little girls. Meanwhile, the girls have already reconciled
+              and are playing together peacefully.
+            </p>
+          </div>
+          <div className="reveal reveal-d2" style={{
+            background:"rgba(243,236,220,0.06)",
+            border:"1px solid rgba(227,165,66,0.25)",
+            borderRadius:"16px",
+            padding:"28px 26px",
+          }}>
+            <div style={{fontSize:"1.6rem", marginBottom:"10px"}}>⚖</div>
+            <div className="display" style={{fontSize:"1.2rem", fontWeight:600, marginBottom:"10px", color:"var(--gold)"}}>
+              Why is it good or bad?
+            </div>
+            <p style={{color:"rgba(243,236,220,0.82)", lineHeight:1.65, fontSize:"0.98rem"}}>
+              It is <strong style={{color:"var(--paper)"}}>bad</strong> — adults are letting pride and anger
+              turn a harmless childhood incident into a foolish street fight. It highlights adult foolishness
+              compared to childhood innocence and forgiveness.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MoralSlide(){
+  const ref = useRef(null);
+  useReveal(ref);
+  return (
+    <section className="slide dusk-bg" ref={ref}>
+      <div style={{ maxWidth:"980px", margin:"0 auto", width:"100%", textAlign:"center" }}>
+        <div className="reveal eyebrow" style={{color:"var(--gold)"}}>THE MORAL OF THE STORY</div>
+        <div className="reveal reveal-d1" style={{ margin:"26px 0 44px" }}>
+          <span className="quote-mark display" style={{fontSize:"3.4rem", lineHeight:0}}>“</span>
+          <p className="display" style={{
+            fontSize:"clamp(1.3rem, 3vw, 2rem)",
+            fontStyle:"italic",
+            fontWeight:500,
+            lineHeight:1.5,
+            color:"var(--paper)",
+            margin:"14px auto 0",
+            maxWidth:"820px",
+          }}>
+            Except you turn, and become as little children, you shall in no wise enter into the kingdom of heaven.
+          </p>
+          <p style={{marginTop:"18px", color:"var(--gold)", fontSize:"0.9rem", letterSpacing:".05em"}}>— Closing reflection by Leo Tolstoy</p>
+        </div>
+
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(230px, 1fr))", gap:"18px", textAlign:"left" }}>
+          {morals.map((m,i) => (
+            <div key={m.title}
+              className={"reveal card-hover" + (i===1 ? " reveal-d2" : i===2 ? " reveal-d3" : " reveal-d1")}
+              style={{
+                background:"rgba(243,236,220,0.07)",
+                border:"1px solid rgba(227,165,66,0.28)",
+                borderTop:"3px solid var(--gold)",
+                borderRadius:"12px",
+                padding:"22px 20px",
+              }}>
+              <div className="display" style={{fontWeight:600, fontSize:"1.05rem", marginBottom:"10px", color:"var(--paper)"}}>
+                {i+1}. {m.title}
+              </div>
+              <div style={{fontSize:"0.9rem", lineHeight:1.55, color:"rgba(243,236,220,0.78)"}}>{m.body}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="reveal reveal-d4" style={{ marginTop:"52px", opacity:.6, fontSize:"0.82rem", letterSpacing:".1em" }}>
+          END OF CHAPTER STUDY
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- APP SHELL ---------------- */
+
+const SLIDES = [
+  { id: "s-title", label: "Title" },
+  { id: "s-ethics", label: "Ethics for Success" },
+  { id: "s-reading", label: "Picture Analysis" },
+  { id: "s-part1", label: "Part 1" },
+  { id: "s-part2", label: "Part 2" },
+  { id: "s-part3", label: "Part 3" },
+  { id: "s-part4", label: "Part 4" },
+  { id: "s-part5", label: "Part 5" },
+  { id: "s-moral", label: "Moral" },
+];
+
+function App(){
+  const [active, setActive] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const deckRef = useRef(null);
+
+  useEffect(() => {
+    const deck = deckRef.current;
+    const sections = SLIDES.map(s => document.getElementById(s.id)).filter(Boolean);
+
+    const onScroll = () => {
+      const scrollTop = deck.scrollTop;
+      const max = deck.scrollHeight - deck.clientHeight;
+      setProgress(max > 0 ? (scrollTop / max) * 100 : 0);
+
+      let closest = 0;
+      let closestDist = Infinity;
+      sections.forEach((sec, i) => {
+        const dist = Math.abs(sec.offsetTop - scrollTop);
+        if (dist < closestDist) { closestDist = dist; closest = i; }
+      });
+      setActive(closest);
+    };
+    deck.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => deck.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const goTo = useCallback((i) => {
+    document.getElementById(SLIDES[i].id).scrollIntoView({ behavior: "smooth" });
+  }, []);
+
+  return (
+    <React.Fragment>
+      <div id="progressbar" style={{ width: progress + "%" }}></div>
+      <div id="navdots">
+        {SLIDES.map((s,i) => (
+          <button
+            key={s.id}
+            className={"dot" + (active === i ? " active" : "")}
+            onClick={() => goTo(i)}
+            title={s.label}
+            aria-label={"Go to " + s.label}
+          />
+        ))}
+      </div>
+
+      <div id="deck" ref={deckRef}>
+        <div id="s-title"><TitleSlide /></div>
+        <div id="s-ethics-wrap"><EthicsSlide /></div>
+        <div id="s-reading"><ReadingSlide /></div>
+
+        <StoryPart
+          id="s-part1" num={1} total={5}
+          title="Meeting at the Puddle"
+          image={IMG.girlsMeet}
+          imageCaption="Two friends, fresh from church, comparing their Easter finery."
+          paragraphs={[
+            "It was early Easter in the village; melting snow formed dirty water streams running down the street.",
+            "Two little girls, Akoulya (elder) and Malasha (younger), met near a large puddle between two farmyards.",
+            "Both girls were dressed in new festive frocks and red head-scarves after coming from church, and began showing off their fine clothes to each other.",
+          ]}
+          words={vocab.part1}
+        />
+
+        <StoryPart
+          id="s-part2" num={2} total={5}
+          title="The Accidental Splash"
+          image={IMG.splash}
+          imageCaption="One heavy step, and a spotless dress is ruined."
+          reverse
+          paragraphs={[
+            "Malasha wanted to wade into the puddle. Akoulya warned her to take off her shoes and stockings first to avoid a scolding.",
+            "As they stepped into the deep water, Akoulya cautioned Malasha to walk carefully without splashing.",
+            "However, Malasha accidentally plumped her foot down hard, splashing dirty mud directly onto Akoulya's new dress and face.",
+            "Enraged by her ruined dress, Akoulya chased a frightened Malasha to strike her.",
+          ]}
+          words={vocab.part2}
+        />
+
+        <StoryPart
+          id="s-part3" num={3} total={5}
+          title="Conflict Escalates Among Adults"
+          image={IMG.quarrel}
+          imageCaption="What began between two children spreads to an entire street."
+          paragraphs={[
+            "Akoulya's mother saw the stained dress, scolded her daughter, and struck Malasha on the neck when she blamed her.",
+            "Malasha cried loudly, bringing her mother out to angrily challenge Akoulya's mother.",
+            "The argument between the two women escalated into a loud, angry neighborhood quarrel.",
+            "Men joined in, shouting and shoving without listening, bringing the minor incident near physical blows.",
+          ]}
+          words={vocab.part3}
+        />
+
+        <StoryPart
+          id="s-part4" num={4} total={5}
+          title="Peacemaking &amp; Reconciliation"
+          image={IMG.digging}
+          imageCaption="While the crowd shouts, two children quietly dig a channel to the sea."
+          reverse
+          paragraphs={[
+            "Akoulya's grandmother stepped into the crowd, pleading for peace on a joyful Easter day, but the angry crowd ignored her.",
+            "While the adults continued shouting, Akoulya wiped the mud off her dress and began digging a channel with a stone to drain the puddle.",
+            "Malasha joined her with a wooden chip to help dig the channel.",
+            "Forgetting their conflict completely, both girls joyfully watched the water stream down the street together.",
+          ]}
+          words={vocab.part4}
+        />
+
+        <StoryPart
+          id="s-part5" num={5} total={5}
+          title="Adult Shame &amp; Resolution"
+          image={IMG.stream}
+          imageCaption="The little wooden chip that shamed a whole street of grown-ups."
+          paragraphs={[
+            "The water stream carried the wooden chip right toward the group of fighting men.",
+            "The two little girls ran alongside the stream, laughing happily and chasing their toy together.",
+            "Grandmother pointed out to the men that the children had already forgiven each other while the adults were still fighting.",
+            "Ashamed of their foolishness, the men laughed at themselves and peacefully returned to their homes.",
+          ]}
+          words={vocab.part5}
+        />
+
+        <div id="s-moral"><MoralSlide /></div>
+      </div>
+    </React.Fragment>
+  );
+}
+
+/* fix wrapper ids for ethics slide since it renders its own id internally */
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
