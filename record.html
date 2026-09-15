@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The World Record Show — Animated</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#120a1a;
+  --bg-mid:#241533;
+  --curtain:#3a2447;
+  --curtain-2:#1c1126;
+  --floor-a:#2c1a35;
+  --floor-b:#170e1f;
+  --gold:#e8b84b;
+  --gold-deep:#b98a2e;
+  --magenta:#d63872;
+  --magenta-deep:#a3275a;
+  --cream:#f4ecd8;
+  --ink:#241726;
+
+  --skin-1:#e3b78e;
+  --skin-1d:#c99569;
+  --skin-2:#d9a274;
+  --skin-2d:#b97f52;
+  --hair-m:#4a3222;
+  --daisy-hair:#5c3620;
+  --daisy-hair-d:#3f2413;
+  --daisy-dress:#7c8b78;
+  --daisy-dress-d:#5c6a58;
+  --daisy-sash:#c9852a;
+  --mabel-hair:#d9a94a;
+  --mabel-hair-d:#b3812c;
+  --mabel-blouse:#e2b23e;
+  --mabel-blouse-d:#b98a2e;
+  --mabel-sash:#a3275a;
+  --mabel-skirt:#4a2f3c;
+  --michael-suit:#4a2b5c;
+  --michael-suit-d:#37204a;
+  --bucket:#9aa0a6;
+  --bucket-d:#6d7278;
+  --bucket-hi:#c7ccd1;
+  --soup:#c8481f;
+  --soup-hi:#e8722e;
+  --wood:#8a5a30;
+  --wood-hi:#c98a4d;
+  --straw:#d9b45c;
+  --straw-d:#b3902f;
+  --man-shirt:#f2ede0;
+  --man-shorts:#a9c6d8;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(ellipse 70% 55% at 50% -10%, #2c1a40 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg-mid) 0%, var(--void) 65%, #0a0510 100%);
+  min-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:28px 14px;
+  font-family:'Karla',sans-serif;
+  color:var(--cream);
+}
+.show-wrap{ width:100%; max-width:980px; }
+
+.marquee{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:6px; padding:0 4px; }
+.marquee h1{
+  font-family:'Anton',sans-serif; letter-spacing:1px;
+  font-size:clamp(22px,4vw,34px); margin:0; color:var(--gold);
+  text-shadow:0 0 22px rgba(232,184,75,0.32);
+}
+.marquee .sub{ font-size:12.5px; color:#c9b8d6; font-style:italic; }
+
+.top-nav{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.nav-btn{
+  display:flex; align-items:center; gap:7px;
+  font-family:'Anton',sans-serif; letter-spacing:.5px; font-size:13px;
+  color:var(--cream);
+  background:linear-gradient(180deg,#3a2447,#2a1834);
+  border:1px solid rgba(255,255,255,0.09);
+  padding:9px 16px; border-radius:24px; cursor:pointer;
+  transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+  box-shadow:0 4px 14px rgba(0,0,0,0.3);
+}
+.nav-btn:hover{ transform:translateY(-2px); background:linear-gradient(180deg,#4a2f5c,#331f42); }
+.nav-btn:active{ transform:translateY(0) scale(.97); }
+.nav-btn.vocab-btn{ border-color:rgba(143,211,199,0.35); }
+.nav-btn.vocab-btn:hover{ box-shadow:0 6px 18px rgba(143,211,199,0.22); }
+.nav-btn.content-btn{ border-color:rgba(232,184,75,0.35); }
+.nav-btn.content-btn:hover{ box-shadow:0 6px 18px rgba(232,184,75,0.2); }
+
+.stage-frame{
+  position:relative; border-radius:16px; padding:10px;
+  background:linear-gradient(180deg,#3a2447,#1c1120);
+  box-shadow:0 20px 60px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+.stage{
+  position:relative; width:100%; aspect-ratio:1200/640; border-radius:9px;
+  overflow:hidden; cursor:pointer; user-select:none;
+  background:linear-gradient(180deg,var(--floor-b) 0%, var(--floor-a) 46%, #24153a 46%, #150c1e 100%);
+}
+.stage svg{ width:100%; height:100%; display:block; }
+
+.chyron{
+  position:absolute; top:12px; left:12px;
+  background:rgba(18,10,26,0.72); border-left:4px solid var(--magenta);
+  padding:5px 12px 5px 10px; border-radius:3px;
+  font-family:'Anton',sans-serif; letter-spacing:.5px; font-size:12.5px; color:var(--gold);
+  pointer-events:none; transition:opacity .3s ease;
+}
+.rec-dot{
+  position:absolute; top:14px; right:14px;
+  display:flex; align-items:center; gap:6px;
+  font-size:11px; color:#e8a9b8; letter-spacing:1px;
+  background:rgba(18,10,26,0.72); padding:4px 10px; border-radius:20px;
+  pointer-events:none;
+}
+.rec-dot i{ width:8px; height:8px; border-radius:50%; background:#e8425e; display:inline-block; animation:recBlink 1.4s infinite; }
+@keyframes recBlink{ 0%,55%{opacity:1} 56%,100%{opacity:.25} }
+
+.start-overlay{
+  position:absolute; inset:0; background:rgba(10,6,14,0.74);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:14px; text-align:center; padding:20px; z-index:30;
+  transition:opacity .5s ease;
+}
+.start-overlay.hidden{ opacity:0; pointer-events:none; }
+.start-overlay h2{ font-family:'Anton',sans-serif; font-size:clamp(20px,4vw,30px); color:var(--gold); margin:0; letter-spacing:1px; }
+.start-overlay p{ margin:0; color:#d8c7e0; font-size:13.5px; max-width:420px; }
+.start-btn{
+  font-family:'Anton',sans-serif; letter-spacing:1px; font-size:16px;
+  background:var(--magenta); color:#fff; border:none; padding:12px 28px;
+  border-radius:30px; cursor:pointer; box-shadow:0 8px 22px rgba(214,56,114,0.45);
+  transition:transform .15s ease;
+}
+.start-btn:hover{ transform:translateY(-2px) scale(1.03); }
+
+.char{ transition:opacity .5s ease; }
+.char.dimmed{ opacity:.42; }
+.char .eyebrow-shape{ transform-origin:center; transition:transform .18s ease; }
+.char .eye{ transform-origin:center; transition:transform .18s ease; }
+.mouth path, .mouth ellipse{ opacity:0; }
+.char.talking .m-open{ animation:flap .3s steps(1) infinite; }
+@keyframes flap{ 0%,100%{opacity:0} 50%{opacity:1} }
+.char.talking .headBob{ animation:bob .42s ease-in-out infinite alternate; }
+@keyframes bob{ from{transform:translateY(0)} to{transform:translateY(-2.5px)} }
+.cheek{ fill:#e8788a; opacity:.28; }
+.eye{ animation:blink 4.6s infinite; }
+@keyframes blink{ 0%,90%,100%{transform:scaleY(1)} 94%{transform:scaleY(.12)} }
+
+.expr-neutral .m-neutral{opacity:1}
+.expr-happy .m-happy{opacity:1}
+.expr-happy .eyebrow-shape{ transform:translateY(-2px); }
+.expr-firm .m-firm{opacity:1}
+.expr-firm .eyebrow-l{ transform:rotate(6deg); } .expr-firm .eyebrow-r{ transform:rotate(-6deg); }
+.expr-tired .m-neutral{opacity:1}
+.expr-tired .eyebrow-l{ transform:rotate(-10deg) translateY(1px); } .expr-tired .eyebrow-r{ transform:rotate(10deg) translateY(1px); }
+.expr-pain .m-pain{opacity:1}
+.expr-pain .eyebrow-l{ transform:rotate(-16deg) translateY(-2px); } .expr-pain .eyebrow-r{ transform:rotate(16deg) translateY(-2px); }
+.expr-worried .m-worried{opacity:1}
+.expr-worried .eyebrow-l{ transform:rotate(-11deg) translateY(-3px); } .expr-worried .eyebrow-r{ transform:rotate(11deg) translateY(-3px); }
+.expr-puzzled .m-tinyO{opacity:1}
+.expr-puzzled .eyebrow-l{ transform:translateY(-6px); } .expr-puzzled .eyebrow-r{ transform:rotate(-8deg); }
+.expr-shock .m-tinyO{opacity:1}
+.expr-shock .eye{ transform:scale(1.3); }
+.expr-shock .eyebrow-l{ transform:translateY(-7px) rotate(-8deg); } .expr-shock .eyebrow-r{ transform:translateY(-7px) rotate(8deg); }
+.expr-wince .m-firm{opacity:1}
+.expr-wince .eye{ transform:scaleY(.42); }
+.expr-wince .eyebrow-l{ transform:rotate(11deg) translateY(2px); } .expr-wince .eyebrow-r{ transform:rotate(-11deg) translateY(2px); }
+.expr-smirk .m-happy{opacity:1}
+.expr-smirk .eyebrow-r{ transform:translateY(-4px) rotate(-10deg); }
+
+.expr-terrified .m-tinyO{opacity:1}
+.expr-terrified .eye{ transform:scale(1.35); }
+.expr-terrified .eyebrow-l{ transform:translateY(-7px) rotate(-10deg); } .expr-terrified .eyebrow-r{ transform:translateY(-7px) rotate(10deg); }
+.expr-terrified .sweat-drop{ opacity:1; }
+
+/* ---------- Michael idle gesture ---------- */
+#char-michael .freeArm.do-gesture{ animation:gesture .8s ease-in-out; }
+@keyframes gesture{ 0%{transform:rotate(0)} 35%{transform:rotate(-44deg)} 70%{transform:rotate(-28deg)} 100%{transform:rotate(0)} }
+
+/* ---------- Albert balancing wobble + fall ---------- */
+#char-albert .balanceGrp{ transform-origin:0 0; animation:wobble 2.3s ease-in-out infinite; }
+@keyframes wobble{ 0%,100%{transform:rotate(-2.4deg)} 50%{transform:rotate(2.4deg)} }
+#char-albert.is-fallen .balanceGrp{ animation:none; }
+#char-albert.is-fallen{ transform:translate(360px,585px) rotate(74deg) !important; transition:transform 1s cubic-bezier(.55,-0.4,.6,1.25); }
+#char-albert.do-flinch{ animation:shake .5s ease-in-out; }
+@keyframes shake{ 0%,100%{transform:translate(0,0) rotate(0)} 20%{transform:translate(-4px,-3px) rotate(-2deg)} 40%{transform:translate(4px,-5px) rotate(2deg)} 60%{transform:translate(-3px,-2px) rotate(-1deg)} 80%{transform:translate(3px,-3px) rotate(1deg)} }
+#char-albert .bucketRim.is-tipped{ animation:bucketTip .9s ease-out forwards; }
+@keyframes bucketTip{ to{ transform:rotate(-70deg) translate(-16px,8px); } }
+.steamPuff{ animation:steamRise 2.3s ease-out infinite; transform-origin:0 0; }
+@keyframes steamRise{ 0%{transform:translateY(0) scale(1); opacity:.55} 100%{transform:translateY(-42px) scale(1.5); opacity:0} }
+
+/* ---------- Daisy: bucket-carry + real pour ---------- */
+#char-daisy{ transition:transform .9s cubic-bezier(.34,1.1,.64,1), opacity .5s ease; }
+#char-daisy.pos-off{ transform:translate(1320px,560px); opacity:0; }
+#char-daisy.pos-on{ transform:translate(560px,560px); opacity:1; }
+#char-daisy .leanGrp{ transform-origin:0px 0px; }
+#char-daisy.do-lean .leanGrp{ animation:daisyLean 2.6s ease-in-out; }
+@keyframes daisyLean{ 0%,100%{transform:rotate(0)} 45%{transform:rotate(6deg)} 65%{transform:rotate(6deg)} }
+#char-daisy .bucketArm{ transform-origin:24px -150px; }
+#char-daisy.do-pour .bucketArm{ animation:daisyPour 2.6s cubic-bezier(.36,.6,.3,1); }
+@keyframes daisyPour{
+  0%{ transform:rotate(6deg); }
+  28%{ transform:rotate(-58deg); }
+  46%{ transform:rotate(-112deg); }
+  70%{ transform:rotate(-112deg); }
+  100%{ transform:rotate(6deg); }
+}
+.pour-stream{ opacity:0; }
+.pour-stream.do-stream{ animation:streamShow 1.05s ease-in forwards; }
+@keyframes streamShow{ 0%{opacity:0} 12%{opacity:1} 82%{opacity:1} 100%{opacity:0} }
+.stream-flow{ stroke-dasharray:9 7; animation:flowDash .35s linear infinite; }
+@keyframes flowDash{ to{ stroke-dashoffset:-16; } }
+.pour-drop{ opacity:0; }
+.pour-stream.do-stream .pour-drop{ animation:dropFall .6s ease-in forwards; }
+@keyframes dropFall{ 0%{opacity:0; transform:translate(0,0);} 8%{opacity:1;} 100%{opacity:0; transform:translate(var(--ddx),var(--ddy));} }
+.impact-splash{ opacity:0; }
+.impact-splash.do-splash{ animation:splashBurst .6s ease-out forwards; }
+@keyframes splashBurst{ 0%{opacity:0; transform:scale(.3);} 25%{opacity:.95;} 100%{opacity:0; transform:scale(1.5) translateY(-14px);} }
+.impact-ripple{ opacity:0; transform-origin:center; }
+.impact-ripple.do-ripple{ animation:rippleGrow .7s ease-out forwards; }
+@keyframes rippleGrow{ 0%{opacity:.9; transform:scale(.3);} 100%{opacity:0; transform:scale(2.4);} }
+.extra-steam{ opacity:0; }
+.extra-steam.do-burst{ animation:steamBurst .9s ease-out forwards; }
+@keyframes steamBurst{ 0%{opacity:0; transform:translateY(0) scale(.6);} 30%{opacity:.85;} 100%{opacity:0; transform:translateY(-46px) scale(1.5);} }
+
+/* ---------- Mabel: broom lean + push ---------- */
+#char-mabel .leanGrp{ transform-origin:0 0; animation:mabelSway 4.2s ease-in-out infinite; }
+@keyframes mabelSway{ 0%,100%{transform:rotate(-1.4deg)} 50%{transform:rotate(2deg)} }
+#char-mabel.do-push .leanGrp{ animation:mabelPush .95s cubic-bezier(.32,.6,.3,1); }
+@keyframes mabelPush{
+  0%{transform:rotate(0) translate(0,0)}
+  28%{transform:rotate(-18deg) translate(-14px,-5px)}
+  48%{transform:rotate(-40deg) translate(-30px,4px)}
+  70%{transform:rotate(-30deg) translate(-22px,1px)}
+  100%{transform:rotate(0) translate(0,0)}
+}
+.broom-bristle{ stroke-linecap:round; }
+
+/* ---------- Trousers man ---------- */
+#char-man{ transition:transform .9s cubic-bezier(.34,1.1,.64,1), opacity .5s ease; }
+#char-man.pos-off{ transform:translate(760px,0); opacity:0; }
+#char-man.pos-on{ transform:translate(0,0); opacity:1; }
+#char-man .bendGrp{ transform-origin:0 -60px; animation:searchBend 1.7s ease-in-out infinite; }
+@keyframes searchBend{ 0%,100%{transform:rotate(0)} 50%{transform:rotate(14deg)} }
+
+/* ---------- comic burst / flash / shake ---------- */
+.comic-burst{
+  position:absolute; left:50%; top:40%; transform:translate(-50%,-50%) scale(.3) rotate(-8deg);
+  font-family:'Anton',sans-serif; font-size:64px; letter-spacing:1px;
+  color:#fff8e0; -webkit-text-stroke:3px var(--magenta-deep);
+  text-shadow:0 0 26px rgba(232,184,75,.8), 4px 4px 0 #7a1440;
+  opacity:0; pointer-events:none; z-index:25; white-space:nowrap;
+}
+.comic-burst.do-burst-text{ animation:burstText .85s cubic-bezier(.2,1.4,.4,1) forwards; }
+@keyframes burstText{
+  0%{opacity:0; transform:translate(-50%,-50%) scale(.2) rotate(-10deg);}
+  35%{opacity:1; transform:translate(-50%,-50%) scale(1.12) rotate(3deg);}
+  55%{opacity:1; transform:translate(-50%,-50%) scale(.96) rotate(-2deg);}
+  100%{opacity:0; transform:translate(-50%,-50%) scale(1.02) rotate(0);}
+}
+.flash-overlay{ position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:20; }
+.flash-overlay.do-flash{ animation:flashPop .35s ease-out; }
+@keyframes flashPop{ 0%{opacity:.7} 100%{opacity:0} }
+.stage.do-shake{ animation:stageShake .5s cubic-bezier(.36,.07,.19,.97); }
+@keyframes stageShake{
+  0%,100%{transform:translate(0,0)}
+  10%{transform:translate(-6px,3px) rotate(-.3deg)}
+  30%{transform:translate(5px,-3px) rotate(.3deg)}
+  50%{transform:translate(-4px,2px)}
+  70%{transform:translate(3px,-2px)}
+  90%{transform:translate(-1px,0)}
+}
+.floor-splat{ opacity:0; transform-origin:center; }
+.do-floorsplat .floor-splat{ animation:splatPop .9s cubic-bezier(.2,.9,.3,1) forwards; }
+@keyframes splatPop{ 0%{opacity:0; transform:scale(.1)} 30%{opacity:.9; transform:scale(1.15)} 100%{opacity:0; transform:scale(1.35)} }
+
+/* ---------- audience ---------- */
+.aud-fig{ transform-origin:center bottom; }
+#audience.clapping .aud-fig .arm-l{ animation:clapL .26s ease-in-out infinite; }
+#audience.clapping .aud-fig .arm-r{ animation:clapR .26s ease-in-out infinite; }
+@keyframes clapL{ 0%,100%{transform:rotate(0)} 50%{transform:rotate(24deg)} }
+@keyframes clapR{ 0%,100%{transform:rotate(0)} 50%{transform:rotate(-24deg)} }
+#audience.clapping .aud-fig{ animation:bodyBounce .26s ease-in-out infinite; }
+@keyframes bodyBounce{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+#audience.laughing .aud-fig{ animation:laughBody .32s ease-in-out infinite; }
+@keyframes laughBody{ 0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-2px) rotate(2.5deg)} }
+#audience.laughing .aud-fig .mouth-o{ opacity:1; }
+#audience.gasping .aud-fig .mouth-o{ opacity:1; }
+#audience.gasping .aud-fig{ animation:gaspLean .4s ease-out forwards; }
+@keyframes gaspLean{ 0%{transform:translateY(0)} 100%{transform:translateY(-6px)} }
+#audience.ovation .aud-fig{ animation:ovationJump .38s ease-in-out infinite; }
+@keyframes ovationJump{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+#audience.ovation .aud-fig .arm-l{ animation:ovL .38s ease-in-out infinite; }
+#audience.ovation .aud-fig .arm-r{ animation:ovR .38s ease-in-out infinite; }
+@keyframes ovL{ 0%,100%{transform:rotate(-18deg)} 50%{transform:rotate(-58deg)} }
+@keyframes ovR{ 0%,100%{transform:rotate(18deg)} 50%{transform:rotate(58deg)} }
+.aud-fig .mouth-o{ opacity:0; transition:opacity .15s ease; }
+
+/* ---------- confetti finale ---------- */
+.confetti-piece{ opacity:0; transform-origin:center; }
+#confettiGroup.do-confetti .confetti-piece{ animation:confettiFall 1.8s ease-in forwards; }
+@keyframes confettiFall{
+  0%{ opacity:0; transform:translate(0,0) rotate(0deg); }
+  8%{ opacity:1; }
+  100%{ opacity:0; transform:translate(var(--cx,0), 340px) rotate(var(--cr,360deg)); }
+}
+
+/* ---------- caption bar / controls ---------- */
+.caption-bar{
+  margin-top:10px; min-height:96px;
+  background:linear-gradient(180deg,#2a1a33,#1d1122);
+  border-radius:10px; padding:16px 20px;
+  display:flex; align-items:center; gap:16px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.06);
+}
+.speaker-tag{
+  flex:0 0 auto; font-family:'Anton',sans-serif; font-size:14px; letter-spacing:.5px;
+  padding:7px 15px; border-radius:6px; color:#1c1120;
+  display:flex; align-items:center; gap:6px; min-width:78px; justify-content:center;
+  transition:background .25s ease;
+}
+.caption-text{ font-size:20px; line-height:1.45; color:var(--cream); font-weight:500; }
+.caption-text.action{ font-style:italic; color:#d3c3e0; font-size:17px; font-weight:400; }
+@keyframes popIn{ from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:translateY(0)} }
+.caption-text.pop, .speaker-tag.pop{ animation:popIn .28s ease; }
+
+.controls{ margin-top:12px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.ctrl-left{ display:flex; gap:8px; align-items:center; }
+.ctrl-btn{
+  background:#3a2447; border:1px solid rgba(255,255,255,0.08); color:var(--cream);
+  font-family:'Karla',sans-serif; font-weight:700; font-size:13px;
+  padding:8px 14px; border-radius:24px; cursor:pointer;
+  transition:background .15s ease, transform .1s ease;
+}
+.ctrl-btn:hover{ background:#4a2f5c; }
+.ctrl-btn:active{ transform:scale(.96); }
+.ctrl-btn.primary{ background:var(--magenta); }
+.ctrl-btn.primary:hover{ background:#e14c82; }
+.ctrl-btn:disabled{ opacity:.35; cursor:default; }
+.progress-wrap{ display:flex; align-items:center; gap:8px; font-size:12px; color:#c9b8d6; }
+.progress-track{ width:120px; height:5px; background:#3a2447; border-radius:3px; overflow:hidden; }
+.progress-fill{ height:100%; background:var(--gold); width:0%; transition:width .25s ease; }
+.hint{ font-size:11.5px; color:#9c85ac; text-align:center; margin-top:8px; }
+
+.speed-group{ display:flex; align-items:center; gap:4px; background:var(--void); border-radius:24px; padding:3px; }
+.speed-btn{ background:transparent; border:none; color:#b8a6c6; font-family:'Karla',sans-serif; font-weight:700; font-size:12px; padding:6px 11px; border-radius:20px; cursor:pointer; transition:background .15s ease, color .15s ease; }
+.speed-btn:hover{ color:var(--cream); }
+.speed-btn.active{ background:var(--gold); color:#241130; }
+
+/* ---------- presentation overlays ---------- */
+.pres-overlay{
+  position:fixed; inset:0; background:rgba(10,6,14,0.82);
+  z-index:100; display:flex; align-items:center; justify-content:center;
+  padding:24px 16px; opacity:0; pointer-events:none; transition:opacity .3s ease;
+}
+.pres-overlay.open{ opacity:1; pointer-events:auto; }
+.pres-card{
+  width:100%; max-width:720px;
+  background:linear-gradient(180deg,#3a2447,#1c1120);
+  border-radius:18px; box-shadow:0 25px 70px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.06);
+  display:flex; flex-direction:column; max-height:88vh; overflow:hidden;
+}
+.pres-head{ display:flex; align-items:center; justify-content:space-between; padding:16px 22px; border-bottom:1px solid rgba(255,255,255,.08); background:rgba(20,10,26,.35); }
+.pres-head h3{ font-family:'Anton',sans-serif; letter-spacing:.5px; font-size:clamp(15px,3vw,20px); margin:0; color:var(--gold); }
+.pres-close{ background:rgba(255,255,255,.08); border:none; color:var(--cream); width:32px; height:32px; border-radius:50%; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s ease; }
+.pres-close:hover{ background:var(--magenta); }
+.pres-body{ flex:1; padding:30px 34px; overflow-y:auto; display:flex; align-items:center; }
+.pres-slide{ width:100%; }
+.slide-eyebrow{ font-weight:700; letter-spacing:1.5px; font-size:11px; color:var(--magenta); text-transform:uppercase; margin-bottom:10px; }
+.pres-slide h4{ font-family:'Anton',sans-serif; letter-spacing:.5px; font-size:clamp(21px,4vw,29px); margin:0 0 16px; color:var(--gold); text-shadow:0 0 16px rgba(232,184,75,.22); }
+.pres-slide ul{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:11px; }
+.pres-slide ul li{ display:flex; align-items:flex-start; gap:11px; font-size:15.5px; line-height:1.5; color:var(--cream); }
+.li-badge{ flex:0 0 auto; width:20px; height:20px; border-radius:50%; background:rgba(232,184,75,.16); border:1px solid rgba(232,184,75,.4); display:flex; align-items:center; justify-content:center; margin-top:1px; }
+.li-badge svg{ width:10px; height:10px; }
+.pres-slide .word-def{ font-size:18px; line-height:1.6; color:#e3d6ee; }
+.pres-slide .word-def strong{ color:var(--gold); }
+.pres-foot{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 22px; border-top:1px solid rgba(255,255,255,.08); background:rgba(20,10,26,.35); flex-wrap:wrap; }
+.pres-dots{ display:flex; gap:6px; flex-wrap:wrap; }
+.pres-dots .dot{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.18); cursor:pointer; transition:background .15s ease, transform .15s ease; }
+.pres-dots .dot.active{ background:var(--gold); transform:scale(1.25); }
+.pres-nav{ display:flex; gap:8px; }
+.pres-nav-btn{ background:#3a2447; border:1px solid rgba(255,255,255,.08); color:var(--cream); font-family:'Karla',sans-serif; font-weight:700; font-size:13px; padding:8px 16px; border-radius:22px; cursor:pointer; transition:background .15s ease; }
+.pres-nav-btn:hover{ background:#4a2f5c; }
+.pres-nav-btn:disabled{ opacity:.3; cursor:default; }
+.pres-count{ font-size:12px; color:#b8a6c6; }
+
+@media (max-width:640px){
+  .pres-body{ padding:22px 20px; }
+  .caption-bar{ flex-direction:column; align-items:flex-start; gap:6px; }
+  .progress-track{ width:80px; }
+}
+@media (prefers-reduced-motion: reduce){
+  .char, .eye, .aud-fig, .steamPuff, .leanGrp, .bucketArm{ animation:none !important; }
+}
+</style>
+</head>
+<body>
+<div class="show-wrap">
+  <div class="marquee">
+    <h1>THE WORLD RECORD SHOW</h1>
+    <div class="sub">an animated sketch</div>
+  </div>
+
+  <div class="top-nav">
+    <button class="nav-btn vocab-btn" id="vocabBtn"><span>📖</span> Vocabulary</button>
+    <button class="nav-btn content-btn" id="contentBtn"><span>📑</span> Content</button>
+  </div>
+
+  <div class="stage-frame">
+    <div class="stage" id="stage">
+      <div class="start-overlay" id="startOverlay">
+        <h2>THE WORLD RECORD SHOW</h2>
+        <p>Michael Moonshine hosts two contenders chasing world records — and one man who's lost his trousers.</p>
+        <button class="start-btn" id="startBtn">▶ Start the Show</button>
+      </div>
+
+      <div class="chyron" id="chyron">SCENE 1 · TV STUDIO · NIGHT</div>
+      <div class="rec-dot"><i></i>LIVE</div>
+      <div class="flash-overlay" id="flashOverlay"></div>
+      <div class="comic-burst" id="comicBurst">SPLASH!</div>
+
+      <svg viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <radialGradient id="spot1" cx="50%" cy="0%" r="75%">
+            <stop offset="0%" stop-color="#5a3d68" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#5a3d68" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="floorGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--floor-a)"/>
+            <stop offset="100%" stop-color="var(--floor-b)"/>
+          </linearGradient>
+          <radialGradient id="skinGradA" cx="38%" cy="32%" r="75%">
+            <stop offset="0%" stop-color="var(--skin-2)"/>
+            <stop offset="100%" stop-color="var(--skin-2d)"/>
+          </radialGradient>
+          <radialGradient id="skinGradB" cx="38%" cy="30%" r="78%">
+            <stop offset="0%" stop-color="var(--skin-1)"/>
+            <stop offset="100%" stop-color="var(--skin-1d)"/>
+          </radialGradient>
+          <linearGradient id="suitGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="var(--michael-suit)"/>
+            <stop offset="100%" stop-color="var(--michael-suit-d)"/>
+          </linearGradient>
+          <linearGradient id="daisyDressGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--daisy-dress)"/>
+            <stop offset="100%" stop-color="var(--daisy-dress-d)"/>
+          </linearGradient>
+          <linearGradient id="mabelBlouseGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--mabel-blouse)"/>
+            <stop offset="100%" stop-color="var(--mabel-blouse-d)"/>
+          </linearGradient>
+          <linearGradient id="hairGradDaisy" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--daisy-hair)"/>
+            <stop offset="100%" stop-color="var(--daisy-hair-d)"/>
+          </linearGradient>
+          <linearGradient id="hairGradMabel" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--mabel-hair)"/>
+            <stop offset="100%" stop-color="var(--mabel-hair-d)"/>
+          </linearGradient>
+          <linearGradient id="bucketGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="var(--bucket-hi)"/>
+            <stop offset="55%" stop-color="var(--bucket)"/>
+            <stop offset="100%" stop-color="var(--bucket-d)"/>
+          </linearGradient>
+          <radialGradient id="soupGrad" cx="45%" cy="35%" r="70%">
+            <stop offset="0%" stop-color="var(--soup-hi)"/>
+            <stop offset="100%" stop-color="var(--soup)"/>
+          </radialGradient>
+          <linearGradient id="woodGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="var(--wood-hi)"/>
+            <stop offset="100%" stop-color="var(--wood)"/>
+          </linearGradient>
+          <linearGradient id="strawGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--straw)"/>
+            <stop offset="100%" stop-color="var(--straw-d)"/>
+          </linearGradient>
+        </defs>
+
+        <!-- back wall + lights -->
+        <rect x="0" y="0" width="1200" height="330" fill="#20142a"/>
+        <rect x="0" y="0" width="1200" height="330" fill="url(#spot1)" opacity="0.55"/>
+        <g fill="#3a2447">
+          <rect x="90" y="18" width="34" height="14" rx="3"/>
+          <rect x="330" y="10" width="34" height="14" rx="3"/>
+          <rect x="590" y="16" width="34" height="14" rx="3"/>
+          <rect x="840" y="10" width="34" height="14" rx="3"/>
+          <rect x="1070" y="18" width="34" height="14" rx="3"/>
+        </g>
+        <g fill="url(#spot1)" opacity="0.8">
+          <polygon points="107,32 40,260 175,260"/>
+          <polygon points="347,24 270,260 425,260"/>
+          <polygon points="607,30 520,270 695,270"/>
+          <polygon points="857,24 770,260 945,260"/>
+          <polygon points="1087,32 1010,260 1165,260"/>
+        </g>
+
+        <g id="audience"></g>
+
+        <rect x="0" y="300" width="1200" height="30" fill="#170e1f"/>
+        <text x="20" y="322" font-family="Anton" font-size="13" fill="#5c4468" letter-spacing="2">WORLD RECORD SHOW</text>
+
+        <rect x="0" y="330" width="1200" height="310" fill="url(#floorGrad)"/>
+        <ellipse cx="600" cy="330" rx="640" ry="30" fill="#3a2447" opacity="0.5"/>
+
+        <g id="confettiGroup" transform="translate(600,80)"></g>
+
+        <g id="floorSplatGroup" transform="translate(400,588)">
+          <ellipse class="floor-splat" cx="0" cy="0" rx="70" ry="20" fill="var(--soup)" opacity="0.75"/>
+          <ellipse class="floor-splat" cx="-46" cy="-6" rx="16" ry="7" fill="var(--soup-hi)"/>
+          <ellipse class="floor-splat" cx="38" cy="8" rx="20" ry="8" fill="var(--soup-hi)"/>
+          <ellipse class="floor-splat" cx="4" cy="-16" rx="12" ry="6" fill="var(--soup)"/>
+          <circle class="floor-splat" cx="-70" cy="4" r="5" fill="var(--soup)"/>
+          <circle class="floor-splat" cx="66" cy="-8" r="6" fill="var(--soup-hi)"/>
+        </g>
+
+        <!-- =================== MICHAEL =================== -->
+        <g id="char-michael" class="char expr-neutral" transform="translate(150,560)">
+          <ellipse cx="0" cy="4" rx="46" ry="10" fill="#000" opacity="0.35"/>
+          <rect x="-21" y="-96" width="16" height="80" rx="7" fill="var(--michael-suit-d)"/>
+          <rect x="6" y="-96" width="16" height="80" rx="7" fill="var(--michael-suit-d)"/>
+          <ellipse cx="-14" cy="-6" rx="13" ry="7" fill="#171018"/>
+          <ellipse cx="14" cy="-6" rx="13" ry="7" fill="#171018"/>
+          <g class="freeArm" style="transform-origin:-30px -158px;">
+            <rect x="-46" y="-158" width="16" height="58" rx="8" fill="url(#suitGrad)"/>
+            <circle cx="-38" cy="-98" r="9" fill="url(#skinGradA)"/>
+          </g>
+          <path d="M -34 -95 Q -36 -180 0 -182 Q 36 -180 34 -95 Z" fill="url(#suitGrad)" stroke="rgba(18,8,22,0.3)" stroke-width="2"/>
+          <path d="M -9 -178 L 9 -178 L 6 -120 L 0 -110 L -6 -120 Z" fill="#d8c7ea"/>
+          <path d="M -4 -176 L 4 -176 L 6 -140 L 0 -128 L -6 -140 Z" fill="var(--magenta-deep)"/>
+          <circle cx="-21" cy="-150" r="5" fill="var(--gold)" stroke="rgba(18,8,22,0.3)"/>
+          <g style="transform-origin:30px -160px; transform:rotate(-18deg);">
+            <rect x="24" y="-198" width="14" height="46" rx="7" fill="url(#suitGrad)"/>
+            <circle cx="31" cy="-206" r="9" fill="url(#skinGradA)"/>
+          </g>
+          <rect x="26" y="-232" width="7" height="26" rx="3" fill="#555"/>
+          <circle cx="29.5" cy="-236" r="8" fill="#666" stroke="#333" stroke-width="1.5"/>
+          <g transform="translate(0,-205)">
+            <g class="headBob">
+              <!-- handsome swept hair with side part + sideburn -->
+              <path d="M -30 -6 Q -35 -36 -4 -37 Q 24 -38 31 -14 Q 33 -22 28 -30 Q 16 -40 -2 -39 Q -28 -37 -31 -12 Q -31 -22 -30 -6 Z" fill="var(--hair-m)"/>
+              <path d="M 22 -30 Q 30 -20 27 -6 Q 31 -14 30 -22 Q 27 -28 22 -30 Z" fill="#3a2718"/>
+              <circle cx="0" cy="0" r="30" fill="url(#skinGradA)" stroke="rgba(20,8,20,0.22)" stroke-width="1.6"/>
+              <path d="M -30 2 Q -32 -30 -3 -31 Q 26 -32 30 -8 Q 28 -20 12 -24 Q -4 -27 -18 -22 Q -28 -18 -30 2 Z" fill="var(--hair-m)"/>
+              <!-- jaw definition -->
+              <path d="M -22 12 Q -12 24 0 25 Q 12 24 22 12 Q 20 20 0 22 Q -20 20 -22 12 Z" fill="#c98a5c" opacity="0.3"/>
+              <!-- sideburn -->
+              <rect x="-27" y="-8" width="4" height="14" rx="2" fill="var(--hair-m)" opacity="0.85"/>
+              <rect x="23" y="-8" width="4" height="14" rx="2" fill="var(--hair-m)" opacity="0.85"/>
+              <ellipse class="cheek" cx="-17" cy="10" rx="4.6" ry="3"/>
+              <ellipse class="cheek" cx="17" cy="10" rx="4.6" ry="3"/>
+              <g class="eyes">
+                <ellipse class="eye eye-l" cx="-10" cy="-4" rx="3.6" ry="4.6" fill="#241726"/>
+                <ellipse class="eye eye-r" cx="10" cy="-4" rx="3.6" ry="4.6" fill="#241726"/>
+              </g>
+              <g class="brows">
+                <rect class="eyebrow-shape eyebrow-l" x="-17" y="-15.5" width="12" height="3" rx="1.5" fill="var(--hair-m)"/>
+                <rect class="eyebrow-shape eyebrow-r" x="5" y="-15.5" width="12" height="3" rx="1.5" fill="var(--hair-m)"/>
+              </g>
+              <!-- straight, defined nose line -->
+              <path d="M -1.5 -6 L -2.5 6 Q 0 8 2.5 6" stroke="#c98a5c" stroke-width="1.3" fill="none" opacity="0.55" stroke-linecap="round"/>
+              <g class="mouth" transform="translate(0,13)">
+                <path class="m-neutral" d="M -8 -1 Q 0 4 8 -1" stroke="#7a4030" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+                <path class="m-happy" d="M -9 -1 Q 0 8 9 -1" fill="#7a2f28"/>
+                <rect class="m-firm" x="-7" y="-1.5" width="14" height="3" rx="1.5" fill="#7a4030"/>
+                <ellipse class="m-tinyO" cx="0" cy="1" rx="3.6" ry="4.6" fill="#5c2320"/>
+                <ellipse class="m-pain" cx="0" cy="1" rx="6.5" ry="7.5" fill="#5c2320"/>
+                <ellipse class="m-worried" cx="0" cy="1" rx="6" ry="6.5" fill="#5c2320"/>
+                <ellipse class="m-open" cx="0" cy="1" rx="7" ry="7" fill="#5c2320"/>
+              </g>
+            </g>
+          </g>
+        </g>
+
+        <!-- =================== ALBERT (in bucket of soup) =================== -->
+        <g id="char-albert" class="char expr-terrified" transform="translate(430,560)">
+          <ellipse cx="0" cy="4" rx="52" ry="10" fill="#000" opacity="0.35"/>
+
+          <!-- support / raised leg for balance -->
+          <g class="balanceGrp">
+            <!-- bare support leg, dipped deep into the bucket, rolled trouser cuff at top -->
+            <rect x="-9" y="-70" width="14" height="52" rx="6" fill="url(#skinGradB)"/>
+            <rect x="-11" y="-72" width="18" height="9" rx="3" fill="#8f887a"/>
+            <g style="transform-origin:6px -68px; transform:rotate(30deg);">
+              <rect x="0" y="-68" width="13" height="42" rx="6" fill="#3c3a42"/>
+              <ellipse cx="6" cy="-68" rx="11" ry="7" fill="#241f20"/>
+            </g>
+
+            <!-- torso -->
+            <path d="M -26 -68 Q -28 -132 0 -134 Q 28 -132 26 -68 Z" fill="var(--daisy-dress)" opacity="0"/>
+            <path d="M -26 -68 Q -28 -132 0 -134 Q 28 -132 26 -68 Z" fill="#8f887a"/>
+            <g style="transform-origin:-26px -122px; transform:rotate(-18deg);">
+              <rect x="-42" y="-122" width="14" height="46" rx="7" fill="#8f887a"/>
+              <circle cx="-35" cy="-80" r="8.5" fill="url(#skinGradB)"/>
+            </g>
+            <g style="transform-origin:26px -122px; transform:rotate(16deg);">
+              <rect x="28" y="-122" width="14" height="46" rx="7" fill="#8f887a"/>
+              <circle cx="35" cy="-80" r="8.5" fill="url(#skinGradB)"/>
+            </g>
+
+            <g transform="translate(0,-164)">
+              <g class="headBob">
+                <g class="head">
+                  <circle cx="0" cy="0" r="29" fill="url(#skinGradB)"/>
+                  <path d="M -28 -4 Q -30 -26 0 -27 Q 30 -26 28 -4 Q 20 -18 0 -18 Q -20 -18 -28 -4 Z" fill="#a8a196"/>
+                  <g class="eyes">
+                    <ellipse class="eye eye-l" cx="-10" cy="-3" rx="3.4" ry="4.4" fill="#241726"/>
+                    <ellipse class="eye eye-r" cx="10" cy="-3" rx="3.4" ry="4.4" fill="#241726"/>
+                  </g>
+                  <g class="brows">
+                    <rect class="eyebrow-shape eyebrow-l" x="-17" y="-14" width="12" height="3.4" rx="1.7" fill="#8a8478"/>
+                    <rect class="eyebrow-shape eyebrow-r" x="5" y="-14" width="12" height="3.4" rx="1.7" fill="#8a8478"/>
+                  </g>
+                  <path class="sweat-drop" d="M 17 -14 Q 21 -10 17 -6 Q 13 -10 17 -14 Z" fill="#8fd3e8" opacity="0.85"/>
+                  <path class="sweat-drop" d="M -20 -2 Q -16 2 -20 6 Q -24 2 -20 -2 Z" fill="#8fd3e8" opacity="0.55"/>
+                  <g class="mouth" transform="translate(0,13)">
+                    <path class="m-neutral" d="M -7 0 Q 0 2 7 0" stroke="#6b3226" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+                    <path class="m-happy" d="M -8 -1 Q 0 7 8 -1" fill="#6b2b24"/>
+                    <rect class="m-firm" x="-7" y="-1.4" width="14" height="2.8" rx="1.4" fill="#6b3226"/>
+                    <ellipse class="m-tinyO" cx="0" cy="1" rx="3.4" ry="4.4" fill="#4a1f1c"/>
+                    <ellipse class="m-pain" cx="0" cy="1" rx="6" ry="8" fill="#4a1f1c"/>
+                    <ellipse class="m-worried" cx="0" cy="1" rx="6" ry="6.5" fill="#4a1f1c"/>
+                    <ellipse class="m-open" cx="0" cy="1" rx="6.5" ry="7" fill="#4a1f1c"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+
+          <!-- bucket at floor with soup, level raised so the leg is clearly submerged -->
+          <g class="bucketRim">
+            <path d="M -30 -6 L -24 -50 L 24 -50 L 30 -6 Z" fill="url(#bucketGrad)"/>
+            <path d="M -30 -6 L -24 -50 L -14 -50 L -19 -6 Z" fill="var(--bucket-d)"/>
+            <ellipse cx="0" cy="-50" rx="24" ry="7" fill="#a7acb2"/>
+            <!-- soup pool raised well above the rim so the leg visibly disappears into it -->
+            <path d="M -22 -55 Q 0 -46 22 -55 Q 0 -66 -22 -55 Z" fill="url(#soupGrad)"/>
+            <ellipse cx="0" cy="-56" rx="17" ry="5.5" fill="var(--soup-hi)"/>
+            <!-- soup clinging/wrapping the ankle for a "dipped in" look -->
+            <ellipse cx="0" cy="-58" rx="8" ry="10" fill="var(--soup)" opacity="0.8"/>
+            <ellipse cx="-1" cy="-60" rx="4.5" ry="6" fill="var(--soup-hi)" opacity="0.7"/>
+            <g fill="none" stroke="#e8dfe0" stroke-width="3" stroke-linecap="round">
+              <path class="steamPuff" style="animation-delay:0s" d="M -8 -63 Q -14 -73 -8 -81" opacity="0.5"/>
+              <path class="steamPuff" style="animation-delay:.7s" d="M 2 -63 Q 8 -75 2 -85" opacity="0.5"/>
+              <path class="steamPuff" style="animation-delay:1.4s" d="M 12 -63 Q 18 -72 12 -80" opacity="0.5"/>
+            </g>
+            <g class="extra-steam" id="albertBurst" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round">
+              <path d="M -12 -63 Q -20 -77 -10 -89"/>
+              <path d="M 0 -63 Q 8 -79 -2 -91"/>
+              <path d="M 12 -63 Q 20 -75 10 -87"/>
+            </g>
+          </g>
+        </g>
+
+        <!-- =================== LIQUID STREAM + SPLASH (Daisy → Albert) =================== -->
+        <g class="pour-stream" id="pourStream">
+          <path class="stream-flow" d="M 500 372 Q 460 428 438 505" stroke="var(--soup)" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.9"/>
+          <path class="stream-flow" d="M 500 372 Q 460 428 438 505" stroke="var(--soup-hi)" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <circle class="pour-drop" cx="486" cy="392" r="3.4" fill="var(--soup-hi)" style="--ddx:-10px;--ddy:34px;"/>
+          <circle class="pour-drop" cx="472" cy="416" r="3" fill="var(--soup)" style="--ddx:-8px;--ddy:30px; animation-delay:.08s"/>
+          <circle class="pour-drop" cx="458" cy="452" r="3.6" fill="var(--soup-hi)" style="--ddx:-6px;--ddy:26px; animation-delay:.16s"/>
+          <circle class="pour-drop" cx="446" cy="480" r="3" fill="var(--soup)" style="--ddx:-4px;--ddy:20px; animation-delay:.24s"/>
+        </g>
+        <g class="impact-ripple" id="impactRipple">
+          <ellipse cx="435" cy="509" rx="22" ry="6" fill="none" stroke="var(--soup-hi)" stroke-width="2.5"/>
+        </g>
+        <g class="impact-splash" id="impactSplash">
+          <circle cx="420" cy="500" r="3.4" fill="var(--soup-hi)"/>
+          <circle cx="450" cy="496" r="3" fill="var(--soup)"/>
+          <circle cx="434" cy="486" r="2.6" fill="var(--soup-hi)"/>
+          <circle cx="408" cy="508" r="2.4" fill="var(--soup)"/>
+          <circle cx="460" cy="508" r="2.8" fill="var(--soup-hi)"/>
+        </g>
+
+        <!-- =================== DAISY (bucket-carrying wife) =================== -->
+        <g id="char-daisy" class="char expr-happy pos-off" transform="translate(560,560)">
+          <g class="leanGrp">
+            <ellipse cx="0" cy="4" rx="40" ry="9" fill="#000" opacity="0.3"/>
+
+            <!-- skirt / legs -->
+            <path d="M -24 -88 L 24 -88 L 32 -4 Q 0 8 -32 -4 Z" fill="var(--daisy-dress-d)"/>
+            <path d="M -18 -88 L 18 -88 L 22 -20 Q 0 -10 -22 -20 Z" fill="url(#daisyDressGrad)"/>
+            <ellipse cx="-14" cy="-4" rx="10" ry="5.5" fill="#2a221c"/>
+            <ellipse cx="14" cy="-4" rx="10" ry="5.5" fill="#2a221c"/>
+
+            <!-- resting arm (left, hand on hip) -->
+            <path d="M -24 -132 Q -38 -122 -30 -104 L -20 -110 Q -26 -120 -18 -128 Z" fill="url(#daisyDressGrad)"/>
+
+            <!-- torso + sash -->
+            <path d="M -26 -86 Q -28 -152 0 -154 Q 28 -152 26 -86 Z" fill="url(#daisyDressGrad)"/>
+            <rect x="-27" y="-108" width="54" height="12" fill="var(--daisy-sash)" opacity="0.92"/>
+            <path d="M -8 -152 Q 0 -146 8 -152 L 6 -140 L -6 -140 Z" fill="#e7dfc9"/>
+
+            <!-- bucket-carrying arm (rotates for the pour) -->
+            <g class="bucketArm">
+              <rect x="17" y="-150" width="14" height="70" rx="7" fill="url(#daisyDressGrad)"/>
+              <circle cx="24" cy="-80" r="8.5" fill="url(#skinGradB)"/>
+              <!-- the bucket, always visible in hand -->
+              <g transform="translate(24,-52)">
+                <path d="M -17 -4 L -13 -36 L 13 -36 L 17 -4 Z" fill="url(#bucketGrad)"/>
+                <path d="M -17 -4 L -13 -36 L -6 -36 L -10 -4 Z" fill="var(--bucket-d)"/>
+                <ellipse cx="0" cy="-36" rx="13" ry="4.2" fill="#c7ccd1"/>
+                <path d="M -11 -37 Q 0 -32 11 -37 Q 0 -42 -11 -37 Z" fill="url(#soupGrad)"/>
+                <path d="M -10 -40 Q -16 -50 -6 -58 M 10 -40 Q 16 -50 6 -58" stroke="#7a7f85" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+                <g fill="none" stroke="#e8dfe0" stroke-width="2" stroke-linecap="round" opacity="0.55">
+                  <path d="M -3 -40 Q -7 -48 -3 -54"/>
+                  <path d="M 4 -40 Q 8 -47 4 -53"/>
+                </g>
+              </g>
+            </g>
+
+            <g transform="translate(-2,-172)">
+              <g class="headBob">
+                <g class="head">
+                  <path d="M -29 6 Q -32 -32 0 -34 Q 32 -32 29 6 Q 29 -14 12 -18 Q 22 -6 18 12 L 14 4 Q 16 -12 0 -14 Q -18 -12 -14 4 L -18 12 Q -22 -6 -12 -18 Q -28 -14 -29 6 Z" fill="url(#hairGradDaisy)"/>
+                  <circle cx="0" cy="2" r="27" fill="url(#skinGradB)"/>
+                  <path d="M -25 -2 Q -27 -22 0 -24 Q 27 -22 25 -2 Q 20 -12 0 -12 Q -20 -12 -25 -2 Z" fill="url(#hairGradDaisy)"/>
+                  <circle cx="-20" cy="-14" r="6.5" fill="var(--daisy-hair)"/>
+                  <path d="M 12 -30 Q 20 -34 18 -26 Q 24 -28 20 -20 Q 14 -22 12 -30 Z" fill="var(--daisy-sash)"/>
+                  <ellipse class="cheek" cx="-15" cy="10" rx="5" ry="3.3"/>
+                  <ellipse class="cheek" cx="15" cy="10" rx="5" ry="3.3"/>
+                  <g class="eyes">
+                    <ellipse class="eye eye-l" cx="-9" cy="-1" rx="3.3" ry="4.3" fill="#241726"/>
+                    <ellipse class="eye eye-r" cx="9" cy="-1" rx="3.3" ry="4.3" fill="#241726"/>
+                    <path d="M -13 -5 L -16 -8 M -9 -6 L -10 -9.5" stroke="#241726" stroke-width="1.1" stroke-linecap="round"/>
+                    <path d="M 13 -5 L 16 -8 M 9 -6 L 10 -9.5" stroke="#241726" stroke-width="1.1" stroke-linecap="round"/>
+                  </g>
+                  <g class="brows">
+                    <rect class="eyebrow-shape eyebrow-l" x="-15.5" y="-13" width="11" height="3.2" rx="1.6" fill="var(--daisy-hair)"/>
+                    <rect class="eyebrow-shape eyebrow-r" x="4.5" y="-13" width="11" height="3.2" rx="1.6" fill="var(--daisy-hair)"/>
+                  </g>
+                  <g class="mouth" transform="translate(0,12)">
+                    <path class="m-neutral" d="M -7 0 Q 0 2 7 0" stroke="#8a4038" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+                    <path class="m-happy" d="M -8 -1 Q 0 7 8 -1" fill="#8a352c"/>
+                    <rect class="m-firm" x="-6.5" y="-1.3" width="13" height="2.6" rx="1.3" fill="#8a4038"/>
+                    <ellipse class="m-tinyO" cx="0" cy="1" rx="3.2" ry="4.2" fill="#5c2320"/>
+                    <ellipse class="m-worried" cx="0" cy="1" rx="6" ry="6.2" fill="#5c2320"/>
+                    <path class="m-worried2" d="M -7 2 Q -3.5 -2 0 2 Q 3.5 -2 7 2" stroke="#8a4038" stroke-width="2" fill="none" opacity="0"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+
+        <!-- =================== MABEL (leaning on broom) =================== -->
+        <g id="char-mabel" class="char expr-happy" transform="translate(760,560)">
+          <g class="leanGrp">
+            <ellipse cx="0" cy="4" rx="42" ry="9" fill="#000" opacity="0.32"/>
+
+            <!-- realistic broom -->
+            <g transform="translate(26,-2)">
+              <rect x="-3.2" y="-122" width="6.4" height="118" rx="3" fill="url(#woodGrad)"/>
+              <rect x="-3.6" y="-38" width="7.2" height="9" rx="1.5" fill="#7a7f85"/>
+              <g class="broom-bristle" stroke-width="2.6">
+                <path d="M -1 -30 Q -13 -2 -17 18" stroke="url(#strawGrad)"/>
+                <path d="M 0.5 -30 Q -8 -2 -10 20" stroke="var(--straw)"/>
+                <path d="M 1.5 -30 Q -2 -2 -3 21" stroke="url(#strawGrad)"/>
+                <path d="M 2 -30 Q 3 -2 3 21" stroke="var(--straw)"/>
+                <path d="M 2.5 -30 Q 8 -2 10 20" stroke="url(#strawGrad)"/>
+                <path d="M 1 -30 Q 13 -2 17 18" stroke="var(--straw-d)"/>
+                <path d="M -1.5 -30 Q -10 -3 -13 19" stroke="var(--straw-d)"/>
+                <path d="M 1.8 -30 Q 10 -3 13 19" stroke="var(--straw)"/>
+              </g>
+              <path d="M -14 -6 L 14 -6 L 17 4 L -17 4 Z" fill="#8a6a3a" opacity="0.9"/>
+            </g>
+
+            <!-- legs -->
+            <path d="M -19 -90 L -5 -90 L -5 -18 Q -12 -8 -22 -16 Z" fill="var(--mabel-skirt)"/>
+            <path d="M 5 -90 L 19 -90 L 22 -16 Q 12 -8 5 -18 Z" fill="var(--mabel-skirt)"/>
+            <ellipse cx="-12" cy="-6" rx="11" ry="6" fill="#3a2c1c"/>
+            <ellipse cx="12" cy="-6" rx="11" ry="6" fill="#3a2c1c"/>
+
+            <!-- torso + waist sash -->
+            <path d="M -26 -90 Q -28 -156 0 -158 Q 28 -156 26 -90 Z" fill="url(#mabelBlouseGrad)"/>
+            <rect x="-27" y="-104" width="54" height="10" fill="var(--mabel-sash)" rx="2"/>
+            <path d="M -3 -155 Q 3 -150 9 -156 L 6 -146 L -3 -148 Z" fill="#fff6e0"/>
+
+            <!-- arm resting on broom handle -->
+            <rect x="16" y="-138" width="13" height="60" rx="6.5" fill="url(#mabelBlouseGrad)" style="transform:rotate(4deg); transform-origin:22px -138px;"/>
+            <circle cx="24" cy="-80" r="8" fill="url(#skinGradB)"/>
+            <!-- hand-on-hip arm -->
+            <path d="M -28 -120 Q -40 -112 -32 -96 L -22 -100 Q -28 -110 -20 -118 Z" fill="url(#mabelBlouseGrad)"/>
+
+            <g transform="translate(-2,-172)">
+              <g class="headBob">
+                <g class="head">
+                  <path d="M -30 6 Q -34 -30 0 -32 Q 34 -30 30 6 Q 30 -18 12 -22 Q 26 -8 20 12 L 14 4 Q 18 -14 0 -16 Q -18 -14 -14 4 L -20 12 Q -26 -8 -12 -22 Q -30 -18 -30 6 Z" fill="url(#hairGradMabel)"/>
+                  <circle cx="0" cy="0" r="27" fill="url(#skinGradB)"/>
+                  <path d="M -27 -2 Q -29 -24 0 -26 Q 29 -24 27 -2 Q 20 -14 0 -14 Q -20 -14 -27 -2 Z" fill="url(#hairGradMabel)"/>
+                  <ellipse cx="20" cy="-18" rx="9" ry="12" fill="url(#hairGradMabel)" transform="rotate(18 20 -18)"/>
+                  <path d="M 6 -30 Q 16 -36 13 -26 Q 21 -30 15 -20 Q 6 -22 6 -30 Z" fill="var(--mabel-sash)"/>
+                  <circle cx="15" cy="-25" r="2.6" fill="#e2b23e"/>
+                  <ellipse class="cheek" cx="-15" cy="8" rx="5" ry="3.3"/>
+                  <ellipse class="cheek" cx="15" cy="8" rx="5" ry="3.3"/>
+                  <g class="eyes">
+                    <ellipse class="eye eye-l" cx="-9" cy="-3" rx="3.3" ry="4.3" fill="#241726"/>
+                    <ellipse class="eye eye-r" cx="9" cy="-3" rx="3.3" ry="4.3" fill="#241726"/>
+                    <path d="M -13 -7 L -16.5 -10 M -9 -8 L -10 -11.5 M -5 -7.5 L -4.5 -11" stroke="#241726" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M 13 -7 L 16.5 -10 M 9 -8 L 10 -11.5 M 5 -7.5 L 4.5 -11" stroke="#241726" stroke-width="1" stroke-linecap="round"/>
+                  </g>
+                  <g class="brows">
+                    <rect class="eyebrow-shape eyebrow-l" x="-15.5" y="-15" width="11" height="3.1" rx="1.5" fill="#a3812f"/>
+                    <rect class="eyebrow-shape eyebrow-r" x="4.5" y="-15" width="11" height="3.1" rx="1.5" fill="#a3812f"/>
+                  </g>
+                  <g class="mouth" transform="translate(0,11)">
+                    <path class="m-neutral" d="M -7 0 Q 0 2 7 0" stroke="#8a4038" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+                    <path class="m-happy" d="M -8 -1 Q 0 7 8 -1" fill="#8a352c"/>
+                    <rect class="m-firm" x="-6.5" y="-1.3" width="13" height="2.6" rx="1.3" fill="#8a4038"/>
+                    <ellipse class="m-tinyO" cx="0" cy="1" rx="3.2" ry="4.2" fill="#5c2320"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+
+        <!-- =================== TROUSERS MAN =================== -->
+        <g id="char-man" class="char expr-worried pos-off" transform="translate(0,0)">
+          <g transform="translate(980,560)">
+            <ellipse cx="0" cy="4" rx="38" ry="9" fill="#000" opacity="0.3"/>
+            <rect x="-16" y="-70" width="13" height="58" rx="6" fill="url(#skinGradB)"/>
+            <rect x="4" y="-70" width="13" height="58" rx="6" fill="url(#skinGradB)"/>
+            <path d="M -18 -80 Q -20 -66 -16 -58 L 16 -58 Q 20 -66 18 -80 Q 8 -86 0 -86 Q -8 -86 -18 -80 Z" fill="var(--man-shorts)"/>
+            <!-- comedic polka-dot pattern on the shorts -->
+            <g fill="#f4ecd8" opacity="0.85">
+              <circle cx="-11" cy="-76" r="2"/>
+              <circle cx="-2" cy="-71" r="2"/>
+              <circle cx="7" cy="-77" r="2"/>
+              <circle cx="12" cy="-66" r="2"/>
+              <circle cx="-8" cy="-64" r="2"/>
+              <circle cx="1" cy="-62" r="2"/>
+            </g>
+            <ellipse cx="-10" cy="-6" rx="10" ry="6" fill="#2a221c"/>
+            <ellipse cx="10" cy="-6" rx="10" ry="6" fill="#2a221c"/>
+            <!-- one odd sock, for comic effect -->
+            <ellipse cx="10" cy="-14" rx="8" ry="5" fill="#d63872" opacity="0.85"/>
+            <g class="bendGrp">
+              <path d="M -25 -80 Q -27 -142 0 -144 Q 27 -142 25 -80 Z" fill="var(--man-shirt)"/>
+              <g style="transform-origin:-25px -124px; transform:rotate(38deg);">
+                <rect x="-40" y="-124" width="13" height="44" rx="6.5" fill="var(--man-shirt)"/>
+                <circle cx="-33" cy="-82" r="8" fill="url(#skinGradB)"/>
+              </g>
+              <rect x="26" y="-128" width="13" height="44" rx="6.5" fill="var(--man-shirt)" style="transform:rotate(-10deg); transform-origin:32px -128px;"/>
+              <circle cx="34" cy="-88" r="8" fill="url(#skinGradB)"/>
+              <g transform="translate(0,-160)">
+                <g class="headBob">
+                  <g class="head">
+                    <circle cx="0" cy="0" r="27" fill="url(#skinGradB)"/>
+                    <path d="M -26 -4 Q -28 -24 0 -25 Q 28 -24 26 -4 Q 18 -16 0 -16 Q -18 -16 -26 -4 Z" fill="#3a2a1c"/>
+                    <ellipse class="cheek" cx="-14" cy="9" rx="5" ry="3.2"/>
+                    <ellipse class="cheek" cx="14" cy="9" rx="5" ry="3.2"/>
+                    <g class="eyes">
+                      <ellipse class="eye eye-l" cx="-9" cy="-3" rx="3.2" ry="4.2" fill="#241726"/>
+                      <ellipse class="eye eye-r" cx="9" cy="-3" rx="3.2" ry="4.2" fill="#241726"/>
+                    </g>
+                    <g class="brows">
+                      <rect class="eyebrow-shape eyebrow-l" x="-15" y="-13" width="10.5" height="3.1" rx="1.5" fill="#3a2a1c"/>
+                      <rect class="eyebrow-shape eyebrow-r" x="4.5" y="-13" width="10.5" height="3.1" rx="1.5" fill="#3a2a1c"/>
+                    </g>
+                    <g class="mouth" transform="translate(0,12)">
+                      <path class="m-neutral" d="M -6.5 0 Q 0 2 6.5 0" stroke="#7a4030" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+                      <rect class="m-firm" x="-6" y="-1.3" width="12" height="2.6" rx="1.3" fill="#7a4030"/>
+                      <ellipse class="m-tinyO" cx="0" cy="1" rx="3" ry="4" fill="#5c2320"/>
+                      <ellipse class="m-worried" cx="0" cy="1" rx="5.5" ry="6.5" fill="#5c2320"/>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="caption-bar">
+      <div class="speaker-tag" id="speakerTag">MICHAEL</div>
+      <div class="caption-text" id="captionText">Tap Start to begin the show.</div>
+    </div>
+
+    <div class="controls">
+      <div class="ctrl-left">
+        <button class="ctrl-btn primary" id="playBtn">▶ Play</button>
+        <button class="ctrl-btn" id="prevBtn">⟵ Prev</button>
+        <button class="ctrl-btn" id="nextBtn">Next ⟶</button>
+        <button class="ctrl-btn" id="replayBtn" style="display:none;">↺ Replay</button>
+      </div>
+      <div class="speed-group" id="speedGroup">
+        <button class="speed-btn" data-speed="0.5">0.5×</button>
+        <button class="speed-btn active" data-speed="1">1×</button>
+        <button class="speed-btn" data-speed="1.5">1.5×</button>
+        <button class="speed-btn" data-speed="2">2×</button>
+      </div>
+      <div class="progress-wrap">
+        <span id="progressLabel">Line 0 / 0</span>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+    </div>
+    <div class="hint">Tap the stage to jump to the next line · use Play for hands-free autoplay · pick a speed anytime</div>
+  </div>
+</div>
+
+<div class="pres-overlay" id="vocabOverlay">
+  <div class="pres-card">
+    <div class="pres-head"><h3>📖 Key Vocabulary</h3><button class="pres-close" id="vocabClose">✕</button></div>
+    <div class="pres-body" id="vocabBody"></div>
+    <div class="pres-foot">
+      <div class="pres-dots" id="vocabDots"></div>
+      <div class="pres-nav">
+        <button class="pres-nav-btn" id="vocabPrev">⟵ Prev</button>
+        <span class="pres-count" id="vocabCount"></span>
+        <button class="pres-nav-btn" id="vocabNext">Next ⟶</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pres-overlay" id="contentOverlay">
+  <div class="pres-card">
+    <div class="pres-head"><h3>📑 Slide Content</h3><button class="pres-close" id="contentClose">✕</button></div>
+    <div class="pres-body" id="contentBody"></div>
+    <div class="pres-foot">
+      <div class="pres-dots" id="contentDots"></div>
+      <div class="pres-nav">
+        <button class="pres-nav-btn" id="contentPrev">⟵ Prev</button>
+        <span class="pres-count" id="contentCount"></span>
+        <button class="pres-nav-btn" id="contentNext">Next ⟶</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+const NAME_COLORS = { michael:'#e8b84b', albert:'#9fd3c7', daisy:'#f0c9a0', mabel:'#e0b23e', man:'#b9c9e0' };
+const NAMES = { michael:'MICHAEL', albert:'ALBERT', daisy:'DAISY', mabel:'MABEL', man:'MAN' };
+
+const SCENE_LABELS = {
+  1:'SCENE 1 · TV STUDIO · NIGHT',
+  2:'SCENE 2 · TV STUDIO · CONTINUOUS',
+  3:'SCENE 3 · TV STUDIO · CONTINUOUS',
+  4:'SCENE 4 · TV STUDIO · FINALE'
+};
+
+const T = [
+  {scene:1, kind:'action', text:"Wide shot: Michael Moonshine stands centre stage under bright lights, mic in hand. The studio audience buzzes with excitement.", focus:null},
+  {scene:1, kind:'line', speaker:'michael', expr:'happy', focus:'michael', actions:['gesture-michael'], text:"Good evening, and welcome back to the programme that gives ordinary people the chance to break a world record!"},
+  {scene:1, kind:'line', speaker:'michael', expr:'happy', focus:'michael', text:"Tonight we have two contenders in the studio, both mid-attempt right now. Let's go and meet the first one."},
+  {scene:1, kind:'action', focus:'albert', text:"Camera cuts to Albert Hargreaves, balancing on one leg, his other leg dipped deep in a bucket of steaming hot soup — and looking absolutely terrified about it."},
+  {scene:1, kind:'line', speaker:'michael', expr:'neutral', focus:'michael', text:"Tell me, sir — what is your name?"},
+  {scene:1, kind:'line', speaker:'albert', expr:'worried', focus:'albert', text:"Albert Hargreaves."},
+  {scene:1, kind:'line', speaker:'michael', expr:'happy', focus:'michael', text:"Albert Hargreaves. And what exactly are you doing?"},
+  {scene:1, kind:'line', speaker:'albert', expr:'terrified', focus:'albert', text:"I'm standing on one leg, with the other one dipped in a bucket of hot soup."},
+  {scene:1, kind:'line', speaker:'michael', expr:'happy', focus:'michael', actions:['clap'], text:"Ladies and gentlemen — he's standing on one leg, with the other dipped in a bucket of hot soup!"},
+  {scene:1, kind:'action', focus:null, actions:['clap'], text:"The audience applauds. Michael beams — delighted with the spectacle."},
+  {scene:1, kind:'line', speaker:'michael', expr:'happy', focus:'michael', text:"Albert, how long have you been standing there?"},
+  {scene:1, kind:'line', speaker:'albert', expr:'tired', focus:'albert', text:"Six hours and fifty-eight minutes, Michael."},
+  {scene:1, kind:'line', speaker:'michael', expr:'happy', focus:'michael', text:"And what's the world record for standing on one leg in a bucket of hot soup?"},
+  {scene:1, kind:'line', speaker:'albert', expr:'firm', focus:'albert', text:"Seven hours and three minutes."},
+  {scene:1, kind:'line', speaker:'michael', expr:'happy', focus:'michael', text:"Seven hours, three minutes! Only five minutes to go, Albert!"},
+  {scene:1, kind:'action', focus:null, actions:['clap'], text:"Enthusiastic applause."},
+
+  {scene:2, kind:'action', focus:'daisy', actions:['daisy-enter'], text:"Daisy Hargreaves enters, carrying a fresh bucket of soup for her husband."},
+  {scene:2, kind:'line', speaker:'daisy', expr:'happy', focus:'daisy', text:"Here you are, love — piping hot, just how you like it."},
+  {scene:2, kind:'action', focus:'albert', actions:['daisy-pour'], text:"Daisy lifts her bucket, tips it right over, and pours a real, sizzling stream of soup straight into Albert's bucket."},
+  {scene:2, kind:'line', speaker:'albert', expr:'terrified', focus:'albert', actions:['albert-flinch'], text:"Aaaargh!"},
+  {scene:2, kind:'line', speaker:'michael', expr:'happy', focus:'michael', text:"Well, I'm very glad it's your leg in that soup, Albert, and not mine."},
+  {scene:2, kind:'action', focus:null, actions:['laugh'], text:"Audience laughter. Michael is thoroughly enjoying himself."},
+  {scene:2, kind:'line', speaker:'michael', expr:'happy', focus:'michael', text:"Now, we have another contender in the studio tonight — a very determined young lady. Can you tell the viewers your name?"},
+  {scene:2, kind:'action', focus:'mabel', text:"Camera pans to Mabel Phillips, leaning gracefully on a broom."},
+  {scene:2, kind:'line', speaker:'mabel', expr:'happy', focus:'mabel', text:"Mabel Phillips."},
+  {scene:2, kind:'line', speaker:'michael', expr:'happy', focus:'michael', text:"Mabel Phillips. And what are you attempting tonight?"},
+  {scene:2, kind:'line', speaker:'mabel', expr:'happy', focus:'mabel', text:"I'm leaning on this broom — trying to break the world record for the longest lean."},
+  {scene:2, kind:'line', speaker:'michael', expr:'happy', focus:'michael', actions:['clap'], text:"Leaning on a broom, ladies and gentlemen! I can't say I blame her."},
+  {scene:2, kind:'action', focus:null, actions:['laugh','clap'], text:"Audience laughs and applauds."},
+  {scene:2, kind:'line', speaker:'michael', expr:'happy', focus:'michael', text:"Albert's had a top-up, so he's back to six hours and fifty-nine minutes. Just one to go! Mabel, meanwhile, has quite a way to run."},
+
+  {scene:3, kind:'action', focus:'man', actions:['man-enter'], text:"A man wanders onto the set in a shirt but no trousers — polka-dot boxers, one loudly mismatched sock, and a face full of panic — searching the floor anxiously."},
+  {scene:3, kind:'line', speaker:'michael', expr:'puzzled', focus:'michael', text:"And here's another gentleman joining us — though he doesn't appear to have any trousers on."},
+  {scene:3, kind:'action', focus:null, actions:['laugh'], text:"Audience giggles."},
+  {scene:3, kind:'line', speaker:'michael', expr:'happy', focus:'michael', text:"Now, sir — what exactly are you doing?"},
+  {scene:3, kind:'line', speaker:'man', expr:'worried', focus:'man', text:"I'm looking for my trousers."},
+  {scene:3, kind:'line', speaker:'michael', expr:'neutral', focus:'michael', text:"I see that. And how long have you been searching?"},
+  {scene:3, kind:'line', speaker:'man', expr:'worried', focus:'man', text:"About five minutes. Though it feels like a lifetime, live on television."},
+  {scene:3, kind:'line', speaker:'michael', expr:'neutral', focus:'michael', text:"And what's the world record for looking for trousers?"},
+  {scene:3, kind:'line', speaker:'man', expr:'puzzled', focus:'man', text:"...Pardon?"},
+  {scene:3, kind:'line', speaker:'man', expr:'worried', focus:'man', text:"I'm not trying to break a record. I took them off for a bath, and when I got out, they were simply gone."},
+  {scene:3, kind:'line', speaker:'michael', expr:'firm', focus:'michael', text:"I see. Well, get out of shot, please — we're on television! ...That's quite enough nonsense for one evening."},
+  {scene:3, kind:'action', focus:null, actions:['laugh','man-exit'], text:"The audience laughs as the man shuffles off backwards, still searching, one sock flapping."},
+
+  {scene:4, kind:'line', speaker:'michael', expr:'happy', focus:'michael', text:"Apologies for that, everyone. Back to Albert — one minute left on the clock!"},
+  {scene:4, kind:'action', focus:'daisy', actions:['daisy-enter'], text:"Daisy returns with one last bucket of soup for the final stretch."},
+  {scene:4, kind:'line', speaker:'daisy', expr:'happy', focus:'daisy', text:"Last top-up, love — make it count!"},
+  {scene:4, kind:'action', focus:'albert', actions:['daisy-pour'], text:"Daisy pours the final, sizzling bucketful in — right over the submerged leg."},
+  {scene:4, kind:'line', speaker:'albert', expr:'terrified', focus:'albert', actions:['albert-flinch'], text:"Scorching!"},
+  {scene:4, kind:'line', speaker:'michael', expr:'happy', focus:'michael', text:"Ten seconds to the record, Albert. Ten, nine, eight, seven..."},
+  {scene:4, kind:'action', focus:'mabel', actions:['mabel-push'], text:"Mabel shifts her weight and her broom swings gently — straight into Albert's bucket."},
+  {scene:4, kind:'line', speaker:'mabel', expr:'smirk', focus:'mabel', text:"Oh — congratulations, Albert!"},
+  {scene:4, kind:'line', speaker:'albert', expr:'shock', focus:'albert', text:"Aaaargh!"},
+  {scene:4, kind:'action', focus:'albert', actions:['albert-fall'], text:"Albert loses his balance and crashes to the studio floor, bucket and all."},
+  {scene:4, kind:'line', speaker:'michael', expr:'wince', focus:'michael', text:"Well, ladies and gentlemen — Albert Hargreaves hasn't broken a world record tonight. But he has broken... his leg!"},
+  {scene:4, kind:'action', focus:null, actions:['ovation-confetti'], text:"The audience rises for a rousing ovation as confetti rains down on the studio. That's a wrap on tonight's World Record Show!"}
+];
+
+const audienceEl = document.getElementById('audience');
+const AUD_SKIN = ['#e0b48c','#d9a274','#c98a5c','#f0c9a0','#b97a52'];
+const AUD_SHIRT = ['#caa6d8','#a6c8d8','#d8b6a6','#c9d8a6','#d8a6b8','#a6d8c4','#d8cba6','#b6a6d8','#e0a9c9','#9fd3c7'];
+let audSvg = '';
+const rows = [{y:158,count:11,scale:0.86,xStart:70,xStep:98},{y:198,count:10,scale:1.0,xStart:110,xStep:98}];
+let fi = 0;
+rows.forEach(row=>{
+  for(let i=0;i<row.count;i++){
+    const x = row.xStart + i*row.xStep, y = row.y, s = row.scale;
+    const shirt = AUD_SHIRT[fi % AUD_SHIRT.length], skin = AUD_SKIN[fi % AUD_SKIN.length];
+    const delay = (fi*0.045).toFixed(2);
+    audSvg += `<g class="aud-fig" transform="translate(${x},${y}) scale(${s})" style="animation-delay:${delay}s">
+      <ellipse cx="0" cy="20" rx="15" ry="17" fill="${shirt}" opacity="0.92"/>
+      <g class="arm arm-l" style="transform-origin:-11px 10px; transform:rotate(-18deg); animation-delay:${delay}s">
+        <rect x="-15" y="6" width="7" height="20" rx="3.5" fill="${shirt}"/><circle cx="-11.5" cy="27" r="4.2" fill="${skin}"/>
+      </g>
+      <g class="arm arm-r" style="transform-origin:11px 10px; transform:rotate(18deg); animation-delay:${delay}s">
+        <rect x="8" y="6" width="7" height="20" rx="3.5" fill="${shirt}"/><circle cx="11.5" cy="27" r="4.2" fill="${skin}"/>
+      </g>
+      <circle class="head" cx="0" cy="0" r="11" fill="${skin}" style="animation-delay:${delay}s"/>
+      <ellipse class="mouth-o" cx="0" cy="3.4" rx="3.4" ry="4.2" fill="#3a1c22"/>
+    </g>`;
+    fi++;
+  }
+});
+audienceEl.innerHTML = audSvg;
+
+/* confetti pieces for the finale */
+const confettiEl = document.getElementById('confettiGroup');
+const CONFETTI_COLORS = ['#e8b84b','#d63872','#8fd3c7','#f4ecd8','#c98a5c','#a6d8c4'];
+let cSvg = '';
+for(let i=0;i<26;i++){
+  const x = (Math.random()*760)-380;
+  const cx = (Math.random()*80)-40;
+  const cr = 300 + Math.round(Math.random()*400);
+  const delay = (Math.random()*0.5).toFixed(2);
+  const color = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+  const shape = i % 2 === 0
+    ? `<rect x="-4" y="-6" width="8" height="12" fill="${color}"/>`
+    : `<circle r="4.5" fill="${color}"/>`;
+  cSvg += `<g class="confetti-piece" style="animation-delay:${delay}s; --cx:${cx}px; --cr:${cr}deg;" transform="translate(${x},0)">${shape}</g>`;
+}
+confettiEl.innerHTML = cSvg;
+
+const chars = {
+  michael: document.getElementById('char-michael'),
+  albert: document.getElementById('char-albert'),
+  daisy: document.getElementById('char-daisy'),
+  mabel: document.getElementById('char-mabel'),
+  man: document.getElementById('char-man')
+};
+const EXPR_CLASSES = ['expr-neutral','expr-happy','expr-firm','expr-tired','expr-pain','expr-worried','expr-puzzled','expr-shock','expr-wince','expr-smirk','expr-terrified'];
+
+const stage = document.getElementById('stage');
+const chyron = document.getElementById('chyron');
+const captionText = document.getElementById('captionText');
+const speakerTag = document.getElementById('speakerTag');
+const playBtn = document.getElementById('playBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const replayBtn = document.getElementById('replayBtn');
+const progressLabel = document.getElementById('progressLabel');
+const progressFill = document.getElementById('progressFill');
+const startOverlay = document.getElementById('startOverlay');
+const startBtn = document.getElementById('startBtn');
+const speedGroup = document.getElementById('speedGroup');
+const comicBurst = document.getElementById('comicBurst');
+const flashOverlay = document.getElementById('flashOverlay');
+const audienceEl2 = document.getElementById('audience');
+const confettiEl2 = document.getElementById('confettiGroup');
+
+let idx=-1, playing=false, timer=null, currentFocus=null, started=false, speed=1;
+
+function burstText(text, ms){
+  comicBurst.textContent = text;
+  comicBurst.classList.remove('do-burst-text');
+  void comicBurst.offsetWidth;
+  comicBurst.classList.add('do-burst-text');
+  setTimeout(()=>comicBurst.classList.remove('do-burst-text'), ms);
+}
+
+speedGroup.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.speed-btn');
+  if(!btn) return;
+  speed = parseFloat(btn.dataset.speed);
+  speedGroup.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(playing) scheduleNext();
+});
+
+function setExpr(id, expr){
+  const el = chars[id];
+  if(!el || !expr) return;
+  EXPR_CLASSES.forEach(c=>el.classList.remove(c));
+  el.classList.add('expr-'+expr);
+}
+function setTalking(speakerId){
+  Object.keys(chars).forEach(k=>chars[k].classList.remove('talking'));
+  if(speakerId && chars[speakerId]) chars[speakerId].classList.add('talking');
+}
+function setFocus(target){
+  if(target) currentFocus = target;
+  if(!currentFocus){ Object.keys(chars).forEach(k=>chars[k].classList.remove('dimmed')); return; }
+  Object.keys(chars).forEach(k=>{
+    if(k===currentFocus) chars[k].classList.remove('dimmed'); else chars[k].classList.add('dimmed');
+  });
+}
+function fire(cls, selector, ms){
+  const el = typeof selector==='string' ? document.querySelector(selector) : selector;
+  if(!el) return;
+  el.classList.add(cls);
+  setTimeout(()=>el.classList.remove(cls), ms);
+}
+
+function runActions(list){
+  if(!list) return;
+  list.forEach(a=>{
+    switch(a){
+      case 'gesture-michael': fire('do-gesture','#char-michael .freeArm',800); break;
+      case 'clap': audienceEl2.classList.add('clapping'); setTimeout(()=>audienceEl2.classList.remove('clapping'),1300); break;
+      case 'laugh': audienceEl2.classList.add('laughing'); setTimeout(()=>audienceEl2.classList.remove('laughing'),1200); break;
+      case 'daisy-enter':
+        chars.daisy.classList.remove('pos-off'); chars.daisy.classList.add('pos-on','do-lean');
+        setTimeout(()=>chars.daisy.classList.remove('do-lean'), Math.round(2700/speed));
+        break;
+      case 'daisy-pour':
+        fire('do-pour','#char-daisy', 2700);
+        setTimeout(()=>{
+          fire('do-stream','#pourStream', 1100);
+          fire('do-splash','#impactSplash', 650);
+          fire('do-ripple','#impactRipple', 750);
+          fire('do-burst','#albertBurst', 900);
+          fire('do-flash','#flashOverlay', 300);
+        }, Math.round(1050/speed));
+        break;
+      case 'albert-flinch': fire('do-flinch','#char-albert', 500); break;
+      case 'mabel-push':
+        fire('do-push','#char-mabel', 1000);
+        setTimeout(()=>{ fire('do-flash','#flashOverlay', 250); }, Math.round(480/speed));
+        break;
+      case 'man-enter':
+        chars.man.classList.remove('pos-off'); chars.man.classList.add('pos-on');
+        break;
+      case 'man-exit':
+        chars.man.classList.remove('pos-on'); chars.man.classList.add('pos-off');
+        break;
+      case 'albert-fall':
+        audienceEl2.classList.remove('clapping','laughing','ovation');
+        audienceEl2.classList.add('gasping');
+        setTimeout(()=>{
+          chars.albert.classList.add('is-fallen');
+          fire('do-tipped','#char-albert .bucketRim', 900);
+          document.querySelector('#char-albert .bucketRim').classList.add('is-tipped');
+          fire('do-shake', stage, 500);
+          fire('do-flash','#flashOverlay', 350);
+          fire('do-floorsplat','#floorSplatGroup', 900);
+          burstText('CRASH!', 900);
+        }, Math.round(260/speed));
+        setTimeout(()=>{
+          audienceEl2.classList.remove('gasping');
+          audienceEl2.classList.add('ovation');
+          setTimeout(()=>audienceEl2.classList.remove('ovation'), 2600);
+        }, Math.round(700/speed));
+        break;
+      case 'ovation-confetti':
+        audienceEl2.classList.remove('gasping');
+        audienceEl2.classList.add('ovation');
+        fire('do-confetti', confettiEl2, 2000);
+        burstText("THAT'S A WRAP!", 1000);
+        break;
+    }
+  });
+}
+
+function durationFor(step){
+  const len = (step.text||'').length;
+  const base = Math.min(6200, Math.max(1900, len*42));
+  return Math.round(base/speed);
+}
+
+function render(step, isNew){
+  const label = SCENE_LABELS[step.scene] || '';
+  if(chyron.textContent !== label) chyron.textContent = label;
+  setFocus(step.focus);
+  if(step.kind==='line' && step.speaker){ setExpr(step.speaker, step.expr||'neutral'); setTalking(step.speaker); }
+  else setTalking(null);
+
+  captionText.classList.remove('pop'); speakerTag.classList.remove('pop');
+  void captionText.offsetWidth;
+  captionText.textContent = step.text;
+  captionText.classList.toggle('action', step.kind==='action');
+  captionText.classList.add('pop');
+
+  if(step.kind==='line' && step.speaker){
+    speakerTag.style.display='flex';
+    speakerTag.textContent = NAMES[step.speaker];
+    speakerTag.style.background = NAME_COLORS[step.speaker];
+    speakerTag.classList.add('pop');
+  } else { speakerTag.style.display='none'; }
+
+  if(isNew) runActions(step.actions);
+
+  progressLabel.textContent = `Line ${idx+1} / ${T.length}`;
+  progressFill.style.width = (((idx+1)/T.length)*100).toFixed(1)+'%';
+  prevBtn.disabled = idx<=0;
+  if(idx >= T.length-1){ nextBtn.disabled = true; replayBtn.style.display='inline-block'; pause(); }
+  else { nextBtn.disabled = false; replayBtn.style.display='none'; }
+}
+
+function goTo(i, isNew){ if(i<0 || i>=T.length) return; idx=i; render(T[idx], isNew!==false); }
+function scheduleNext(){
+  clearTimeout(timer);
+  if(!playing) return;
+  const step=T[idx];
+  timer=setTimeout(()=>{
+    if(idx<T.length-1){ goTo(idx+1,true); scheduleNext(); } else pause();
+  }, durationFor(step));
+}
+function play(){ if(idx>=T.length-1) return; playing=true; playBtn.textContent='⏸ Pause'; scheduleNext(); }
+function pause(){ playing=false; playBtn.textContent='▶ Play'; clearTimeout(timer); }
+
+playBtn.addEventListener('click', ()=>{ if(!started){ beginShow(); return; } if(playing) pause(); else play(); });
+prevBtn.addEventListener('click', ()=>{ pause(); if(idx>0) goTo(idx-1,false); });
+nextBtn.addEventListener('click', ()=>{ pause(); if(idx<T.length-1) goTo(idx+1,true); });
+replayBtn.addEventListener('click', ()=>{
+  chars.albert.classList.remove('is-fallen');
+  document.querySelector('#char-albert .bucketRim').classList.remove('is-tipped');
+  chars.daisy.classList.remove('pos-on'); chars.daisy.classList.add('pos-off');
+  chars.man.classList.remove('pos-on'); chars.man.classList.add('pos-off');
+  audienceEl2.classList.remove('clapping','laughing','gasping','ovation');
+  confettiEl2.classList.remove('do-confetti');
+  document.getElementById('floorSplatGroup').classList.remove('do-floorsplat');
+  comicBurst.classList.remove('do-burst-text');
+  idx=-1; goTo(0,true); play();
+});
+stage.addEventListener('click', (e)=>{
+  if(!started) return;
+  if(e.target.closest('.start-overlay')) return;
+  pause();
+  if(idx<T.length-1) goTo(idx+1,true);
+});
+function beginShow(){ started=true; startOverlay.classList.add('hidden'); goTo(0,true); play(); }
+startBtn.addEventListener('click', beginShow);
+progressLabel.textContent = `Line 0 / ${T.length}`;
+
+/* ================= VOCAB + CONTENT PRESENTERS ================= */
+const VOCAB = [
+  {word:'Contender', def:'A person who competes or takes part in a challenge or competition.'},
+  {word:'Sizzling', def:'Extremely hot, often making a hissing sound.'},
+  {word:'Balancing', def:'Keeping steady and not falling over, especially on one point of support.'},
+  {word:'Scorching', def:'Burning hot; causing a stinging, burning sensation.'},
+  {word:'Nonsense', def:'Words, ideas, or behaviour that have no sense or logical meaning.'},
+  {word:'Ovation', def:'An enthusiastic round of applause from an audience.'}
+];
+const CONTENT = [
+  {eyebrow:'Slide 1', title:'Title & Setting', items:[
+    'Title: The World Record Show',
+    'Setting: A lively live TV studio, hosted by Michael Moonshine',
+    'Theme: Ordinary people attempting unusual world records, live on air'
+  ]},
+  {eyebrow:'Slide 2', title:'Main Characters', items:[
+    'Michael Moonshine — the TV host and presenter',
+    "Albert Hargreaves — standing on one leg in a bucket of hot soup",
+    "Daisy Hargreaves — Albert's wife, topping up the soup",
+    'Mabel Phillips — attempting the longest lean on a broom',
+    'The Trousers Man — wanders on set searching for his missing trousers'
+  ]},
+  {eyebrow:'Slide 3', title:"Albert's Challenge", items:[
+    'Goal: stand on one leg in a bucket of hot soup longer than anyone before',
+    'Record to beat: 7 hours and 3 minutes',
+    "Daisy keeps the soup topped up — and scorching hot",
+    'Tension builds as Albert closes in on the record'
+  ]},
+  {eyebrow:'Slide 4', title:'Comic Interruptions', items:[
+    'Mabel Phillips — leaning on a broom to break a very silly record',
+    'A man wanders on set with no trousers, searching the floor',
+    "He isn't chasing a record at all — he just lost them in the bath",
+    "Michael dismisses him as live-broadcast 'nonsense'"
+  ]},
+  {eyebrow:'Slide 5', title:'The Climax', items:[
+    'Ten seconds from the record, Albert is almost there',
+    "Mabel's broom nudges his bucket at just the wrong moment",
+    'Albert loses his balance and crashes to the floor',
+    "Michael's closing line: he didn't break the record — he broke his leg"
+  ]},
+  {eyebrow:'Slide 6', title:'Why It Works', items:[
+    'Genre: absurdist, slapstick comedy sketch',
+    'Humour style: misunderstanding, physical comedy, and irony',
+    'Big idea: the strange lengths people will go to for a moment of fame'
+  ]}
+];
+
+function makePresenter(cfg){
+  let i=0;
+  const overlay=document.getElementById(cfg.overlayId), body=document.getElementById(cfg.bodyId);
+  const dotsEl=document.getElementById(cfg.dotsId), countEl=document.getElementById(cfg.countId);
+  const prevBtn2=document.getElementById(cfg.prevId), nextBtn2=document.getElementById(cfg.nextId);
+  const openBtn=document.getElementById(cfg.openId), closeBtn=document.getElementById(cfg.closeId);
+  dotsEl.innerHTML = cfg.data.map((_,n)=>`<span class="dot" data-i="${n}"></span>`).join('');
+  const dots = Array.from(dotsEl.querySelectorAll('.dot'));
+  function renderSlide(){
+    body.innerHTML = `<div class="pres-slide">${cfg.renderSlide(cfg.data[i], i)}</div>`;
+    dots.forEach((d,n)=>d.classList.toggle('active', n===i));
+    countEl.textContent = `${i+1} / ${cfg.data.length}`;
+    prevBtn2.disabled = i===0; nextBtn2.disabled = i===cfg.data.length-1;
+  }
+  function open(){ i=0; overlay.classList.add('open'); renderSlide(); }
+  function close(){ overlay.classList.remove('open'); }
+  function go(n){ if(n<0||n>=cfg.data.length) return; i=n; renderSlide(); }
+  openBtn.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', (e)=>{ if(e.target===overlay) close(); });
+  prevBtn2.addEventListener('click', ()=>go(i-1));
+  nextBtn2.addEventListener('click', ()=>go(i+1));
+  dots.forEach(d=>d.addEventListener('click', ()=>go(parseInt(d.dataset.i,10))));
+}
+const CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="#e8b84b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+makePresenter({
+  overlayId:'vocabOverlay', bodyId:'vocabBody', dotsId:'vocabDots', countId:'vocabCount',
+  prevId:'vocabPrev', nextId:'vocabNext', openId:'vocabBtn', closeId:'vocabClose', data:VOCAB,
+  renderSlide:(d,n)=>`
+    <div class="slide-eyebrow">Word ${n+1} of ${VOCAB.length}</div>
+    <h4>${d.word}</h4>
+    <div class="word-def">${d.def}</div>
+  `
+});
+makePresenter({
+  overlayId:'contentOverlay', bodyId:'contentBody', dotsId:'contentDots', countId:'contentCount',
+  prevId:'contentPrev', nextId:'contentNext', openId:'contentBtn', closeId:'contentClose', data:CONTENT,
+  renderSlide:(d)=>`
+    <div class="slide-eyebrow">${d.eyebrow}</div>
+    <h4>${d.title}</h4>
+    <ul>${d.items.map(it=>`<li><span class="li-badge">${CHECK_ICON}</span><span>${it}</span></li>`).join('')}</ul>
+  `
+});
+})();
+</script>
+</body>
+</html>
