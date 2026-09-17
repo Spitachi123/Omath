@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>English Grade 10 — Unit Exercises</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --paper:#FFFFFF;
+  --card:#F6F7FB;
+  --ink:#14161F;
+  --muted:#5A6070;
+  --rule:#E3E5EF;
+  --accent:#3B2FD6;
+  --accent-soft:#ECEAFF;
+  --hot:#F08A00;
+  --hot-soft:#FFF3DF;
+  --yes:#0E7C58;
+  --yes-soft:#E4F6EE;
+  --no:#C32B3A;
+  --no-soft:#FDEBED;
+  --display:"Bricolage Grotesque", "Trebuchet MS", sans-serif;
+  --read:"Source Serif 4", Georgia, serif;
+  --shell: clamp(20px, 5vw, 76px);
+}
+/* The deck is deliberately a white-paper theme; keep it white in any viewer. */
+:root:not([data-theme="light"]),
+:root[data-theme="dark"]{ color-scheme: light; }
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--read);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+
+/* ---------- rail ---------- */
+#rail{position:fixed;top:0;left:0;right:0;height:3px;background:var(--rule);z-index:60}
+#railFill{height:100%;width:0;background:var(--accent);transition:width .5s cubic-bezier(.65,0,.35,1)}
+
+/* ---------- stage ---------- */
+#stage{position:relative;height:100%;width:100%}
+.slide{
+  position:absolute;inset:0;
+  display:none;
+  flex-direction:column;justify-content:flex-start;
+  padding:clamp(56px,7vh,84px) var(--shell) clamp(70px,9vh,96px);
+  overflow-y:auto;
+}
+.slide.on{display:flex}
+.wrap{width:100%;max-width:1020px;margin:auto}
+
+/* entrance choreography */
+.slide.on .step{opacity:0;animation:rise .62s cubic-bezier(.22,1,.36,1) forwards}
+.slide.on.back .step{animation-name:riseBack}
+@keyframes rise{from{opacity:0;transform:translate3d(26px,10px,0)}to{opacity:1;transform:none}}
+@keyframes riseBack{from{opacity:0;transform:translate3d(-26px,10px,0)}to{opacity:1;transform:none}}
+
+/* ---------- type ---------- */
+.eyebrow{
+  font-family:var(--display);font-weight:600;font-size:.82rem;
+  color:var(--accent);letter-spacing:.02em;margin-bottom:14px;
+  display:inline-flex;align-items:center;gap:9px;
+}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--accent);border-radius:2px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,6.4vw,4.6rem);line-height:.98;letter-spacing:-.025em}
+h2{font-family:var(--display);font-weight:800;font-size:clamp(1.7rem,3.8vw,2.8rem);line-height:1.06;letter-spacing:-.02em}
+h3{font-family:var(--display);font-weight:600;font-size:clamp(1.1rem,2vw,1.35rem);line-height:1.25}
+.lede{font-size:clamp(1rem,1.6vw,1.2rem);line-height:1.6;color:var(--muted);max-width:62ch;margin-top:16px}
+.note{font-size:.95rem;color:var(--muted);line-height:1.6}
+
+/* ---------- title slide ---------- */
+.title-grid{display:grid;gap:34px}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.chip{
+  font-family:var(--display);font-weight:600;font-size:.86rem;
+  padding:7px 14px;border-radius:100px;background:var(--card);color:var(--muted);
+  border:1px solid var(--rule);
+}
+.chip.hot{background:var(--hot-soft);color:#8A4E00;border-color:#F6DDB4}
+.chip.ink{background:var(--accent-soft);color:var(--accent);border-color:#D9D4FF}
+
+/* ---------- section divider ---------- */
+.divider-num{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(5rem,17vw,11rem);line-height:.8;
+  color:var(--accent-soft);letter-spacing:-.05em;
+}
+.divider-body{margin-top:-14px}
+
+/* ---------- cloze ---------- */
+.family{
+  display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  padding-bottom:18px;border-bottom:1px solid var(--rule);margin-bottom:26px;
+}
+.family .root{font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,3.4vw,2.2rem);letter-spacing:-.02em}
+.family .gloss{font-style:italic;color:var(--muted);font-size:1rem}
+
+.qlist{display:grid;gap:14px}
+.q{
+  display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:start;
+  padding:18px 20px;background:var(--card);border:1px solid var(--rule);border-radius:14px;
+}
+.q .idx{
+  font-family:var(--display);font-weight:600;font-size:.86rem;color:var(--muted);
+  padding-top:3px;min-width:1.4em;
+}
+.q .sentence{font-size:clamp(1rem,1.75vw,1.24rem);line-height:1.75}
+.q .pos{
+  font-family:var(--display);font-weight:600;font-size:.74rem;
+  color:var(--accent);background:var(--accent-soft);
+  padding:5px 10px;border-radius:100px;white-space:nowrap;margin-top:4px;
+}
+
+.blank{
+  font-family:var(--read);font-size:inherit;
+  display:inline-block;min-width:8.5ch;text-align:center;
+  padding:1px 10px 3px;margin:0 2px;
+  border:0;border-bottom:2px dashed var(--accent);
+  background:transparent;color:var(--accent);
+  cursor:pointer;border-radius:4px 4px 0 0;
+  transition:background .2s ease;
+}
+.blank:hover{background:var(--accent-soft)}
+.blank.shown{
+  border-bottom-style:solid;border-bottom-color:var(--hot);
+  color:var(--ink);font-weight:600;background:var(--hot-soft);
+  cursor:default;animation:pop .42s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes pop{0%{transform:scale(.7);opacity:0}60%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+
+/* ---------- buttons ---------- */
+.btn{
+  font-family:var(--display);font-weight:600;font-size:.94rem;
+  padding:11px 20px;border-radius:100px;cursor:pointer;
+  border:1px solid var(--ink);background:var(--ink);color:#fff;
+  transition:transform .16s ease, background .2s ease, color .2s ease, border-color .2s ease;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default;transform:none}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px;align-items:center}
+
+/* ---------- true / false ---------- */
+.tf{display:grid;gap:12px}
+.tf-row{
+  display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;
+  padding:16px 20px;border:1px solid var(--rule);border-radius:14px;background:var(--paper);
+  transition:border-color .25s ease, background .25s ease;
+}
+.tf-row .idx{font-family:var(--display);font-weight:600;color:var(--muted);font-size:.9rem}
+.tf-row .stmt{font-size:clamp(.98rem,1.55vw,1.15rem);line-height:1.6}
+.tf-pair{display:flex;gap:8px}
+.tf-btn{
+  font-family:var(--display);font-weight:600;font-size:.88rem;
+  padding:9px 18px;border-radius:100px;cursor:pointer;
+  border:1px solid var(--rule);background:var(--paper);color:var(--muted);
+  transition:all .2s ease;
+}
+.tf-btn:hover{border-color:var(--ink);color:var(--ink)}
+.tf-btn.picked{background:var(--accent);border-color:var(--accent);color:#fff}
+.tf-row.right{border-color:var(--yes);background:var(--yes-soft)}
+.tf-row.wrong{border-color:var(--no);background:var(--no-soft)}
+.tf-row.right .tf-btn.picked{background:var(--yes);border-color:var(--yes)}
+.tf-row.wrong .tf-btn.picked{background:var(--no);border-color:var(--no)}
+.verdict{
+  grid-column:2 / -1;font-size:.94rem;line-height:1.6;color:var(--muted);
+  padding-top:4px;animation:rise .45s cubic-bezier(.22,1,.36,1) both;
+}
+.verdict b{font-family:var(--display);color:var(--ink)}
+#score{font-family:var(--display);font-weight:600;color:var(--accent)}
+
+/* ---------- Q & A ---------- */
+.qa-question{font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,3.4vw,2.35rem);line-height:1.12;letter-spacing:-.02em;max-width:22ch}
+.panel{
+  margin-top:22px;padding:20px 24px;border-radius:14px;
+  animation:unfold .5s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes unfold{from{opacity:0;transform:translateY(-8px);clip-path:inset(0 0 100% 0)}to{opacity:1;transform:none;clip-path:inset(0 0 0 0)}}
+.panel.hint{background:var(--hot-soft);border-left:3px solid var(--hot)}
+.panel.answer{background:var(--card);border-left:3px solid var(--accent)}
+.panel.alt{background:var(--paper);border:1px solid var(--rule);border-left:3px solid var(--ink);animation-delay:.3s}
+.panel h3{margin-bottom:8px}
+.panel p{font-size:clamp(1rem,1.6vw,1.16rem);line-height:1.7}
+.alt-group{margin-top:14px}
+.alt-group:first-of-type{margin-top:4px}
+.alt-head{font-family:var(--display);font-weight:600;font-size:.95rem;margin-bottom:8px}
+.words{display:flex;flex-wrap:wrap;gap:7px}
+.word{
+  font-size:.92rem;padding:6px 12px;border-radius:100px;
+  background:var(--card);border:1px solid var(--rule);
+  animation:pop .38s cubic-bezier(.34,1.56,.64,1) both;
+}
+
+/* ---------- grammar ---------- */
+.gram-grid{display:grid;gap:18px;margin-top:26px}
+.gram-card{padding:20px 24px;background:var(--card);border-radius:14px;border:1px solid var(--rule)}
+.gram-card h3{margin-bottom:8px}
+.gram-card p{font-size:1.02rem;line-height:1.7;color:var(--muted)}
+.formula{
+  font-family:var(--display);font-weight:600;font-size:1.02rem;
+  background:var(--accent-soft);color:var(--accent);
+  padding:10px 16px;border-radius:10px;display:inline-block;margin-top:12px;
+}
+.ex{margin-top:12px;padding-left:16px;border-left:2px solid var(--hot);font-style:italic;line-height:1.7}
+.ex span{font-style:normal;font-family:var(--display);font-weight:600;font-size:.78rem;color:var(--hot);display:block;margin-bottom:2px}
+
+/* ---------- nav ---------- */
+#nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px var(--shell);
+  background:linear-gradient(to top, var(--paper) 62%, transparent);
+  pointer-events:none;
+}
+#nav > *{pointer-events:auto}
+.nav-btn{
+  width:42px;height:42px;border-radius:50%;cursor:pointer;
+  border:1px solid var(--rule);background:var(--paper);color:var(--ink);
+  font-size:1.05rem;line-height:1;display:grid;place-items:center;
+  transition:border-color .2s ease, transform .2s ease;
+}
+.nav-btn:hover{border-color:var(--ink);transform:scale(1.07)}
+.nav-btn:disabled{opacity:.3;cursor:default;transform:none}
+#counter{font-family:var(--display);font-weight:600;font-size:.86rem;color:var(--muted)}
+.nav-right{display:flex;align-items:center;gap:12px}
+
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+@media (max-width:640px){
+  .q{grid-template-columns:auto 1fr;}
+  .q .pos{grid-column:2;justify-self:start;margin-top:8px}
+  .tf-row{grid-template-columns:auto 1fr;row-gap:12px}
+  .tf-pair{grid-column:2;justify-self:start}
+  .verdict{grid-column:1 / -1}
+}
+</style>
+</head>
+<body>
+
+<div id="rail"><div id="railFill"></div></div>
+<div id="stage"></div>
+
+<div id="nav">
+  <button class="nav-btn" id="prev" aria-label="Previous slide">&#8592;</button>
+  <div class="nav-right">
+    <span id="counter">1 / 1</span>
+    <button class="nav-btn" id="next" aria-label="Next slide">&#8594;</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+
+const CLOZE = [
+  {
+    root:"charm", gloss:"to delight or fascinate someone",
+    items:[
+      {pre:"Despite his rough manners, the old sailor had a certain ", ans:"charm", post:" that won everyone over.", pos:"noun"},
+      {pre:"She smiled ", ans:"charmingly", post:" at the camera before answering the presenter's question.", pos:"adverb"}
+    ]
+  },
+  {
+    root:"scorch", gloss:"to burn the surface of something with heat",
+    items:[
+      {pre:"Yesterday was a real ", ans:"scorcher", post:" — the temperature climbed to forty degrees by noon.", pos:"noun"},
+      {pre:"They ran barefoot across the ", ans:"scorching", post:" sand to reach the water.", pos:"adjective"}
+    ]
+  },
+  {
+    root:"sizzle", gloss:"to make a hissing sound, as hot fat does",
+    items:[
+      {pre:"You could hear the onions ", ans:"sizzle", post:" the moment they hit the hot pan.", pos:"verb"},
+      {pre:"Daisy poured ", ans:"sizzling", post:" hot soup into the bucket every half an hour.", pos:"adjective"},
+      {pre:"The steak arrived ", ans:"sizzlingly", post:" hot, straight from the grill.", pos:"adverb"}
+    ]
+  },
+  {
+    root:"beautify", gloss:"to make something more attractive",
+    items:[
+      {pre:"The ", ans:"beauty", post:" of the valley left the travellers completely speechless.", pos:"noun"},
+      {pre:"She wore a ", ans:"beautiful", post:" red dress to the prize ceremony.", pos:"adjective"},
+      {pre:"The choir sang so ", ans:"beautifully", post:" that the whole hall fell silent.", pos:"adverb"}
+    ]
+  },
+  {
+    root:"purify", gloss:"to remove dirt or harmful substances",
+    items:[
+      {pre:"The villagers boil the water to ", ans:"purify", post:" it before drinking.", pos:"verb"},
+      {pre:"Scientists tested the ", ans:"purity", post:" of the sample in the laboratory.", pos:"noun"},
+      {pre:"This bangle is made of ", ans:"pure", post:" gold, not an alloy.", pos:"adjective"}
+    ]
+  },
+  {
+    root:"taste", gloss:"the flavour of something; also good judgement in style",
+    items:[
+      {pre:"Let me ", ans:"taste", post:" the soup to check whether it needs more salt.", pos:"verb"},
+      {pre:"The soup was thick, hot and surprisingly ", ans:"tasty", post:".", pos:"adjective"},
+      {pre:"The sitting room was decorated in a quiet, ", ans:"tasteful", post:" style.", pos:"adjective"},
+      {pre:"The old house has been ", ans:"tastefully", post:" restored by its new owners.", pos:"adverb"}
+    ]
+  },
+  {
+    root:"surprise", gloss:"an unexpected event; to astonish someone",
+    items:[
+      {pre:"Mabel's push came as a complete ", ans:"surprise", post:" to everyone watching.", pos:"noun"},
+      {pre:"It is not ", ans:"surprising", post:" that Albert lost the record at the very last second.", pos:"adjective"},
+      {pre:"The final round was ", ans:"surprisingly", post:" easy, and every contestant finished it.", pos:"adverb"}
+    ]
+  }
+];
+
+const TF = [
+  {s:"Two people are going to cast their performance to break the world record today.", a:false,
+   why:"Mabel Phillips and Albert Hargreaves are attempting records — but they are contestants on the show, not people casting a performance."},
+  {s:"Michael is one of the contestants.", a:false,
+   why:"Michael presents the programme. The contestants are Mabel and Albert."},
+  {s:"Michael also tried dipping his foot on the bucket.", a:false,
+   why:"Michael never puts his foot in the bucket; it is Albert who stands in the hot soup."},
+  {s:"Albert broke the world record for standing on a bucket of hot soup.", a:false,
+   why:"He came within six to ten seconds of it, but Mabel pushed him before the time was up."},
+  {s:"The word 'sizzling' is similar in meaning to 'scorching'.", a:true,
+   why:"Both describe intense, burning heat, which is why the soup is called sizzling hot."},
+  {s:"The programme is a comedy show.", a:true,
+   why:"The absurd records, the lost trousers and Mabel's final push are all written for laughs."}
+];
+
+const QA = [
+  {
+    q:"Who is Mabel Phillips?",
+    hint:"She is not the presenter. Look for the person balanced against a household cleaning tool.",
+    a:"Mabel Phillips is a contestant on the television show who is attempting to break a world record by leaning on a brush.",
+    alts:[
+      {for:"contestant", words:["participant","contender","competitor","challenger","entrant","hopeful","nominee","applicant","rival"]},
+      {for:"attempting", words:["endeavouring","trying","striving","seeking","aiming","tackling","undertaking","venturing","aspiring"]}
+    ]
+  },
+  {
+    q:"What is she trying to do?",
+    hint:"It involves a brush and a record book — think about what she is leaning on, and for how long.",
+    a:"She is trying to break a world record by leaning on a brush.",
+    alts:[
+      {for:"trying", words:["endeavouring","attempting","striving","seeking","aiming","struggling","testing","working","labouring","pushing"]},
+      {for:"break", words:["shatter","surpass","beat","exceed","top","excel","eclipse","transcend","better","outdo"]}
+    ]
+  },
+  {
+    q:"How do they maintain the heat of the soup?",
+    hint:"Someone arrives at regular intervals with a fresh supply — who is she, and how often does she come?",
+    a:"They maintain the heat of the soup by having Daisy Hargreaves, Albert's wife, come every half an hour and pour fresh, boiling, sizzling hot soup into the bucket.",
+    alts:[
+      {for:"maintain", words:["sustain","preserve","keep up","uphold","retain","manage","continue","guard","protect"]},
+      {for:"pour", words:["tip","stream","cascade","decant","empty","flow","discharge","spill","shed"]}
+    ]
+  },
+  {
+    q:"How far was Albert from breaking the record?",
+    hint:"The answer is measured in seconds, not minutes — and he had already stood there for over seven hours.",
+    a:"Albert was only six to ten seconds away from breaking the world record, having stood in the hot soup for more than seven hours.",
+    alts:[
+      {for:"away", words:["distant","remote","separated","spaced","apart","removed","short of","off"]},
+      {for:"standing", words:["remaining upright","waiting","holding out","enduring","persisting","lasting","staying put"]}
+    ]
+  },
+  {
+    q:"How did the man lose his trousers?",
+    hint:"He was not wearing them at the time. Think about where a person leaves clothes before getting wet.",
+    a:"The man took his trousers off to have a bath, and when he got out of the bath, his trousers had mysteriously disappeared.",
+    alts:[
+      {for:"lose", words:["misplace","forfeit","drop","miss","mislay","shed","part with","let slip"]},
+      {for:"disappeared", words:["vanished","faded","dissolved","melted away","evaporated","cleared off","departed","gone missing"]}
+    ]
+  },
+  {
+    q:"Why do you think Mabel pushed Albert?",
+    hint:"Notice what she says to him one second before she pushes. Is she really congratulating him?",
+    a:"Mabel likely pushed Albert out of mischievous rivalry, jealousy or comic malice, so that he would fail at the very last second — which is why she greets him first with an ironic 'Congratulations, Albert!'",
+    alts:[
+      {for:"pushed", words:["shoved","jostled","nudged","thrust","propelled","pressed","elbowed","forced","bundled"]},
+      {for:"think", words:["believe","suppose","imagine","consider","reckon","guess","assume","conclude","suspect"]}
+    ]
+  }
+];
+
+const GRAMMAR = [
+  {
+    n:"Subject–verb agreement",
+    body:"A singular subject takes a singular verb, and a plural subject takes a plural verb. Watch out for nouns like 'trousers', which look singular in meaning but always take a plural verb.",
+    formula:"singular subject + is / has &nbsp;•&nbsp; plural subject + are / have",
+    ex:[
+      {tag:"From the text", t:"Albert Hargreaves <b>is</b> standing in a bucket of hot soup."},
+      {tag:"Plurale tantum", t:"My trousers <b>were</b> gone. (not 'was gone')"}
+    ]
+  },
+  {
+    n:"The passive voice",
+    body:"Use the passive when the action or the receiver matters more than the doer. The object of the active sentence moves to the front, and the doer follows 'by' — or disappears altogether.",
+    formula:"be + past participle (+ by + agent)",
+    ex:[
+      {tag:"Active", t:"Daisy <b>pours</b> hot soup into the bucket."},
+      {tag:"Passive", t:"Hot soup <b>is poured</b> into the bucket by Daisy."}
+    ]
+  },
+  {
+    n:"Present perfect continuous",
+    body:"This tense measures an action that began in the past and is still going on right now. It is the natural tense for a world-record attempt, because it stresses unbroken duration.",
+    formula:"have / has + been + verb-ing",
+    ex:[
+      {tag:"From the text", t:"I <b>have been standing</b> here for six hours and fifty-eight minutes."},
+      {tag:"Also in the text", t:"My wife <b>has been approaching</b> every half an hour."}
+    ]
+  },
+  {
+    n:"Word-class derivation",
+    body:"Suffixes move a word from one class to another. Learning the pattern rather than the single word multiplies your vocabulary across the whole exercise.",
+    formula:"-ify → verb &nbsp;•&nbsp; -ity / -y → noun &nbsp;•&nbsp; -ing / -ful → adjective &nbsp;•&nbsp; -ly → adverb",
+    ex:[
+      {tag:"Verb to noun", t:"purify → <b>purity</b>, beautify → <b>beauty</b>"},
+      {tag:"Adjective to adverb", t:"ironic → <b>ironically</b>, scorching → <b>scorchingly</b>"}
+    ]
+  }
+];
+
+/* ============================================================
+   BUILD SLIDES
+   ============================================================ */
+
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const slides = [];
+const add = html => slides.push(html);
+
+/* --- title --- */
+add(`
+<div class="wrap title-grid">
+  <div>
+    <div class="eyebrow step" style="animation-delay:.05s">English · Grade 10 · Unit exercises</div>
+    <h1 class="step" style="animation-delay:.14s">Six hours,<br>fifty-eight minutes<br>and one push.</h1>
+    <p class="lede step" style="animation-delay:.26s">Work through the exercises from the drama: build word families from the clues, decide what is true, then answer in full sentences and collect better words as you go.</p>
+    <div class="meta-row step" style="animation-delay:.36s">
+      <span class="chip ink">Task A — word classes</span>
+      <span class="chip">Task B — true or false</span>
+      <span class="chip">Task C — questions</span>
+      <span class="chip hot">Grammar</span>
+    </div>
+    <p class="note step" style="animation-delay:.46s;margin-top:24px">Use the arrow keys, or the buttons at the bottom, to move between slides.</p>
+  </div>
+</div>`);
+
+/* --- Task A divider --- */
+add(`
+<div class="wrap">
+  <div class="divider-num step">A</div>
+  <div class="divider-body">
+    <h2 class="step" style="animation-delay:.12s">Find the missing word</h2>
+    <p class="lede step" style="animation-delay:.22s">Each sentence is missing one member of a word family. Read the sentence, work out which word class the gap needs, then say the word aloud before you tap the blank to check it.</p>
+    <div class="meta-row step" style="animation-delay:.32s">
+      <span class="chip">7 word families</span>
+      <span class="chip">18 sentences</span>
+      <span class="chip hot">Tap a blank to reveal</span>
+    </div>
+  </div>
+</div>`);
+
+/* --- Task A slides --- */
+CLOZE.forEach((fam, fi) => {
+  const rows = fam.items.map((it, i) => `
+    <div class="q step" style="animation-delay:${.18 + i*.09}s">
+      <span class="idx">${i+1}</span>
+      <p class="sentence">${esc(it.pre)}<button class="blank" data-ans="${esc(it.ans)}" aria-label="Reveal the missing word">?</button>${esc(it.post)}</p>
+      <span class="pos">${it.pos}</span>
+    </div>`).join("");
+  add(`
+<div class="wrap">
+  <div class="eyebrow step">Task A · word family ${fi+1} of ${CLOZE.length}</div>
+  <div class="family step" style="animation-delay:.08s">
+    <span class="root">${esc(fam.root)}</span>
+    <span class="gloss">${esc(fam.gloss)}</span>
+  </div>
+  <div class="qlist">${rows}</div>
+  <div class="actions step" style="animation-delay:${.18 + fam.items.length*.09}s">
+    <button class="btn revealAll">Reveal all answers</button>
+    <button class="btn ghost resetAll">Hide again</button>
+  </div>
+</div>`);
+});
+
+/* --- Task B divider --- */
+add(`
+<div class="wrap">
+  <div class="divider-num step">B</div>
+  <div class="divider-body">
+    <h2 class="step" style="animation-delay:.12s">True or false?</h2>
+    <p class="lede step" style="animation-delay:.22s">Choose True or False for each statement. Nothing is marked until you press Check, so change your mind as often as you like.</p>
+  </div>
+</div>`);
+
+/* --- Task B slide --- */
+add(`
+<div class="wrap">
+  <div class="eyebrow step">Task B · 6 statements</div>
+  <h2 class="step" style="animation-delay:.08s">Write True for true and False for false</h2>
+  <div class="tf" id="tfList" style="margin-top:28px">
+    ${TF.map((t,i)=>`
+      <div class="tf-row step" data-i="${i}" style="animation-delay:${.16+i*.07}s">
+        <span class="idx">${String.fromCharCode(97+i)}.</span>
+        <p class="stmt">${esc(t.s)}</p>
+        <div class="tf-pair">
+          <button class="tf-btn" data-v="true">True</button>
+          <button class="tf-btn" data-v="false">False</button>
+        </div>
+      </div>`).join("")}
+  </div>
+  <div class="actions step" style="animation-delay:.62s">
+    <button class="btn" id="tfCheck">Check answers</button>
+    <button class="btn ghost" id="tfReset">Start over</button>
+    <span id="score"></span>
+  </div>
+</div>`);
+
+/* --- Task C divider --- */
+add(`
+<div class="wrap">
+  <div class="divider-num step">C</div>
+  <div class="divider-body">
+    <h2 class="step" style="animation-delay:.12s">Answer the questions</h2>
+    <p class="lede step" style="animation-delay:.22s">Try each question first. Take a hint if you are stuck, then reveal the full answer — and keep the alternative words that follow it, because they are what turn a correct answer into a strong one.</p>
+  </div>
+</div>`);
+
+/* --- Task C slides --- */
+QA.forEach((item, qi) => {
+  const alts = item.alts.map(g => `
+    <div class="alt-group">
+      <div class="alt-head">Instead of &ldquo;${esc(g.for)}&rdquo;</div>
+      <div class="words">${g.words.map((w,i)=>`<span class="word" style="animation-delay:${i*.04}s">${esc(w)}</span>`).join("")}</div>
+    </div>`).join("");
+  add(`
+<div class="wrap qa" data-qa>
+  <div class="eyebrow step">Task C · question ${qi+1} of ${QA.length}</div>
+  <p class="qa-question step" style="animation-delay:.1s">${String.fromCharCode(97+qi)}. ${esc(item.q)}</p>
+  <div class="actions step" style="animation-delay:.22s">
+    <button class="btn ghost" data-act="hint">Show a hint</button>
+    <button class="btn" data-act="answer">Reveal the answer</button>
+  </div>
+  <div data-slot="hint" hidden>
+    <div class="panel hint"><h3>Hint</h3><p>${esc(item.hint)}</p></div>
+  </div>
+  <div data-slot="answer" hidden>
+    <div class="panel answer"><h3>Answer</h3><p>${esc(item.a)}</p></div>
+    <div class="panel alt"><h3>Words you could use instead</h3>${alts}</div>
+  </div>
+</div>`);
+});
+
+/* --- Grammar divider --- */
+add(`
+<div class="wrap">
+  <div class="divider-num step">G</div>
+  <div class="divider-body">
+    <h2 class="step" style="animation-delay:.12s">The grammar behind the chapter</h2>
+    <p class="lede step" style="animation-delay:.22s">Four structures do most of the work in this text. Each one is set out with its pattern and an example taken straight from the drama.</p>
+    <div class="meta-row step" style="animation-delay:.32s">
+      ${GRAMMAR.map(g=>`<span class="chip">${esc(g.n)}</span>`).join("")}
+    </div>
+  </div>
+</div>`);
+
+/* --- Grammar slides --- */
+GRAMMAR.forEach((g, i) => {
+  add(`
+<div class="wrap">
+  <div class="eyebrow step">Grammar · ${i+1} of ${GRAMMAR.length}</div>
+  <h2 class="step" style="animation-delay:.08s">${esc(g.n)}</h2>
+  <div class="gram-grid">
+    <div class="gram-card step" style="animation-delay:.18s">
+      <p>${esc(g.body)}</p>
+      <div class="formula">${g.formula}</div>
+    </div>
+    ${g.ex.map((e,j)=>`
+      <div class="gram-card step" style="animation-delay:${.28+j*.09}s">
+        <div class="ex"><span>${esc(e.tag)}</span>${e.t}</div>
+      </div>`).join("")}
+  </div>
+</div>`);
+});
+
+/* --- closing --- */
+add(`
+<div class="wrap">
+  <div class="eyebrow step">End of the unit</div>
+  <h1 class="step" style="animation-delay:.1s">Congratulations,<br>Albert.</h1>
+  <p class="lede step" style="animation-delay:.24s">Before you close the deck: pick three alternative words from Task C and use each of them in a sentence of your own about the drama. Then rewrite two sentences from the text in the passive voice.</p>
+  <div class="meta-row step" style="animation-delay:.34s">
+    <span class="chip ink">Task A revisited</span>
+    <span class="chip">New sentences</span>
+    <span class="chip hot">Passive voice practice</span>
+  </div>
+</div>`);
+
+/* ============================================================
+   RENDER + NAVIGATION
+   ============================================================ */
+
+const stage = document.getElementById("stage");
+stage.innerHTML = slides.map(s => `<section class="slide">${s}</section>`).join("");
+const els = [...document.querySelectorAll(".slide")];
+let cur = 0;
+
+const railFill = document.getElementById("railFill");
+const counter  = document.getElementById("counter");
+const prevBtn  = document.getElementById("prev");
+const nextBtn  = document.getElementById("next");
+
+function show(n, dir){
+  n = Math.max(0, Math.min(els.length - 1, n));
+  if (n === cur && els[cur].classList.contains("on")) return;
+  els[cur].classList.remove("on","back");
+  cur = n;
+  const s = els[cur];
+  s.classList.add("on");
+  s.classList.toggle("back", dir === -1);
+  s.scrollTop = 0;
+  // restart the entrance animation
+  s.querySelectorAll(".step").forEach(el => { el.style.animation = "none"; void el.offsetWidth; el.style.animation = ""; });
+  railFill.style.width = ((cur + 1) / els.length * 100) + "%";
+  counter.textContent = `${cur + 1} / ${els.length}`;
+  prevBtn.disabled = cur === 0;
+  nextBtn.disabled = cur === els.length - 1;
+}
+
+prevBtn.onclick = () => show(cur - 1, -1);
+nextBtn.onclick = () => show(cur + 1, 1);
+
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); show(cur + 1, 1); }
+  if (e.key === "ArrowLeft"  || e.key === "PageUp")  { e.preventDefault(); show(cur - 1, -1); }
+  if (e.key === "Home") show(0, -1);
+  if (e.key === "End")  show(els.length - 1, 1);
+});
+
+/* ---- Task A interactions ---- */
+stage.addEventListener("click", e => {
+  const b = e.target.closest(".blank");
+  if (b && !b.classList.contains("shown")) {
+    b.textContent = b.dataset.ans;
+    b.classList.add("shown");
+    return;
+  }
+  const all = e.target.closest(".revealAll");
+  if (all) {
+    all.closest(".wrap").querySelectorAll(".blank").forEach((el, i) => {
+      setTimeout(() => {
+        if (el.classList.contains("shown")) return;
+        el.textContent = el.dataset.ans;
+        el.classList.add("shown");
+      }, i * 110);
+    });
+    return;
+  }
+  const reset = e.target.closest(".resetAll");
+  if (reset) {
+    reset.closest(".wrap").querySelectorAll(".blank").forEach(el => {
+      el.textContent = "?";
+      el.classList.remove("shown");
+    });
+    return;
+  }
+
+  /* ---- Task C interactions ---- */
+  const act = e.target.closest("[data-act]");
+  if (act) {
+    const wrap = act.closest(".qa");
+    const slot = wrap.querySelector(`[data-slot="${act.dataset.act}"]`);
+    const open = !slot.hidden;
+    slot.hidden = open;
+    if (act.dataset.act === "hint") act.textContent = open ? "Show a hint" : "Hide the hint";
+    if (act.dataset.act === "answer") act.textContent = open ? "Reveal the answer" : "Hide the answer";
+  }
+});
+
+/* ---- Task B interactions ---- */
+const picks = {};
+const tfList = document.getElementById("tfList");
+const scoreEl = document.getElementById("score");
+
+tfList.addEventListener("click", e => {
+  const btn = e.target.closest(".tf-btn");
+  if (!btn) return;
+  const row = btn.closest(".tf-row");
+  if (row.classList.contains("right") || row.classList.contains("wrong")) return;
+  row.querySelectorAll(".tf-btn").forEach(b => b.classList.remove("picked"));
+  btn.classList.add("picked");
+  picks[row.dataset.i] = btn.dataset.v === "true";
+});
+
+document.getElementById("tfCheck").onclick = () => {
+  let got = 0, answered = 0;
+  [...tfList.children].forEach((row, i) => {
+    row.querySelector(".verdict")?.remove();
+    row.classList.remove("right","wrong");
+    if (!(i in picks)) return;
+    answered++;
+    const ok = picks[i] === TF[i].a;
+    if (ok) got++;
+    row.classList.add(ok ? "right" : "wrong");
+    const v = document.createElement("p");
+    v.className = "verdict";
+    v.innerHTML = `<b>${ok ? "Correct" : "Not quite"} — the answer is ${TF[i].a ? "True" : "False"}.</b> ${esc(TF[i].why)}`;
+    row.appendChild(v);
+  });
+  scoreEl.textContent = answered === 0
+    ? "Choose True or False first."
+    : `${got} out of ${TF.length} correct`;
+};
+
+document.getElementById("tfReset").onclick = () => {
+  for (const k in picks) delete picks[k];
+  [...tfList.children].forEach(row => {
+    row.classList.remove("right","wrong");
+    row.querySelector(".verdict")?.remove();
+    row.querySelectorAll(".tf-btn").forEach(b => b.classList.remove("picked"));
+  });
+  scoreEl.textContent = "";
+};
+
+show(0, 1);
+</script>
+</body>
+</html>
