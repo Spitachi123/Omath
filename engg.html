@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Subject-Verb Agreement Masterclass</title>
+<style>
+:root{--bg:#fff;--ink:#1b1f3b;--mut:#667;--pri:#5b5bf0;--pri2:#e8e8ff;--ok:#12a150;--okb:#e3f7ec;--no:#e5484d;--nob:#fdeaea;--card:#f7f8ff;--ln:#e3e5f4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:#fff;color:var(--ink);font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+#bar{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,#5b5bf0,#ff7ab6);z-index:30;transition:width .3s}
+header.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--ln);padding:calc(10px + env(safe-area-inset-top,0px)) 18px 10px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+header b{font-size:15px}.pill{background:var(--pri2);color:var(--pri);border-radius:99px;padding:4px 14px;font-weight:700;font-size:14px;white-space:nowrap}
+header a{color:var(--pri);text-decoration:none;font-weight:600;font-size:14px}
+.hero{min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;background:radial-gradient(circle at 20% 20%,#eef0ff,transparent 50%),radial-gradient(circle at 85% 70%,#ffeaf4,transparent 45%)}
+.hero h1{font-size:clamp(34px,7vw,68px);line-height:1.1;margin:0 0 14px;background:linear-gradient(90deg,#5b5bf0,#ff4f9a);-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise .9s both}
+.hero p{max-width:620px;color:var(--mut);animation:rise .9s .2s both}
+.chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:10px 0 26px;animation:rise .9s .35s both}
+.chips span{background:#fff;border:1px solid var(--ln);border-radius:99px;padding:6px 14px;font-size:14px;animation:float 3s ease-in-out infinite}
+.chips span:nth-child(2n){animation-delay:.6s}.chips span:nth-child(3n){animation-delay:1.2s}
+.btn{border:0;background:var(--pri);color:#fff;font:600 17px inherit;font-family:inherit;padding:14px 30px;border-radius:14px;cursor:pointer;box-shadow:0 8px 22px rgba(91,91,240,.35);transition:transform .2s,box-shadow .2s;text-decoration:none;display:inline-block}
+.btn:hover{transform:translateY(-3px)}.btn.alt{background:#fff;color:var(--pri);box-shadow:none;border:2px solid var(--pri)}
+@keyframes rise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes float{50%{transform:translateY(-6px)}}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+section.rule{max-width:860px;margin:0 auto;padding:60px 20px 20px}
+.rv{opacity:0;transform:translateY(34px);transition:opacity .7s,transform .7s}.rv.in{opacity:1;transform:none}
+.num{display:inline-block;background:var(--pri);color:#fff;border-radius:10px;padding:2px 12px;font-weight:700;font-size:14px;margin-bottom:8px}
+section.rule h2{font-size:clamp(24px,4vw,36px);margin:0 0 10px;line-height:1.25}
+.rl{background:var(--card);border-left:5px solid var(--pri);border-radius:12px;padding:14px 18px;margin-bottom:20px}
+.q{border:1px solid var(--ln);border-radius:16px;padding:18px;margin:14px 0;background:#fff;box-shadow:0 4px 18px rgba(30,30,90,.05)}
+.q .t{font-size:19px;margin-bottom:12px}.q small{color:var(--mut);font-weight:700}
+.blank{display:inline-block;min-width:80px;border-bottom:3px dashed var(--pri);text-align:center;font-weight:700;color:var(--pri);transition:.3s}
+.blank.ok{border-bottom:3px solid var(--ok);color:var(--ok);animation:pop .5s}
+.opts{display:flex;flex-wrap:wrap;gap:10px}
+.opt{flex:1 1 140px;border:2px solid var(--ln);background:#fff;border-radius:12px;padding:10px 14px;font:600 16px inherit;font-family:inherit;cursor:pointer;color:var(--ink);transition:.2s}
+.opt:hover:not(:disabled){border-color:var(--pri);background:var(--pri2);transform:translateY(-2px)}
+.opt.ok{background:var(--okb);border-color:var(--ok);color:var(--ok)}.opt.no{background:var(--nob);border-color:var(--no);color:var(--no);animation:shake .4s}
+.opt:disabled{cursor:default}
+.ex{max-height:0;overflow:hidden;opacity:0;transition:max-height .5s,opacity .5s,margin .5s}
+.ex.show{max-height:600px;opacity:1;margin-top:14px}
+.ex div{background:var(--okb);border-radius:12px;padding:12px 16px;font-size:16px}
+.game{background:linear-gradient(135deg,#f1f0ff,#fff0f7);margin:50px 0 10px;padding:56px 20px}
+.gi{max-width:760px;margin:0 auto;text-align:center}.gi h2{font-size:clamp(26px,5vw,40px);margin:0 0 8px}
+.gb{background:#fff;border-radius:20px;padding:22px;margin-top:20px;box-shadow:0 10px 40px rgba(60,60,160,.12);text-align:left;min-height:120px}
+.gb .t{font-size:21px;margin:10px 0 14px}.hud{display:flex;justify-content:space-between;font-weight:700;flex-wrap:wrap;gap:6px}
+.tm{height:8px;background:var(--pri2);border-radius:9px;overflow:hidden;margin:10px 0}.tm i{display:block;height:100%;width:100%;background:var(--pri);transition:width .1s linear}
+.gb .opts .opt{flex:1 1 120px}.cen{text-align:center}
+footer{text-align:center;padding:60px 20px 80px}.big{font-size:60px;font-weight:800;color:var(--pri)}
+.hw{max-width:760px;width:100%}.eyebrow{letter-spacing:.18em;text-transform:uppercase;font-size:13px;font-weight:700;color:var(--pri);margin-bottom:10px;animation:rise .8s both}
+.hero .sub{margin:0 auto 22px}.demo{background:#fff;border:1px solid var(--ln);border-radius:20px;padding:22px;box-shadow:0 14px 44px rgba(60,60,160,.12);text-align:left;animation:rise .9s .3s both}
+.ds{font-size:clamp(19px,3vw,24px);margin-bottom:16px}.ds .s,.ds .tr{border-radius:6px;padding:0 5px;transition:.5s}.demo.done .s{background:var(--okb);color:var(--ok);font-weight:700}.demo.done .tr{background:var(--nob);color:var(--no);text-decoration:line-through}
+.stats{display:flex;justify-content:center;gap:clamp(18px,5vw,56px);margin:28px 0;flex-wrap:wrap;animation:rise .9s .5s both}.stats b{display:block;font-size:40px;color:var(--pri);line-height:1}.stats span{font-size:14px;color:var(--mut)}
+body{font-size:19px}.hero{min-height:100vh}.hero h1{font-size:clamp(40px,9vw,92px);margin:0}
+.q .t{font-size:23px!important}.opt{font-size:19px!important;padding:12px 16px!important}.ex div{font-size:18px!important}.rl{font-size:19px}.gb .t{font-size:24px!important}.q small{font-size:15px}
+.gloss{max-width:1000px;margin:0 auto;padding:70px 20px 10px}.gs{color:var(--mut);margin:0 0 22px}.gg{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.gc{border:1px solid var(--ln);border-radius:16px;padding:18px;background:#fff;box-shadow:0 4px 18px rgba(30,30,90,.05);transition:transform .25s,box-shadow .25s}.gc:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(60,60,160,.14)}
+.gc h3{margin:0 0 6px;color:var(--pri);font-size:20px}.gc p{margin:0 0 8px;font-size:17px}.gc em{display:block;background:var(--card);border-radius:10px;padding:8px 12px;font-size:16px}.gc small{display:block;margin-top:8px;color:var(--mut);font-weight:700}
+@media(max-width:600px){header.top a{display:none}}</style></head><body>
+<div id="bar"></div>
+<header class="top"><b>📘 SVA Masterclass</b><a href="#terms">Key Terms</a><a href="#g1">Games</a><span class="pill" id="sc">Score 0 / 0</span></header>
+<div class="hero"><h1>Subject-Verb Agreement<br>Masterclass</h1></div>
+<section class="gloss rv" id="terms"><span class="num">Before we start</span><h2>Key Terms Made Simple</h2><p class="gs">Tricky words used in this presentation, explained in plain English.</p><div class="gg" id="gg"></div></section>
+<main id="m"></main>
+<footer class="rv"><div class="big" id="fin">🎓</div><h2>You finished the masterclass!</h2><p id="fm" style="color:var(--mut)"></p><a class="btn alt" href="#g2">Play Team Battle again 🏆</a> <a class="btn" href="javascript:location.reload()">Restart ↻</a></footer>
+<script>
+const W=['was','were'],H=['has','have'],I=['is','are'],c=(l,q,o,a,e)=>({l,q,o,a,e});
+const D=[
+[`Intervening Prepositional Phrases`,`Phrases like <i>along with, together with, as well as,</i> and <i>in addition to</i> do not change the subject's number, even when pronouns like <b>I</b> or <b>we</b> are involved.`,[
+c(`Case A (Singular Subject + Plural Phrase)`,`The captain, along with his crew members, ___ praised for bravery.`,W,0,`The true subject here is <b>"captain"</b> (singular). Beginners often get tricked by looking at the plural noun right next to the verb ("crew members"). Remember that anything inside commas or following phrases like <i>along with</i> is just extra descriptive info (an aside) and doesn't control the verb.`),
+c(`Case B (First-Person Pronoun + Phrase)`,`I, along with my colleagues, ___ attending the conference.`,['am','are'],0,`The subject is <b>"I"</b>. Even though "colleagues" is plural, the verb must match the pronoun <b>I</b> ("I am"), because the phrase <i>along with my colleagues</i> doesn't turn the subject into "we".`),
+c(`Case C (Plural Subject + Phrase)`,`We, as well as our manager, ___ invited to speak.`,W,1,`The subject is <b>"we"</b> (plural), so it requires the plural verb "were", regardless of the singular manager mentioned afterward.`)]],
+[`Variable Indefinite Pronouns (SANAM Rule)`,`Pronouns like <i>Some, Any, None, All, More/Most</i> depend on the noun in the prepositional phrase that follows.`,[
+c(`Case A (Uncountable Noun)`,`All of the cake ___ gone.`,I,0,`The word "All" can be singular or plural depending on what it refers to. Here it refers to <b>"cake"</b>, which is an uncountable mass noun. Uncountable nouns always take singular verbs.`),
+c(`Case B (Countable Plural Noun)`,`All of the cookies ___ gone.`,I,1,`Here, "All" refers to <b>"cookies"</b>, which is a plural countable noun. Therefore, the verb must be plural ("are").`),
+c(`Case C (Pronoun 'None' with Plural)`,`None of the students ___ finished the test.`,H,1,`Traditionally, "none" meant "not one" (singular). However, in modern standard English, when "none of" is followed by a plural noun, using a plural verb ("have") is widely accepted and sounds natural, though strict formal writing sometimes still permits singular.`)]],
+[`Inverted Sentences ("Here" / "There")`,`The subject comes after the verb in sentences starting with <i>here</i> or <i>there</i>.`,[
+c(`Case A (Plural Subject)`,`There ___ three errors in this report.`,I,1,`The word "There" is never the subject. You have to look <i>after</i> the verb to find the true subject, which is <b>"errors"</b> (plural). Because errors are plural, use "are".`),
+c(`Case B (Singular Subject)`,`Here ___ the document you needed.`,I,0,`Looking past the verb, the subject is <b>"document"</b> (singular). Thus, we use "is".`),
+c(`Case C (Compound Subject)`,`There ___ a book and a pen on the desk.`,I,1,`When the inverted subject consists of multiple items joined by "and" ("a book and a pen"), it forms a plural subject combination, requiring "are".`)]],
+[`Fractions and Percentages`,`The verb agrees with the noun in the prepositional phrase following the fraction or percentage.`,[
+c(`Case A (Singular Mass Noun)`,`Fifty percent of the pie ___ eaten.`,W,0,`The percentage ("Fifty percent") relies on the object of the preposition: <b>"pie"</b>. Since pie is a singular/uncountable whole here, the verb is singular.`),
+c(`Case B (Plural Countable Noun)`,`Fifty percent of the pies ___ eaten.`,W,1,`Here, the phrase points to <b>"pies"</b> (plural countable), so the verb shifts to plural ("were").`),
+c(`Case C (Fraction with Pronoun)`,`Three-quarters of the budget ___ been allocated.`,H,0,`"Budget" is a singular financial amount, making the verb singular ("has").`)]],
+[`"A number of" vs. "The number of"`,`"A number of" means "many" (plural verb). "The number of" refers to a specific total (singular verb).`,[
+c(`Case A (A number of)`,`A number of students ___ absent today.`,I,1,`<b>"A number of"</b> functions as an indefinite quantifier meaning "several" or "many", which logically points to a plural group of people/things.`),
+c(`Case B (The number of)`,`The number of applicants ___ increased.`,H,0,`<b>"The number of"</b> refers to a single, specific mathematical total or statistic (e.g., the <i>count</i> of applicants). A single count is singular.`),
+c(`Case C (Variant with issues)`,`A number of key issues ___ raised at the meeting.`,W,1,`Re-emphasizes that "A number of" always triggers a plural verb because it highlights multiple distinct items.`)]],
+[`Nouns of Multiplicity (Collective Nouns)`,`If members of a collective noun act as individuals doing different things, use a plural verb. If as a single unit, use singular.`,[
+c(`Case A (Acting Individually)`,`The jury ___ divided in their opinions.`,I,1,`Notice the pronoun "their". Because the jury members hold different, conflicting opinions, they are acting as separate individuals, requiring a plural verb.`),
+c(`Case B (Acting as a Unit)`,`The jury ___ reached a unanimous verdict.`,H,0,`Here, the jury acts as a single, cohesive entity working together to make one collective decision, taking a singular verb.`),
+c(`Case C (Family Members)`,`The family ___ arguing among themselves about vacation spots.`,I,1,`The phrase "among themselves" shows they are acting as separate people with conflicting choices, making the verb plural.`)]],
+[`Plural Form with Singular Meaning (Plural-Only Nouns)`,`Items with two connected parts take a plural verb unless preceded by "a pair of".`,[
+c(`Case A (Without 'pair of')`,`My scissors ___ dull.`,I,1,`Nouns like <i>scissors, pants, tweezers,</i> and <i>glasses</i> have two lenses or blades and are grammatically treated as plural when standing alone.`),
+c(`Case B (With 'a pair of')`,`A pair of scissors ___ on the table.`,I,0,`Adding <b>"a pair of"</b> shifts the grammatical spotlight away from scissors onto the singular container word "pair". Thus, the verb becomes singular.`),
+c(`Case C (Trousers/Pants)`,`Those trousers ___ you very well.`,['fits','fit'],1,`Without "pair of" modifying it upfront, trousers behaves as a plural noun requiring a plural verb form.`)]],
+[`Clause Subjects (Gerunds & Relative Clauses)`,`A clause or gerund phrase acting as the subject takes a singular verb.`,[
+c(`Case A (Gerund Phrase)`,`Running five miles every day ___ you fit.`,['keeps','keep'],0,`Even though "miles" is plural right before the verb, the true subject is the <i>action</i> of running ("Running five miles..."). An action/gerund phrase represents a single concept, taking a singular verb.`),
+c(`Case B (Noun Clause)`,`What he said ___ complete sense.`,['makes','make'],0,`The whole clause "What he said" acts as a singular noun block representing a statement or idea.`),
+c(`Case C (Infinitive Phrase)`,`To master multiple languages ___ dedication.`,['requires','require'],0,`An infinitive phrase ("To master...") serving as a subject is always treated as singular.`)]],
+[`Subject Complements (Predicate Nouns)`,`The verb agrees with the true subject, not the predicate noun/complement that follows it.`,[
+c(`Case A (Singular Subject, Plural Complement)`,`My main concern ___ the rising costs.`,I,0,`People often accidentally match the verb to the closest noun ("costs"). However, the true subject is <b>"concern"</b> (singular). Your main concern <i>is</i> costs.`),
+c(`Case B (Plural Subject, Singular Complement)`,`The best part of the trip ___ the scenic views.`,W,0,`The subject is <b>"part"</b> (singular), even though what followed it ("views") is plural.`),
+c(`Case C (Reversed Order)`,`The unexpected delays ___ the biggest problem.`,W,1,`Here, the subject is <b>"delays"</b> (plural), so the verb must be plural ("were"), even though the predicate noun "problem" is singular.`)]],
+[`"One of the [Plural Noun] Who/That"`,`In "one of the [plural noun] who/that...", the relative pronoun refers to the plural noun (plural verb). If preceded by "the only one of...", it is singular.`,[
+c(`Case A (Standard 'one of those')`,`She is one of those people who ___ early.`,['always work','always works'],0,`"Who" refers back to <b>"people"</b> (plural), meaning multiple people work early, and she is one of them. Therefore, the verb inside the clause must be plural ("work").`),
+c(`Case B ('The only one of')`,`She is the only one of those people who ___ always early.`,I,0,`The phrase <b>"the only one"</b> changes everything. "Who" now refers exclusively to that single person, making the verb singular ("is").`),
+c(`Case C (First-person variant)`,`I am one of those players who ___ 100% on the field.`,['gives','give'],1,`"Who" points back to the plural noun <b>"players"</b>, requiring the plural verb "give".`)]],
+[`"Every" or "Each" Before Compound Subjects`,`Placing "every" or "each" before compound subjects connected by "and" makes the verb singular.`,[
+c(`Case A (Every)`,`Every man and woman ___ required to attend.`,I,0,`Normally, two nouns joined by "and" ("man and woman") make a plural subject. However, prepending <b>"every"</b> distributes them individually, forcing the sentence to view them as separate singular units.`),
+c(`Case B (Each)`,`Each student and teacher ___ given a badge.`,W,0,`Just like "every", <b>"each"</b> makes the compound subject take a singular verb.`),
+c(`Case C (Pronoun combo)`,`Every cat and dog ___ proper care.`,['needs','need'],0,`The distributive determiner "every" keeps the verb singular.`)]],
+[`Relative Clauses Modifying Main-Clause Pronouns`,`In "It is I who..." or "It is you who...", the verb inside the relative clause agrees with the pronoun antecedent.`,[
+c(`Case A (First Person 'I')`,`It is I who ___ responsible for this.`,['am','is'],0,`The relative pronoun "who" looks back at <b>"I"</b>. Since the pronoun is "I", the verb inside that clause must match it ("I am").`),
+c(`Case B (Second Person 'You')`,`It is you who ___ at fault.`,I,1,`"Who" refers to <b>"you"</b>, so the verb matches ("you are").`),
+c(`Case C (Third Person Plural 'They')`,`It is they who ___ chosen.`,W,1,`"Who" refers to <b>"they"</b>, taking the plural verb "were".`)]],
+[`"Neither of" / "Either of"`,`In formal English, "neither of" or "either of" followed by a plural noun takes a singular verb.`,[
+c(`Case A (Neither of)`,`Neither of the two candidates ___ suitable.`,I,0,`<b>"Neither"</b> means "not either one", which is fundamentally singular. In strict formal grammar, even though a plural noun ("candidates") follows, the pronoun driver is singular.`),
+c(`Case B (Either of)`,`Either of the options ___ for me.`,['works','work'],0,`<b>"Either"</b> means "one or the other (singular choice)", requiring a singular verb.`),
+c(`Case C (Pronoun check)`,`Neither of them ___ the answer.`,['knows','know'],0,`Formal adherence keeps "neither" singular.`)]],
+[`Correlative Conjunctions with Subordinate Modifiers`,`When using <i>Not only... but also...</i>, agreement goes to the closest noun, ignoring intervening modifiers.`,[
+c(`Case A (Closest Noun Plural)`,`Not only the manager, but also the employees, who worked late, ___ receiving bonuses.`,W,1,`With <i>not only... but also</i> (and <i>either...or / neither...nor</i>), the verb agrees with the noun <b>closest</b> to it. Here, that is <b>"employees"</b> (plural), ignoring the intervening clause about working late.`),
+c(`Case B (Closest Noun Singular)`,`Not only the employees, but also the manager, who worked late, ___ receiving a bonus.`,W,0,`The closest noun to the verb is now <b>"manager"</b> (singular), so the verb shifts to singular ("was").`),
+c(`Case C (Or/Nor rule)`,`Neither the teacher nor the students ___ prepared.`,W,1,`The closest noun to the blank is "students" (plural), making the verb plural.`)]],
+[`Mathematical Operations`,`Mathematical operations can technically take singular or plural, but singular is overwhelmingly preferred in formal writing.`,[
+c(`Case A (Preferred Singular)`,`Two plus two ___ four.`,I,0,`Math equations are treated as stating a single summation or conceptual fact, making the singular verb the gold standard in academic writing.`),
+c(`Case B (Multiplication)`,`Five times five ___ twenty-five.`,['equals','equal'],0,`Treated as a single product equation.`),
+c(`Case C (Subtraction)`,`Ten minus four ___ six.`,['leaves','leave'],0,`Singular verb treatment is preferred for clarity and convention.`)]],
+[`"Majority" and "Minority"`,`When used alone, use singular. When followed by "of + plural noun", use a plural verb.`,[
+c(`Case A (Alone / Single Total)`,`The majority ___ the decision.`,['rules','rule'],0,`When standing alone without an "of" phrase, "majority" acts as a singular collective body making a unified decision.`),
+c(`Case B (Followed by 'of + plural')`,`A majority of the members ___ voted.`,H,1,`When followed by <b>"of + plural noun"</b> ("of the members"), the focus shifts to the individual members making up that majority, requiring a plural verb.`),
+c(`Case C (Minority variant)`,`A minority of students ___ opposed.`,W,1,`Follows the same logic as majority when paired with "of + plural noun".`)]],
+[`Nouns with Foreign Plurals`,`Words borrowed from Latin/Greek take singular or plural verbs based on their original plural forms.`,[
+c(`Case A (Singular Greek/Latin)`,`This criterion ___ essential.`,I,0,`<b>"Criterion"</b> is a singular Greek-derived noun (its plural is <i>criteria</i>). A single criterion takes a singular verb.`),
+c(`Case B (Plural Greek/Latin)`,`These criteria ___ essential.`,I,1,`<b>"Criteria"</b> is already plural, requiring a plural verb ("are").`),
+c(`Case C (Phenomenon)`,`The phenomenon ___ unexplained.`,W,0,`<b>"Phenomenon"</b> is singular (plural is <i>phenomena</i>).`)]],
+[`Plural Nouns Used as Adjectives/Qualifiers`,`When a plural noun acts as part of a compound noun phrase, the primary head noun determines agreement.`,[
+c(`Case A (Sports car)`,`The sports car ___ fast.`,I,0,`Even though "sports" ends in an 's' and looks plural, it is functioning here as an adjective describing what kind of car it is. The true head noun is <b>"car"</b> (singular).`),
+c(`Case B (Arms trade)`,`The arms trade ___ increased.`,H,0,`"Arms" modifies "trade". The true subject is <b>"trade"</b> (singular).`),
+c(`Case C (Real estate)`,`The real estate market ___ growth.`,['shows','show'],0,`Head noun is "market" (singular).`)]],
+[`"More than one" Rule`,`Despite its plural meaning, "more than one" is followed by a singular noun and requires a singular verb.`,[
+c(`Case A (More than one)`,`More than one person ___ complained.`,H,0,`It is a well-known grammatical quirk: despite meaning multiple people, the idiom <b>"more than one"</b> grammatically demands a singular noun ("person") and a singular verb ("has").`),
+c(`Case B (More than two)`,`More than two people ___ complained.`,H,1,`The moment the number exceeds one (e.g., <i>more than two</i>), the phrase reverts to normal plural rules and takes a plural verb.`),
+c(`Case C (More than one student)`,`More than one student ___ late.`,W,0,`Singular noun and verb required due to the "more than one" idiom.`)]],
+[`Quotations as Subjects`,`When a direct quote or phrase acts as the subject, it takes a singular verb regardless of words inside.`,[
+c(`Case A (Famous quote)`,`"We are the champions" ___ a famous song.`,I,0,`Even though the quote contains the plural verb "are", the entire quotation acts as a single, quoted title/subject entity in the sentence, which is always treated as singular.`),
+c(`Case B (Saying)`,`"Actions speak louder than words" ___ a proverb.`,I,0,`The whole proverb functions as one singular noun phrase naming a specific saying.`),
+c(`Case C (Book title)`,`"Great Expectations" ___ written by Dickens.`,W,0,`A titled work is a single singular entity, regardless of the words inside the title.`)]]
+];
+const Q=[];D.forEach((r,i)=>r[2].forEach(x=>Q.push(x)));
+const sh=a=>[...a].sort(()=>Math.random()-.5);
+let right=0,tot=0;const $=id=>document.getElementById(id);
+const upd=()=>{$('sc').textContent=`Score ${right} / ${tot}`;$('fm').textContent=`Final score: ${right} / ${tot} on the practice questions. Keep practising!`};
+const fill=(q,t)=>q.replace('___',t);
+const m=$('m');
+function gameHTML(n,t,d){return `<div class="game rv" id="g${n}"><div class="gi"><h2>${t}</h2><p style="color:var(--mut)">${d}</p><div class="gb" id="gb${n}"><div class="cen"><button class="btn" onclick="G(${n})">Play ▶</button></div></div></div></div>`}
+D.forEach((r,i)=>{
+ let h=`<section class="rule rv" id="r${i+1}"><span class="num">Rule ${i+1}</span><h2>${r[0]}</h2><div class="rl">${r[1]}</div>`;
+ r[2].forEach((x,j)=>{
+  const idx=sh([0,1].concat(x.o.length>2?[2]:[]));
+  h+=`<div class="q" data-r="${i}" data-j="${j}"><small>${x.l}</small><div class="t">${x.q.replace('___','<span class="blank">&nbsp;</span>')}</div><div class="opts">${idx.map(k=>`<button class="opt" data-k="${k}">${x.o[k]}</button>`).join('')}</div><div class="ex"><div></div></div></div>`});
+ h+='</section>';
+ if(i==9)h+=gameHTML(1,'⚡ Speed Round','10 questions, 10 seconds each, 3 lives. How far can you go?');
+ if(i==19)h+=gameHTML(2,'🏆 Team Battle','Two teams take turns answering. Class discusses, the team picks, the clicker clicks!');
+ m.insertAdjacentHTML('beforeend',h)});
+m.addEventListener('click',e=>{
+ const b=e.target.closest('.opt');if(!b||b.disabled||!b.closest('.q'))return;
+ const q=b.closest('.q'),x=D[q.dataset.r][2][q.dataset.j],k=+b.dataset.k;
+ q.querySelectorAll('.opt').forEach(o=>{o.disabled=true;if(+o.dataset.k==x.a)o.classList.add('ok')});
+ const bl=q.querySelector('.blank');bl.textContent=x.o[x.a];bl.classList.add('ok');
+ tot++;if(k==x.a)right++;else b.classList.add('no');
+ const ex=q.querySelector('.ex');ex.firstElementChild.innerHTML=(k==x.a?'✅ Correct! ':'❌ Not quite. Answer: <b>'+x.o[x.a]+'</b>. ')+x.e;ex.classList.add('show');upd()});
+function G(n){
+ const box=$('gb'+n),speed=n==1,pool=sh(Q).slice(0,speed?10:8);
+ let i=0,lives=3,sc=[0,0],tl=100,iv;
+ const end=()=>{clearInterval(iv);box.innerHTML=`<div class="cen"><div class="big">${speed?sc[0]+' / '+pool.length:(sc[0]==sc[1]?'🤝 Tie!':sc[0]>sc[1]?'🔵 Team A wins!':'🔴 Team B wins!')}</div><p>${speed?(lives?'Great job!':'Out of lives — try again!'):'Team A '+sc[0]+' – Team B '+sc[1]}</p><button class="btn" onclick="G(${n})">Play again ↻</button></div>`};
+ const next=()=>{
+  if(i>=pool.length||(speed&&!lives))return end();
+  const x=pool[i],ord=sh([0,1].concat(x.o.length>2?[2]:[]));tl=100;
+  box.innerHTML=`<div class="hud"><span>${speed?'❤️'.repeat(lives)+' • Score '+sc[0]:'🔵 A: '+sc[0]+' &nbsp; 🔴 B: '+sc[1]}</span><span>Q ${i+1}/${pool.length}${speed?'':' • Turn: '+(i%2?'🔴 Team B':'🔵 Team A')}</span></div>${speed?'<div class="tm"><i id="tb"></i></div>':''}<div class="t">${x.q.replace('___','<span class="blank">&nbsp;</span>')}</div><div class="opts">${ord.map(k=>`<button class="opt" data-k="${k}">${x.o[k]}</button>`).join('')}</div><div class="ex"><div></div></div>`;
+  const done=k=>{clearInterval(iv);box.querySelectorAll('.opt').forEach(o=>{o.disabled=true;if(+o.dataset.k==x.a)o.classList.add('ok')});
+   const bl=box.querySelector('.blank');bl.textContent=x.o[x.a];bl.classList.add('ok');
+   const good=k==x.a;if(good)sc[speed?0:i%2]++;else{if(speed)lives--;const o=box.querySelector(`[data-k="${k}"]`);o&&o.classList.add('no')}
+   const ex=box.querySelector('.ex');ex.firstElementChild.innerHTML=(good?'✅ ':'❌ ')+x.e;ex.classList.add('show');
+   i++;setTimeout(next,speed?2200:3200)};
+  box.querySelectorAll('.opt').forEach(o=>o.onclick=()=>done(+o.dataset.k));
+  if(speed)iv=setInterval(()=>{tl-=1;const t=$('tb');t&&(t.style.width=tl+'%');if(tl<=0)done(-1)},100)};
+ next()}
+const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('in')),{threshold:.08});
+document.querySelectorAll('.rv').forEach(e=>io.observe(e));
+addEventListener('scroll',()=>{const h=document.documentElement;$('bar').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'},{passive:true});
+function dmo(b,k){const d=document.getElementById('dm');d.querySelectorAll('.opt').forEach(o=>o.disabled=true);const bl=document.getElementById('db');bl.textContent='was';bl.classList.add('ok');d.classList.add('done');d.querySelectorAll('.opt')[0].classList.add('ok');if(k)b.classList.add('no');const e=document.getElementById('de');e.firstElementChild.innerHTML=(k?'&#10060; Tricked by <b>crew</b>! ':'&#9989; Correct! ')+'The true subject is <b>captain</b> (singular). Phrases like <i>along with</i> are only an aside, so the verb is <b>was</b>. That is the whole masterclass in one sentence.';e.classList.add('show')}
+const GL=[["Subject", "The person or thing that does the action or is being described. The verb must agree with it.", "<b>The captain</b> was praised.", "1\u201320"], ["Verb", "A word that shows action or state (is, was, run, has).", "The captain <b>was</b> praised.", "1\u201320"], ["Singular / Plural", "Singular means one; plural means more than one.", "cake (singular), cookies (plural)", "1\u201320"], ["Prepositional Phrase", "A group of words that starts with a preposition (of, along with, in, on) and gives extra detail. It is never the subject.", "The captain, <b>along with his crew</b>\u2026", "1, 2, 4"], ["Intervening Phrase", "A phrase standing between the subject and the verb that can trick you.", "The captain, <b>along with his crew</b>, was\u2026", "1"], ["Aside", "Extra information placed inside commas that does not control the verb.", "My uncle, <b>who lives abroad</b>, is here.", "1"], ["Indefinite Pronoun", "A pronoun that does not name a specific person or thing (all, some, none, any, most).", "<b>None</b> of the students\u2026", "2"], ["Countable / Uncountable Noun", "Countable nouns can be counted (cookies). Uncountable (mass) nouns cannot (cake, water, budget).", "two cookies / some water", "2, 4"], ["Inverted Sentence", "A sentence where the verb comes before the subject, such as those starting with here or there.", "There <b>are</b> three errors.", "3"], ["Compound Subject", "Two or more subjects joined by and.", "A book <b>and</b> a pen", "3, 11"], ["Quantifier", "A word that tells how many or how much (a number of, several, many).", "<b>A number of</b> students", "5"], ["Collective Noun", "A noun naming a group (jury, family, team, committee).", "The <b>jury</b> has decided.", "6, 16"], ["Plural-Only Noun", "A noun that looks plural and always takes a plural verb (scissors, trousers, glasses).", "My <b>scissors</b> are dull.", "7"], ["Gerund", "A verb + -ing used as a noun.", "<b>Running</b> keeps you fit.", "8"], ["Infinitive Phrase", "'To' + verb, used as a noun.", "<b>To master languages</b> takes time.", "8"], ["Noun Clause", "A group of words with its own subject and verb that works as one noun.", "<b>What he said</b> makes sense.", "8"], ["Subject Complement (Predicate Noun)", "The noun after the verb that renames or describes the subject. It does not control the verb.", "My concern is <b>costs</b>.", "9"], ["Relative Clause / Pronoun", "A clause that describes a noun, starting with who, that or which. The relative pronoun stands for that noun.", "people <b>who work</b> early", "10, 12"], ["Antecedent", "The word that a pronoun refers back to.", "In 'people who work', <b>people</b> is the antecedent of who.", "10, 12"], ["Distributive Determiner", "Words like every and each that treat members one by one.", "<b>Every</b> man and woman", "11"], ["Correlative Conjunctions", "Paired words that join ideas (not only\u2026 but also, either\u2026 or, neither\u2026 nor).", "<b>Neither</b> the teacher <b>nor</b> the students", "14"], ["Modifier", "A word or phrase that describes another word.", "the <b>sports</b> car", "14, 18"], ["Head Noun", "The main noun of a phrase; it decides the verb.", "The sports <b>car</b> is fast.", "18"], ["Idiom", "A fixed expression with its own special rule.", "<b>More than one</b> person has\u2026", "19"], ["Foreign Plural", "A plural form borrowed from Latin or Greek.", "criterion \u2192 criteria", "17"]];document.getElementById('gg').innerHTML=GL.map(g=>`<div class="gc"><h3>${g[0]}</h3><p>${g[1]}</p><em>${g[2]}</em><small>Rules: ${g[3]}</small></div>`).join('');document.querySelectorAll('.rv').forEach(e=>io.observe(e));
+upd();
+</script></body></html>
