@@ -150,30 +150,31 @@ var PIC={
 var ALT={"d1946": "https://commons.wikimedia.org/wiki/Special:FilePath/Walt_Disney_1946.JPG?width=900", "d1935": "https://commons.wikimedia.org/wiki/Special:FilePath/Walt_Disney_1935.jpg?width=900", "dport": "https://commons.wikimedia.org/wiki/Special:FilePath/Walt_disney_portrait.jpg?width=726", "castle": "https://commons.wikimedia.org/wiki/Special:FilePath/Sleeping_Beauty_Castle_Disneyland_Anaheim_2013.jpeg?width=1400", "castle50": "https://commons.wikimedia.org/wiki/Special:FilePath/Sleepingbeautycastle50.jpg?width=480", "mBefore": "https://commons.wikimedia.org/wiki/Special:FilePath/Mickey_Mouse_-_Steamboat_Willie_(1928).jpg?width=900", "mAfter": "https://commons.wikimedia.org/wiki/Special:FilePath/Mickey_Mouse_colored.svg?width=700", "mClassic": "https://commons.wikimedia.org/wiki/Special:FilePath/Classic_Steamboat_Willie.png?width=400", "mPoster": "https://commons.wikimedia.org/wiki/Special:FilePath/Steamboat_Willie_1928_Poster.png?width=700", "mSketch": "https://commons.wikimedia.org/wiki/Special:FilePath/Mickey_Mouse_inbetweener_drawing_no_469_or_479_from_Steamboat_Willie.jpg?width=700"};
 var VIDEO=W+"Steamboat_Willie_(1928)_by_Walt_Disney.webm";
 var EMPTY="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-/* Pictures found live on Wikimedia Commons (free images). Change the search words to get a different picture. */
+/* Pictures found live on Wikimedia Commons (free images). Each picture has 3 search tries (specific -> simple), and a safe stand-in photo shows first so nothing is ever blank. Change the words to get a different picture. */
 var Q={
- youth:"students celebrating graduation caps",
- world:"Argentina 2022 FIFA World Cup celebration trophy",
- chicago:"Chicago street scene 1900s",
- redcross:"American Red Cross ambulance World War I",
- kansas:"Kansas City Missouri 1920s street",
- la:"Los Angeles 1920s downtown street",
- train:"steam passenger train 1920s",
- ny:"New York City 1920s street",
- cinema:"movie theater 1930s marquee",
- tv:"1950s television set family living room",
- dl1955:"Disneyland 1955 Main Street opening"
+ youth:["students celebrating graduation","graduation ceremony","celebration"],
+ world:["Argentina 2022 World Cup celebration","FIFA World Cup trophy","football World Cup"],
+ chicago:["Chicago 1900s street","Chicago history street","Chicago skyline"],
+ redcross:["Red Cross ambulance World War I","World War I ambulance","Red Cross"],
+ kansas:["Kansas City 1920s","Kansas City Missouri history","Kansas City skyline"],
+ la:["Los Angeles 1920s","Los Angeles downtown history","Los Angeles skyline"],
+ train:["steam passenger train 1920s","steam locomotive passenger train","steam train"],
+ ny:["New York City 1920s street","New York 1920s","New York skyline"],
+ cinema:["movie theater 1930s","vintage movie theatre marquee","cinema"],
+ tv:["television 1950s","vintage television set","television"],
+ dl1955:["Disneyland 1955","Disneyland Main Street","Disneyland"]
 };
+var FB={youth:"castle",world:"castle50",chicago:"d1935",redcross:"dport",kansas:"d1935",la:"d1946",train:"dport",ny:"d1946",cinema:"d1935",tv:"d1946",dl1955:"castle50"};
 var DYN={},pos={d1946:"center 15%",d1935:"center 20%",dport:"center 20%"};
-/* each picture tries: your link -> Wikimedia backup link -> live Commons search results -> plain gradient (never loops) */
-function chain(k){var c=(k=="mNow"?[PIC.mickeyNow,PIC.mAfter,ALT.mAfter,W+"Mickey_Mouse_(poster_version).svg?width=700"]:k=="mBefore"?[PIC.mBefore,ALT.mBefore,PIC.mClassic,PIC.mPoster]:[PIC[k],ALT[k]]);c=c.concat(DYN[k]||[]).filter(Boolean);return c.filter(function(u,i){return c.indexOf(u)==i})}
+function chain(k){var c=(k=="mNow"?[PIC.mickeyNow,PIC.mAfter,ALT.mAfter,W+"Mickey_Mouse_(poster_version).svg?width=700"]:k=="mBefore"?[PIC.mBefore,ALT.mBefore,PIC.mClassic,PIC.mPoster]:[PIC[k],ALT[k]]);c=c.concat(DYN[k]||[],FB[k]?[PIC[FB[k]],ALT[FB[k]]]:[]).filter(Boolean);return c.filter(function(u,i){return c.indexOf(u)==i})}
 function src(k){return chain(k)[0]||EMPTY}
 function nx(e,k){var c=chain(k),s=(+e.dataset.s||0)+1;e.dataset.s=s;if(s<c.length)e.src=c[s];else{e.onerror=null;e.src=EMPTY;e.classList.add("miss")}}
+function api(q){return "https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=30&gsrsearch="+encodeURIComponent(q)+"&prop=imageinfo&iiprop=url|mime|size&iiurlwidth=1000"}
+function getJSON(q){return fetch(api(q)+"&origin=*").then(function(r){return r.json()}).catch(function(){return new Promise(function(res,rej){var cb="jp"+Math.random().toString(36).slice(2),sc=document.createElement("script");window[cb]=function(d){res(d);sc.remove();delete window[cb]};sc.onerror=rej;sc.src=api(q)+"&callback="+cb;document.head.appendChild(sc);setTimeout(rej,8000)})})}
+function parse(d){var pg=d.query&&d.query.pages?Object.keys(d.query.pages).map(function(i){return d.query.pages[i]}):[];pg.sort(function(a,b){return a.index-b.index});var u=[];pg.forEach(function(p){var ii=p.imageinfo&&p.imageinfo[0];if(ii&&/^image\/(jpeg|png)$/.test(ii.mime)&&ii.width>=500&&(ii.thumburl||ii.url))u.push(ii.thumburl||ii.url)});return u.slice(0,5)}
+function tryQ(k,i){if(i>=Q[k].length)return Promise.resolve([]);return getJSON(Q[k][i]).then(parse).catch(function(){return[]}).then(function(u){return u.length?u:tryQ(k,i+1)})}
 function loadDyn(){var ks={};document.querySelectorAll("img[onerror]").forEach(function(im){var m=/nx\(this,'(\w+)'/.exec(im.getAttribute("onerror")||"");if(m&&Q[m[1]]&&!PIC[m[1]]){im.dataset.q=m[1];ks[m[1]]=1}});
- Object.keys(ks).forEach(function(k){var u="https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=15&gsrsearch="+encodeURIComponent(Q[k]+" filetype:bitmap")+"&prop=imageinfo&iiprop=url|mime|size&iiurlwidth=1000";
-  fetch(u).then(function(r){return r.json()}).then(function(d){var pg=Object.keys((d.query||{}).pages||{}).map(function(i){return d.query.pages[i]}).sort(function(a,b){return a.index-b.index});
-   var urls=[];pg.forEach(function(p){var ii=p.imageinfo&&p.imageinfo[0];if(ii&&/^image\/(jpeg|png)$/.test(ii.mime)&&ii.width>=600&&ii.thumburl)urls.push(ii.thumburl)});DYN[k]=urls.slice(0,5);
-   document.querySelectorAll('img[data-q="'+k+'"]').forEach(function(im){if(DYN[k][0]){im.dataset.s=0;im.classList.remove("miss");im.src=DYN[k][0]}else im.classList.add("miss")})}).catch(function(){document.querySelectorAll('img[data-q="'+k+'"]').forEach(function(im){im.classList.add("miss")})})})}
+ Object.keys(ks).forEach(function(k){tryQ(k,0).then(function(u){if(!u.length)return;DYN[k]=u;document.querySelectorAll('img[data-q="'+k+'"]').forEach(function(im){im.dataset.s=0;im.classList.remove("miss");im.onerror=function(){nx(im,k)};im.src=u[0]})})})}
 function bg(k){return '<img src="'+src(k)+'" alt="" onerror="nx(this,\''+k+'\')">'}
 function ph(k,cap,sm,h){return '<div class="photo'+(h?' s':'')+'" '+(h===2?'style="min-height:480px"':'')+'><img src="'+src(k)+'" alt="" referrerpolicy="no-referrer" onerror="nx(this,\''+k+'\')" style="object-position:'+(pos[k]||"center")+'"><div class="cap"><small>'+sm+'</small>'+cap+'</div></div>'}
 function qa(h,m,a){return '<div class="rv3"><button data-k="h">💡 Hint</button><button data-k="m">✅ Main Answer</button><button data-k="a">🔁 Alternative</button></div><div class="ans h"><b>Hint</b>'+h+'</div><div class="ans m"><b>Main answer</b>'+m+'</div><div class="ans a"><b>Alternative answer</b>'+a+'</div>'}
