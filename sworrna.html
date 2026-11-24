@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sugarloaf Mountain: 5 Interesting Facts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400..700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1d2e; --bg2:#12395a; --ink:#fff5e6; --mute:#c9dce8;
+  --coral:#ff7b54; --gold:#ffc857; --teal:#27b3a8; --pink:#ff8fb8; --sky:#8ecae6;
+  --card:rgba(255,255,255,.08); --line:rgba(255,255,255,.16);
+  --disp:'Fredoka','Trebuchet MS',Arial,sans-serif; --text:'Nunito',Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:var(--text);overflow:hidden}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+
+/* ---------- deck + transitions ---------- */
+#deck{position:fixed;inset:0;perspective:1800px;overflow:hidden}
+.slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:clamp(14px,3.5vw,56px) clamp(16px,6vw,96px) 104px;overflow:hidden;
+  background:radial-gradient(1200px 700px at 80% 0%,#1d5a86 0%,transparent 60%),linear-gradient(160deg,var(--bg2),var(--bg));
+  opacity:0;visibility:hidden;
+  transition:opacity .9s ease,transform 1s cubic-bezier(.2,.8,.2,1),filter .9s ease,visibility 0s linear .9s}
+.slide.active{opacity:1;visibility:visible;transform:none;filter:none;transition-delay:0s}
+.slide[data-tr=zoom].future{transform:scale(1.3)} .slide[data-tr=zoom].past{transform:scale(.75)}
+.slide[data-tr=left].future{transform:translateX(14%)} .slide[data-tr=left].past{transform:translateX(-14%)}
+.slide[data-tr=up].future{transform:translateY(12%)} .slide[data-tr=up].past{transform:translateY(-12%)}
+.slide[data-tr=flip].future{transform:rotateY(40deg) translateX(14%)} .slide[data-tr=flip].past{transform:rotateY(-40deg) translateX(-14%)}
+.slide[data-tr=blur].future{transform:scale(1.06);filter:blur(22px)} .slide[data-tr=blur].past{transform:scale(.94);filter:blur(22px)}
+
+/* staggered reveal of content */
+.rv{opacity:0}
+.slide.active .rv{animation:rv .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*120ms + 250ms)}
+@keyframes rv{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+@keyframes kb{from{transform:scale(1.02)}to{transform:scale(1.15) translate(-1.5%,-1%)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+/* ---------- layout bits ---------- */
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(20px,4vw,60px);align-items:center;width:min(1280px,100%);max-height:100%}
+.split.flip{grid-template-columns:.95fr 1.05fr}
+.col{display:flex;flex-direction:column;gap:clamp(10px,1.8vh,20px);min-width:0}
+.eyebrow{font-weight:800;letter-spacing:.2em;font-size:clamp(12px,1.2vw,17px);color:var(--gold);text-transform:uppercase}
+h1,h2{font-family:var(--disp);margin:0;line-height:1.04;text-wrap:balance}
+h1{font-size:clamp(46px,9vw,140px);font-weight:700;text-shadow:0 8px 40px rgba(0,0,0,.45)}
+h2{font-size:clamp(30px,4.6vw,66px);font-weight:700}
+p{margin:0;font-size:clamp(15px,1.65vw,24px);line-height:1.55;color:#f3ead9}
+.lead{font-size:clamp(18px,2.2vw,34px);font-weight:600;color:#ffe9c7}
+.titlerow{display:flex;align-items:center;gap:clamp(12px,2vw,26px)}
+.badge{flex:none;width:clamp(54px,7vw,100px);aspect-ratio:1;border-radius:50%;background:var(--coral);color:#12304a;
+  display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:clamp(30px,4.4vw,64px);box-shadow:0 0 0 8px rgba(255,123,84,.25)}
+.chips{display:flex;flex-wrap:wrap;gap:12px}
+.chip{display:flex;align-items:baseline;gap:10px;padding:10px 20px;border-radius:22px;background:var(--gold);color:#12304a;font-weight:800;font-size:clamp(13px,1.3vw,19px)}
+.chip b{font-family:var(--disp);font-size:clamp(24px,3vw,42px);font-weight:700}
+.chip.t{background:var(--teal)} .chip.s{background:var(--sky)}
+.pill{align-self:flex-start;padding:10px 24px;border-radius:40px;background:var(--gold);color:#12304a;font-weight:800;font-size:clamp(14px,1.6vw,22px)}
+
+/* photos */
+.photo{position:relative;border-radius:28px;overflow:hidden;aspect-ratio:4/3;width:100%;
+  background:linear-gradient(135deg,#1b4468,#ff7b54);box-shadow:0 30px 80px rgba(0,0,0,.55);border:1px solid var(--line)}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 1s}
+.photo img.ok{opacity:1}
+.slide.active .photo img{animation:kb 22s ease-out both}
+.cap{position:absolute;left:14px;bottom:12px;font-size:13px;font-weight:700;background:rgba(0,0,0,.55);padding:4px 12px;border-radius:20px;backdrop-filter:blur(6px)}
+.tilt{transform:rotate(1.6deg)}
+.photo.failed::after{content:"Photo could not load. Open this file in a normal browser tab with internet on.";position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;font-weight:700;font-size:15px;color:#fff5e6}
+.photo.full.failed::after{display:none}
+
+/* vocabulary inside text + mini cards */
+.vw{color:var(--pink);font-weight:800;border-bottom:2px dotted var(--pink);cursor:pointer;transition:background .2s}
+.vw:hover{background:rgba(255,143,184,.18)}
+.vcards{display:flex;gap:14px;flex-wrap:wrap}
+.vc{flex:1 1 220px;text-align:left;background:var(--card);border:2px solid var(--pink);border-radius:22px;padding:14px 18px;color:var(--ink);
+  transition:transform .25s,background .25s}
+.vc:hover{transform:translateY(-4px);background:rgba(255,143,184,.14)}
+.vc .w{font-family:var(--disp);font-weight:700;font-size:clamp(22px,2.6vw,36px);color:var(--pink);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.vc .w i{font-style:normal;font-family:var(--text);font-size:13px;font-weight:800;color:#12304a;background:var(--pink);padding:2px 10px;border-radius:20px}
+.vc .m{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s ease}
+.vc .m>div{overflow:hidden;font-size:clamp(14px,1.35vw,19px);line-height:1.45;color:#f3ead9}
+.vc.open .m{grid-template-rows:1fr}
+.vc .m span{display:block;padding-top:8px}
+.vc .m em{display:block;color:var(--mute);margin-top:6px}
+.vc .tap{font-size:13px;font-weight:700;color:var(--mute)}
+.vc.open .tap{display:none}
+
+/* cover */
+.cover{background:#0b1d2e}
+.cover .photo.full{position:absolute;inset:0;border-radius:0;aspect-ratio:auto;border:0;box-shadow:none}
+.cover .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,20,33,.92) 0%,rgba(7,20,33,.6) 45%,rgba(7,20,33,.1) 100%),linear-gradient(0deg,rgba(7,20,33,.8),transparent 40%)}
+.cover .in{position:relative;width:min(1280px,100%);display:flex;flex-direction:column;gap:clamp(12px,2.2vh,26px)}
+.hint{font-weight:700;color:var(--mute);font-size:clamp(13px,1.3vw,18px);animation:float 3s ease-in-out infinite}
+.kbd{display:inline-block;padding:1px 9px;border:1px solid var(--line);border-radius:8px;background:var(--card)}
+
+/* agenda */
+.acards{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(10px,1.6vw,22px);width:min(1280px,100%)}
+.acard{text-align:left;background:#fff;color:#12304a;border:0;border-radius:26px;padding:clamp(14px,1.8vw,26px);display:flex;flex-direction:column;gap:12px;
+  border-top:10px solid var(--c);transition:transform .3s,box-shadow .3s}
+.acard:hover{transform:translateY(-10px) rotate(-1deg);box-shadow:0 24px 50px rgba(0,0,0,.4)}
+.acard .l{width:clamp(44px,5vw,76px);aspect-ratio:1;border-radius:50%;background:var(--c);display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:clamp(26px,3vw,44px);color:#12304a}
+.acard h3{margin:0;font-family:var(--disp);font-size:clamp(18px,2vw,30px);line-height:1.1}
+.acard span{font-size:clamp(13px,1.2vw,18px);line-height:1.4;color:#3f566b}
+.note{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.1);border:1px solid var(--line);border-radius:20px;padding:14px 22px;font-weight:700;font-size:clamp(14px,1.5vw,21px)}
+
+/* timeline (fact C) */
+.tl{display:flex;flex-direction:column;gap:12px}
+.tli{display:flex;gap:18px;align-items:center;background:var(--card);border-radius:20px;padding:12px 20px;border-left:6px solid var(--gold)}
+.tli b{font-family:var(--disp);font-size:clamp(22px,2.6vw,38px);color:var(--gold);min-width:3.2em}
+.tli span{font-size:clamp(14px,1.4vw,20px);line-height:1.35}
+
+/* view slide */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.6vw,24px);width:min(1280px,100%)}
+.tile{display:flex;flex-direction:column;gap:10px}
+.tile .photo{aspect-ratio:16/11;border-radius:22px}
+.tile .vc{flex:none}
+
+/* vocab lab */
+.fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,1.2vw,16px);width:min(1280px,100%)}
+.fc{perspective:900px;border:0;background:none;padding:0;height:clamp(84px,15vh,150px);color:inherit}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .7s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.fc.flipped .in{transform:rotateY(180deg)}
+.fc .f,.fc .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;gap:4px;text-align:left}
+.fc .f{background:var(--card);border:2px solid var(--pink)}
+.fc .f strong{font-family:var(--disp);font-size:clamp(18px,2.2vw,32px);color:var(--pink)}
+.fc .f small{font-weight:800;color:var(--mute);font-size:clamp(11px,1vw,14px)}
+.fc .b{background:var(--pink);color:#3a0a20;transform:rotateY(180deg);font-size:clamp(11px,1.15vw,16px);line-height:1.3;font-weight:700;overflow:hidden}
+.fc .b em{font-weight:600}
+
+/* quiz */
+.quiz{width:min(900px,100%);display:flex;flex-direction:column;gap:18px}
+.qbar{height:8px;border-radius:8px;background:var(--line);overflow:hidden}
+.qbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--coral),var(--gold));transition:width .5s}
+.qq{font-family:var(--disp);font-size:clamp(22px,3vw,42px);font-weight:600;line-height:1.15}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{text-align:left;background:var(--card);border:2px solid var(--line);color:var(--ink);border-radius:18px;padding:14px 18px;font-size:clamp(14px,1.6vw,22px);font-weight:700;transition:transform .2s,background .2s}
+.opt:hover:not(:disabled){transform:translateY(-3px);background:rgba(255,255,255,.16)}
+.opt.good{background:#1f8a5b;border-color:#7ff0b4}.opt.bad{background:#9b2b3b;border-color:#ff9aa9}
+.fb{min-height:1.6em;font-weight:700;font-size:clamp(14px,1.5vw,20px);color:var(--gold)}
+.btn{align-self:flex-start;border:0;border-radius:40px;padding:12px 28px;background:var(--gold);color:#12304a;font-weight:800;font-size:clamp(14px,1.5vw,20px)}
+.score{font-family:var(--disp);font-size:clamp(50px,9vw,120px);color:var(--gold);line-height:1}
+
+/* recap */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(10px,1.6vw,22px);width:min(1280px,100%)}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:clamp(14px,2vw,28px);display:flex;flex-direction:column;gap:8px}
+.stat b{font-family:var(--disp);font-size:clamp(34px,5vw,76px);line-height:1;color:var(--gold)}
+.stat span{font-weight:700;font-size:clamp(13px,1.3vw,19px);line-height:1.35;color:#f3ead9}
+.tags{display:flex;flex-wrap:wrap;gap:12px}
+.tag{padding:10px 22px;border-radius:30px;background:#fff;color:#12304a;font-weight:800;font-size:clamp(13px,1.4vw,20px)}
+
+/* controls */
+#bar{position:fixed;left:0;top:0;height:5px;width:0;background:linear-gradient(90deg,var(--coral),var(--gold),var(--teal));z-index:50;transition:width .6s}
+#ctl{position:fixed;left:50%;bottom:clamp(10px,2.5vh,24px);transform:translateX(-50%);z-index:40;display:flex;align-items:center;gap:10px;
+  padding:8px 12px;border-radius:50px;background:rgba(8,22,36,.78);backdrop-filter:blur(14px);border:1px solid var(--line);max-width:calc(100vw - 20px)}
+.cb{width:44px;height:44px;border-radius:50%;border:0;background:var(--card);color:var(--ink);font-size:22px;display:grid;place-items:center;transition:background .2s,transform .2s}
+.cb:hover{background:rgba(255,255,255,.22);transform:scale(1.08)}
+#vbtn{display:flex;align-items:center;gap:8px;border:0;border-radius:40px;padding:0 20px;height:44px;background:var(--pink);color:#3a0a20;font-weight:800;font-size:16px;animation:pulse 2.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,143,184,.55)}50%{box-shadow:0 0 0 12px rgba(255,143,184,0)}}
+#dots{display:flex;gap:6px;align-items:center;max-width:34vw;overflow:hidden}
+#dots button{width:10px;height:10px;border-radius:10px;border:0;padding:0;background:rgba(255,255,255,.3);transition:width .3s,background .3s}
+#dots button.on{width:28px;background:var(--gold)}
+#count{font-weight:800;font-size:14px;color:var(--mute);min-width:3.4em;text-align:center}
+
+/* drawer */
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100vw);z-index:60;background:rgba(8,22,36,.96);backdrop-filter:blur(18px);border-left:1px solid var(--line);
+  transform:translateX(105%);transition:transform .5s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;padding:20px;gap:14px}
+#drawer.open{transform:none}
+#drawer header{display:flex;justify-content:space-between;align-items:center}
+#drawer h3{margin:0;font-family:var(--disp);font-size:30px;color:var(--pink)}
+#search{width:100%;padding:12px 16px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:700 16px var(--text)}
+#vlist{overflow:auto;display:flex;flex-direction:column;gap:10px;padding-right:4px}
+.vi{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 16px}
+.vi .h{display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer}
+.vi .h strong{font-family:var(--disp);font-size:24px;color:var(--pink)}
+.vi .h small{font-weight:800;color:var(--mute)}
+.vi .d{display:none;margin-top:8px;font-size:16px;line-height:1.5}
+.vi.open .d{display:block}
+.vi .d em{display:block;color:var(--mute);margin:6px 0}
+.mini{border:0;border-radius:30px;padding:6px 14px;background:var(--gold);color:#12304a;font-weight:800;font-size:13px;margin-right:6px}
+
+/* popup for inline words */
+#pop{position:fixed;z-index:70;max-width:min(340px,90vw);background:#fff;color:#12304a;border-radius:18px;padding:14px 18px;box-shadow:0 20px 50px rgba(0,0,0,.5);
+  opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .25s,transform .25s}
+#pop.show{opacity:1;pointer-events:auto;transform:none}
+#pop strong{font-family:var(--disp);font-size:24px;color:#b8135a}
+#pop small{font-weight:800;color:#55687a;margin-left:6px}
+#pop p{color:#12304a;font-size:16px;line-height:1.45;margin:6px 0}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:45}
+
+@media(max-width:900px){
+  .slide{align-items:flex-start;overflow-y:auto}
+  .split,.split.flip{grid-template-columns:1fr;max-height:none}
+  .acards,.stats{grid-template-columns:1fr 1fr}
+  .tiles{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:1fr 1fr}
+  .opts{grid-template-columns:1fr}
+  #dots{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .slide.active .photo img,.hint,#vbtn{animation:none}
+  .slide{transition-duration:.01s}
+}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<canvas id="confetti"></canvas>
+
+<main id="deck">
+
+<!-- 1 COVER -->
+<section class="slide cover" data-tr="zoom">
+  <div class="photo full" data-img="sunrise"></div><div class="shade"></div>
+  <div class="in">
+    <p class="eyebrow rv">English 10 · Reading and Vocabulary</p>
+    <h1 class="rv">Sugarloaf<br>Mountain</h1>
+    <p class="lead rv" style="max-width:20em">5 Interesting Facts about Rio de Janeiro’s <span class="vw" data-w="iconic">iconic</span> landmark</p>
+    <p class="pill rv">Pão de Açúcar · Rio de Janeiro, Brazil</p>
+    <p class="hint rv">Press <span class="kbd">→</span> or swipe to begin · Press <span class="kbd">V</span> for the vocabulary</p>
+  </div>
+</section>
+
+<!-- 2 INTRO -->
+<section class="slide" data-tr="left">
+  <div class="split">
+    <div class="col">
+      <p class="eyebrow rv">Meet the mountain</p>
+      <h2 class="rv">A granite giant at the mouth of Guanabara Bay</h2>
+      <p class="rv">Sugarloaf Mountain is a striking natural <span class="vw" data-w="landmark">landmark</span> overlooking Rio de Janeiro, at the entrance to Guanabara Bay in southeastern Brazil. In Portuguese it is called <b>Pão de Açúcar</b>, named for its shape, which resembles the traditional loaf of refined sugar used in the 19th century.</p>
+      <p class="rv">This tall granite cone with a circular top is a <span class="vw" data-w="spectacular">spectacular</span> part of Rio.</p>
+      <div class="chips rv">
+        <div class="chip"><b class="count" data-to="396">0</b> metres tall</div>
+        <div class="chip t"><b class="count" data-to="1299">0</b> feet tall</div>
+      </div>
+    </div>
+    <div class="photo rv tilt" data-img="sea"><span class="cap">Sugarloaf from the sea · Wikimedia Commons</span></div>
+  </div>
+</section>
+
+<!-- 3 AGENDA -->
+<section class="slide" data-tr="up">
+  <div class="col" style="width:min(1280px,100%);gap:clamp(12px,2.4vh,28px)">
+    <p class="eyebrow rv">Today’s journey</p>
+    <h2 class="rv">Five facts, five surprises</h2>
+    <div class="acards">
+      <button class="acard rv" style="--c:#ff7b54" data-go="3"><div class="l">A</div><h3>Rock Climbing</h3><span>270 routes high above the Atlantic.</span></button>
+      <button class="acard rv" style="--c:#27b3a8" data-go="4"><div class="l">B</div><h3>Neighbouring Peaks</h3><span>Two more natural wonders next door.</span></button>
+      <button class="acard rv" style="--c:#ffc857" data-go="5"><div class="l">C</div><h3>Hollywood Fame</h3><span>Bond, Bette Davis and even The Simpsons.</span></button>
+      <button class="acard rv" style="--c:#5ba9d6" data-go="6"><div class="l">D</div><h3>Guanabara Bay</h3><span>“The bosom of the sea” with 130+ islands.</span></button>
+      <button class="acard rv" style="--c:#b8135a" data-go="7"><div class="l">E</div><h3>Glass Cable Cars</h3><span>A ride to the summit with stunning views.</span></button>
+    </div>
+    <div class="note rv"><span style="color:var(--pink);font-size:26px">●</span> Pink dotted words are vocabulary. Click one for its meaning, or press <span class="kbd">V</span> to open the whole list.</div>
+  </div>
+</section>
+
+<!-- 4 FACT A -->
+<section class="slide" data-tr="flip">
+  <div class="split">
+    <div class="col">
+      <div class="titlerow rv"><div class="badge">A</div><div><p class="eyebrow">Fact A · Rock climbing</p><h2>A Climber’s Playground</h2></div></div>
+      <p class="rv">Sugarloaf is one of the largest and most popular urban rock-climbing destinations in the world. With <b>270 different routes</b>, you can climb high above the Atlantic Ocean and the <span class="vw" data-w="sprawling">sprawling</span> city of Rio de Janeiro, or simply watch other adventurers conquer the <span class="vw" data-w="iconic">iconic</span> mountain.</p>
+      <div class="chips rv"><div class="chip"><b class="count" data-to="270">0</b> routes</div></div>
+      <div class="vcards rv"><button class="vc" data-w="sprawling"></button><button class="vc" data-w="iconic"></button></div>
+    </div>
+    <div class="photo rv" data-img="face"><span class="cap">The granite face · Wikimedia Commons</span></div>
+  </div>
+</section>
+
+<!-- 5 FACT B -->
+<section class="slide" data-tr="left">
+  <div class="split flip">
+    <div class="photo rv" data-img="urca"><span class="cap">Urca hill beside Sugarloaf · Wikimedia Commons</span></div>
+    <div class="col">
+      <div class="titlerow rv"><div class="badge" style="background:var(--teal)">B</div><div><p class="eyebrow">Fact B · Neighbours</p><h2>Neighbours Worth Visiting</h2></div></div>
+      <p class="rv">It is not the only unique landmark in the area. Its neighbours add to the <span class="vw" data-w="tranquil">tranquil</span> beauty of the whole peninsula. <b>Morro de Babilonia</b> (Babylon Mountain) and <b>Morro de Urca</b> (Urca’s mountain) are <span class="vw" data-w="accessible">accessible</span> to the public and open to rock climbers. Morro de Urca even has a play area for children and a restaurant.</p>
+      <div class="chips rv"><div class="chip t">Open to the public</div><div class="chip t">Play area · Restaurant</div></div>
+      <div class="vcards rv"><button class="vc" data-w="tranquil"></button><button class="vc" data-w="accessible"></button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 FACT C -->
+<section class="slide" data-tr="blur">
+  <div class="split">
+    <div class="col">
+      <div class="titlerow rv"><div class="badge" style="background:var(--gold)">C</div><div><p class="eyebrow">Fact C · Hollywood</p><h2>Starring on the Big Screen</h2></div></div>
+      <p class="rv">The beauty of the area makes it perfect for the big screen, and Sugarloaf has appeared in Hollywood <span class="vw" data-w="blockbusters">blockbusters</span>.</p>
+      <div class="tl rv">
+        <div class="tli"><b>1942</b><span>Its screen debut in “Now, Voyager” with Bette Davis.</span></div>
+        <div class="tli"><b>1979</b><span>The James Bond film “Moonraker”, where a scene <span class="vw" data-w="unfolds">unfolds</span> in a cable car.</span></div>
+        <div class="tli"><b>TV</b><span>Even referenced in the cartoon sitcom “The Simpsons”.</span></div>
+      </div>
+      <div class="vcards rv"><button class="vc" data-w="blockbusters"></button><button class="vc" data-w="unfolds"></button></div>
+    </div>
+    <div class="photo rv tilt" data-img="cristo"><span class="cap">Sugarloaf seen from Corcovado · Wikimedia Commons</span></div>
+  </div>
+</section>
+
+<!-- 7 FACT D -->
+<section class="slide" data-tr="zoom">
+  <div class="split flip">
+    <div class="photo rv" data-img="city"><span class="cap">Rio and its bay · Wikimedia Commons</span></div>
+    <div class="col">
+      <div class="titlerow rv"><div class="badge" style="background:#5ba9d6">D</div><div><p class="eyebrow">Fact D · The bay</p><h2>The Bosom of the Sea</h2></div></div>
+      <p class="rv">Historic Guanabara Bay stretches out in front of Sugarloaf Mountain. Its name translates as “the bosom of the sea”. In the 16th century it was home to several <span class="vw" data-w="fortifications">fortifications</span> built by the colonial government. Today the bay is made up of more than 130 islands and is surrounded by beautiful scenery that you can see from high above as you tour the mountain.</p>
+      <div class="chips rv"><div class="chip s"><b class="count" data-to="130" data-suf="+">0</b> islands</div><div class="chip s"><b>16th</b> century forts</div></div>
+      <div class="vcards rv"><button class="vc" data-w="fortifications"></button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 FACT E -->
+<section class="slide" data-tr="up">
+  <div class="split">
+    <div class="col">
+      <div class="titlerow rv"><div class="badge" style="background:#b8135a;color:#fff">E</div><div><p class="eyebrow">Fact E · Cable cars</p><h2>Ride the Glass Cable Cars</h2></div></div>
+      <p class="rv">Two cable cars take visitors to the summit, where you can enjoy stunning views of Rio de Janeiro from a height of 1,296 feet. The cars themselves are enclosed by glass panels. As you begin to ascend to the very top, <span class="vw" data-w="breathtaking">breathtaking</span> views unfold below you.</p>
+      <div class="chips rv"><div class="chip"><b class="count" data-to="2">0</b> cable cars</div><div class="chip t"><b class="count" data-to="1296">0</b> feet up</div></div>
+      <div class="vcards rv"><button class="vc" data-w="breathtaking"></button></div>
+    </div>
+    <div class="photo rv tilt" data-img="cable"><span class="cap">The Sugarloaf cable car · Wikimedia Commons</span></div>
+  </div>
+</section>
+
+<!-- 9 VIEW -->
+<section class="slide" data-tr="flip">
+  <div class="col" style="width:min(1280px,100%);gap:clamp(10px,2vh,22px)">
+    <p class="eyebrow rv">The view from the top</p>
+    <h2 class="rv">A City, a Bay and an Ocean</h2>
+    <p class="rv" style="max-width:60em">Because Sugarloaf sits on a <span class="vw" data-w="peninsula">peninsula</span> that stretches into the Atlantic Ocean, it offers a unique scenic combination. You will love reaching the summit, but the journey there will be just as enjoyable.</p>
+    <div class="tiles">
+      <div class="tile rv"><div class="photo" data-img="city" data-pos="30% 60%"><span class="cap">The city</span></div><button class="vc" data-w="bustling"></button></div>
+      <div class="tile rv"><div class="photo" data-img="sea" data-pos="50% 70%"><span class="cap">The bay</span></div><button class="vc" data-w="tranquil"></button></div>
+      <div class="tile rv"><div class="photo" data-img="corc" data-pos="50% 55%"><span class="cap">The ocean</span></div><button class="vc" data-w="peninsula"></button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 VOCAB LAB -->
+<section class="slide" data-tr="blur">
+  <div class="col" style="width:min(1280px,100%);gap:clamp(10px,2vh,22px)">
+    <p class="eyebrow rv">Vocabulary lab</p>
+    <h2 class="rv">Flip a card, then say the word</h2>
+    <div class="fgrid rv" id="fgrid"></div>
+    <div class="note rv">Click a card to see its meaning and an example. Press <span class="kbd">L</span> to hear the last word you opened.</div>
+  </div>
+</section>
+
+<!-- 11 QUIZ -->
+<section class="slide" data-tr="left">
+  <div class="quiz"><p class="eyebrow rv">Quick quiz</p><div class="qbar rv"><i id="qprog"></i></div><div id="quiz" class="col"></div></div>
+</section>
+
+<!-- 12 RECAP -->
+<section class="slide" data-tr="zoom">
+  <div class="col" style="width:min(1280px,100%);gap:clamp(12px,2.4vh,28px)">
+    <p class="eyebrow rv">Remember</p>
+    <h2 class="rv">Sugarloaf by the Numbers</h2>
+    <div class="stats">
+      <div class="stat rv"><b><span class="count" data-to="396">0</span> m</b><span>height of the mountain (1,299 ft)</span></div>
+      <div class="stat rv"><b class="count" data-to="270">0</b><span>different climbing routes</span></div>
+      <div class="stat rv"><b><span class="count" data-to="130">0</span>+</b><span>islands in Guanabara Bay</span></div>
+      <div class="stat rv"><b class="count" data-to="2">0</b><span>glass cable cars to the summit</span></div>
+      <div class="stat rv"><b class="count" data-to="1942" data-plain="1">0</b><span>year of its film debut, “Now, Voyager”</span></div>
+    </div>
+    <div class="tags rv"><span class="tag">A Climbing</span><span class="tag">B Neighbours</span><span class="tag">C Hollywood</span><span class="tag">D The Bay</span><span class="tag">E Cable cars</span></div>
+  </div>
+</section>
+
+<!-- 13 THANKS -->
+<section class="slide cover" data-tr="blur" id="thanks">
+  <div class="photo full" data-img="corc" data-pos="50% 60%"></div><div class="shade"></div>
+  <div class="in">
+    <p class="eyebrow rv">The end</p>
+    <h1 class="rv">Thank you!</h1>
+    <p class="lead rv" style="max-width:22em">Any questions? Open the vocabulary any time and practise the words again.</p>
+    <p class="pill rv">Obrigado · Obrigada</p>
+    <p class="hint rv" style="animation:none">Text source: Brazil Culture And Travel.com · Photos: Wikimedia Commons (linked from the web)</p>
+  </div>
+</section>
+
+</main>
+
+<!-- controls -->
+<nav id="ctl" aria-label="Presentation controls">
+  <button class="cb" id="prev" aria-label="Previous slide">‹</button>
+  <div id="dots"></div>
+  <span id="count">1 / 13</span>
+  <button class="cb" id="next" aria-label="Next slide">›</button>
+  <button id="vbtn" aria-label="Open vocabulary">
+    <span style="font-size:18px">Aa</span> Vocabulary
+  </button>
+  <button class="cb" id="fs" aria-label="Toggle fullscreen" style="font-size:18px">⛶</button>
+</nav>
+
+<aside id="drawer" aria-label="Vocabulary list" aria-hidden="true">
+  <header><h3>Vocabulary</h3><button class="cb" id="dclose" aria-label="Close vocabulary">×</button></header>
+  <input id="search" type="search" placeholder="Search a word or meaning…" aria-label="Search vocabulary">
+  <div id="vlist"></div>
+</aside>
+<div id="pop" role="dialog"></div>
+
+<script>
+/* ================= DATA ================= */
+const V=[
+ {w:'landmark',p:'noun',m:'A famous, easily recognised place or building that helps people identify an area.',e:'The Eiffel Tower is the best-known landmark of Paris.',s:2},
+ {w:'spectacular',p:'adjective',m:'Extremely impressive and beautiful to look at.',e:'The fireworks over the bay were absolutely spectacular.',s:2},
+ {w:'sprawling',p:'adjective',m:'Spread out over a large area in an uneven or untidy way.',e:'We flew over the sprawling city at night.',s:4},
+ {w:'iconic',p:'adjective',m:'Very famous and seen as a symbol of a place or an idea.',e:'The iconic mountain appears on many postcards of Rio.',s:4},
+ {w:'tranquil',p:'adjective',m:'Calm, peaceful and quiet, without noise or worry.',e:'She loved the tranquil beauty of the lake at dawn.',s:5},
+ {w:'accessible',p:'adjective',m:'Easy to reach, enter or use.',e:'The park is accessible by bus, so everyone can visit.',s:5},
+ {w:'blockbusters',p:'noun',m:'Very popular films that earn a huge amount of money.',e:'Many Hollywood blockbusters are filmed in beautiful places.',s:6},
+ {w:'unfolds',p:'verb',m:'Happens or develops gradually; also, opens out.',e:'In the film, a dramatic scene unfolds inside a cable car.',s:6},
+ {w:'fortifications',p:'noun',m:'Strong walls, towers or defences built to protect a place.',e:'Old fortifications once guarded the entrance to the bay.',s:7},
+ {w:'breathtaking',p:'adjective',m:'So beautiful or amazing that it almost takes your breath away.',e:'The view from the summit was breathtaking.',s:8},
+ {w:'peninsula',p:'noun',m:'A long piece of land almost surrounded by water but joined to the mainland.',e:'Italy is a peninsula shaped like a boot.',s:9},
+ {w:'bustling',p:'adjective',m:'Full of busy, noisy activity.',e:'The bustling market was crowded with shoppers.',s:9}
+];
+const byW=Object.fromEntries(V.map(v=>[v.w,v]));
+
+/* Photos are loaded from web links (Wikimedia Commons). Each has fallbacks. */
+const FILES={
+ sunrise:'Sugarloaf Sunrise 2.jpg',
+ sea:'Rio Sugarloaf and Corcovado from sea 2.jpg',
+ urca:'Rio de Janeiro-Urca.jpg',
+ cable:'Rio de Janeiro - Pão de Açucar - Cablecar.jpg',
+ face:'Morro do Pão de Açúcar (3920227619).jpg',
+ city:'Cidade de luz e cor.jpg',
+ corc:'Corcovado sunset silhouette.jpg',
+ cristo:'Rio de Janeiro, Pão de Açúcar from Cristo Redentor (15744316848).jpg'
+};
+const HOSTS=['https://commons.wikimedia.org','https://en.wikipedia.org'];
+const imgUrl=(k,h,w)=>`${HOSTS[h]}/wiki/Special:FilePath/${encodeURIComponent(FILES[k])}?width=${w}`;
+
+document.querySelectorAll('[data-img]').forEach(box=>{
+  const k=box.dataset.img, full=box.classList.contains('full');
+  const img=new Image(); let h=0;
+  img.alt='Photo of Sugarloaf Mountain and Rio de Janeiro'; img.decoding='async';
+  if(box.dataset.pos) img.style.objectPosition=box.dataset.pos;
+  img.onload=()=>img.classList.add('ok');
+  img.referrerPolicy='no-referrer';
+  img.onerror=()=>{ h++; if(h<HOSTS.length){ img.src=imgUrl(k,h,full?2000:1400);} else { box.classList.add('failed'); } };
+  img.src=imgUrl(k,0,full?2000:1400);
+  box.prepend(img);
+});
+
+/* ================= DECK ================= */
+const slides=[...document.querySelectorAll('.slide')];
+const N=slides.length; let cur=-1;
+const dots=document.getElementById('dots');
+slides.forEach((s,i)=>{
+  [...s.querySelectorAll('.rv')].forEach((el,j)=>el.style.setProperty('--i',j));
+  const b=document.createElement('button'); b.setAttribute('aria-label','Go to slide '+(i+1));
+  b.onclick=()=>go(i); dots.appendChild(b);
+});
+const dotEls=[...dots.children];
+
+function go(n){
+  n=Math.max(0,Math.min(N-1,n)); if(n===cur) return;
+  slides.forEach((s,i)=>{
+    s.classList.toggle('active',i===n);
+    s.classList.toggle('past',i<n);
+    s.classList.toggle('future',i>n);
+  });
+  cur=n;
+  dotEls.forEach((d,i)=>d.classList.toggle('on',i===n));
+  document.getElementById('count').textContent=(n+1)+' / '+N;
+  document.getElementById('bar').style.width=((n+1)/N*100)+'%';
+  try{ history.replaceState(null,'','#'+(n+1)); }catch(e){}
+  hidePop(); runCounters(slides[n]);
+  if(slides[n].id==='thanks') burst();
+  if(slides[n].querySelector('#quiz')&&!quizStarted) startQuiz();
+}
+const next=()=>go(cur+1), prev=()=>go(cur-1);
+document.getElementById('next').onclick=next;
+document.getElementById('prev').onclick=prev;
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(+b.dataset.go));
+
+/* counters */
+function runCounters(sl){
+  sl.querySelectorAll('.count').forEach(el=>{
+    const to=+el.dataset.to, suf=el.dataset.suf||'', plain=el.dataset.plain, t0=performance.now(), dur=1600;
+    const fmt=v=>(plain?String(v):v.toLocaleString('en-US'))+suf;
+    (function tick(t){
+      const p=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-p,3);
+      el.textContent=fmt(Math.round(to*e));
+      if(p<1&&sl.classList.contains('active')) requestAnimationFrame(tick); else el.textContent=fmt(to);
+    })(t0);
+  });
+}
+
+/* ================= VOCABULARY ================= */
+let lastWord=null;
+function speak(w){
+  lastWord=w;
+  try{ if(!('speechSynthesis' in window)) return;
+    speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(w); u.lang='en-US'; u.rate=.85; speechSynthesis.speak(u);}catch(e){}
+}
+/* mini cards on slides */
+document.querySelectorAll('.vc').forEach(b=>{
+  const v=byW[b.dataset.w];
+  b.innerHTML=`<div class="w">${v.w}<i>${v.p}</i></div><span class="tap">Click for meaning</span><div class="m"><div><span>${v.m}</span><em>“${v.e}”</em></div></div>`;
+  b.onclick=()=>{ b.classList.toggle('open'); if(b.classList.contains('open')) speak(v.w); };
+});
+/* inline word popup */
+const pop=document.getElementById('pop');
+function showPop(el){
+  const v=byW[el.dataset.w]; if(!v) return;
+  pop.innerHTML=`<strong>${v.w}</strong><small>${v.p}</small><p>${v.m}</p><p style="color:#55687a"><em>“${v.e}”</em></p><button class="mini" id="pl">Listen</button><button class="mini" id="po" style="background:#ff8fb8;color:#3a0a20">Open list</button>`;
+  const r=el.getBoundingClientRect();
+  pop.style.left=Math.max(10,Math.min(innerWidth-pop.offsetWidth-10,r.left))+'px';
+  pop.classList.add('show');
+  const top=r.bottom+10; pop.style.top=(top+pop.offsetHeight>innerHeight-90? Math.max(10,r.top-pop.offsetHeight-10):top)+'px';
+  pop.querySelector('#pl').onclick=()=>speak(v.w);
+  pop.querySelector('#po').onclick=()=>{hidePop();openDrawer(v.w)};
+  speak(v.w);
+}
+function hidePop(){pop.classList.remove('show')}
+document.querySelectorAll('.vw').forEach(el=>{el.tabIndex=0;el.setAttribute('role','button');
+  el.onclick=e=>{e.stopPropagation();showPop(el)};
+  el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();showPop(el)}};});
+document.addEventListener('click',e=>{if(!pop.contains(e.target)) hidePop()});
+
+/* flashcards */
+document.getElementById('fgrid').innerHTML=V.map(v=>`<button class="fc" data-w="${v.w}"><div class="in"><div class="f"><strong>${v.w}</strong><small>${v.p}</small></div><div class="b">${v.m}<br><em>“${v.e}”</em></div></div></button>`).join('');
+document.querySelectorAll('.fc').forEach(c=>c.onclick=()=>{c.classList.toggle('flipped'); speak(c.dataset.w);});
+
+/* drawer */
+const drawer=document.getElementById('drawer'), vlist=document.getElementById('vlist'), search=document.getElementById('search');
+function renderList(q=''){
+  q=q.trim().toLowerCase();
+  vlist.innerHTML=V.filter(v=>!q||v.w.includes(q)||v.m.toLowerCase().includes(q)).map(v=>`
+   <div class="vi" data-w="${v.w}"><div class="h"><strong>${v.w}</strong><small>${v.p} · slide ${v.s}</small></div>
+   <div class="d">${v.m}<em>“${v.e}”</em><button class="mini" data-act="l">Listen</button><button class="mini" data-act="g" style="background:var(--pink);color:#3a0a20">Show slide</button></div></div>`).join('')
+   || '<p>No word found. Try another search.</p>';
+}
+renderList();
+search.oninput=()=>renderList(search.value);
+vlist.onclick=e=>{
+  const it=e.target.closest('.vi'); if(!it) return; const v=byW[it.dataset.w];
+  const act=e.target.dataset.act;
+  if(act==='l'){speak(v.w);return;}
+  if(act==='g'){closeDrawer();go(v.s-1);return;}
+  it.classList.toggle('open');
+};
+function openDrawer(w){
+  drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false');
+  if(w){search.value='';renderList();const it=vlist.querySelector(`[data-w="${w}"]`); if(it){it.classList.add('open');it.scrollIntoView({block:'center'});}}
+}
+function closeDrawer(){drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true')}
+const toggleDrawer=()=>drawer.classList.contains('open')?closeDrawer():openDrawer();
+document.getElementById('vbtn').onclick=()=>openDrawer();
+document.getElementById('dclose').onclick=closeDrawer;
+
+/* ================= QUIZ ================= */
+const Q=[
+ {q:'How tall is Sugarloaf Mountain?',o:['About 396 m (1,299 ft)','About 96 m (315 ft)','About 1,296 m','About 2,000 ft'],a:0},
+ {q:'How many climbing routes are there?',o:['120','270','540','70'],a:1},
+ {q:'Which 1979 James Bond film has a scene in the cable car?',o:['Goldfinger','Skyfall','Moonraker','Octopussy'],a:2},
+ {q:'What does “Guanabara” translate as?',o:['The golden river','The bosom of the sea','The sugar bay','The mountain’s mirror'],a:1},
+ {q:'Which film was Sugarloaf’s screen debut, in 1942?',o:['Now, Voyager','Casablanca','Moonraker','Rio'],a:0},
+ {q:'Which word means “calm, peaceful and quiet”?',o:['bustling','sprawling','tranquil','iconic'],a:2}
+];
+let quizStarted=false,qi=0,score=0;
+const quizEl=document.getElementById('quiz'), qprog=document.getElementById('qprog');
+function startQuiz(){quizStarted=true;qi=0;score=0;renderQ();}
+function renderQ(){
+  qprog.style.width=(qi/Q.length*100)+'%';
+  if(qi>=Q.length){
+    const great=score>=5;
+    quizEl.innerHTML=`<div class="score">${score} / ${Q.length}</div><p class="lead">${great?'Fantastic! You really know Sugarloaf Mountain.':score>=3?'Nice work! Review the vocabulary and try again.':'Good try! Go back through the facts and play again.'}</p><button class="btn" id="again">Play again</button>`;
+    document.getElementById('again').onclick=startQuiz; if(great) burst(); return;
+  }
+  const it=Q[qi];
+  quizEl.innerHTML=`<div class="eyebrow" style="color:var(--mute)">Question ${qi+1} of ${Q.length}</div><div class="qq">${it.q}</div><div class="opts">${it.o.map((t,i)=>`<button class="opt" data-i="${i}">${t}</button>`).join('')}</div><div class="fb" id="fb"></div>`;
+  quizEl.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i; quizEl.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+    const ok=i===it.a; if(ok){score++;b.classList.add('good')} else {b.classList.add('bad');quizEl.querySelectorAll('.opt')[it.a].classList.add('good')}
+    document.getElementById('fb').textContent=ok?'Correct!':'Not quite. The answer is: '+it.o[it.a];
+    setTimeout(()=>{qi++;renderQ()},1500);
+  });
+}
+
+/* ================= CONFETTI ================= */
+const cv=document.getElementById('confetti'), cx=cv.getContext('2d'); let parts=[],raf=0;
+function size(){cv.width=innerWidth;cv.height=innerHeight} size(); addEventListener('resize',size);
+function burst(){
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const cols=['#ff7b54','#ffc857','#27b3a8','#ff8fb8','#8ecae6','#fff5e6'];
+  for(let i=0;i<160;i++) parts.push({x:innerWidth/2,y:innerHeight*.6,vx:(Math.random()-.5)*18,vy:-Math.random()*18-6,g:.35,s:6+Math.random()*8,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[i%cols.length],l:160+Math.random()*80});
+  if(!raf) raf=requestAnimationFrame(loop);
+}
+function loop(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  parts=parts.filter(p=>p.l>0);
+  parts.forEach(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;p.l--;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.globalAlpha=Math.min(1,p.l/40);cx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);cx.restore();});
+  raf=parts.length?requestAnimationFrame(loop):0;
+}
+
+/* ================= INPUT ================= */
+document.getElementById('fs').onclick=toggleFs;
+function toggleFs(){try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}}
+addEventListener('keydown',e=>{
+  if(e.target===search){ if(e.key==='Escape'){closeDrawer();search.blur();} return; }
+  if(e.ctrlKey||e.metaKey||e.altKey) return;
+  switch(e.key){
+    case 'ArrowRight':case 'PageDown':case ' ':e.preventDefault();next();break;
+    case 'ArrowLeft':case 'PageUp':e.preventDefault();prev();break;
+    case 'Home':go(0);break; case 'End':go(N-1);break;
+    case 'v':case 'V':toggleDrawer();break;
+    case 'f':case 'F':toggleFs();break;
+    case 'l':case 'L':if(lastWord)speak(lastWord);break;
+    case 'Escape':closeDrawer();hidePop();break;
+  }
+});
+let tx=0,ty=0;
+addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){ if(drawer.classList.contains('open')) return; dx<0?next():prev(); }},{passive:true});
+
+/* boot */
+let startAt=0;
+try{ startAt=Math.max(0,Math.min(N-1,(parseInt(location.hash.slice(1))||1)-1)); }catch(e){}
+go(startAt);
+</script>
+</body>
+</html>
+
